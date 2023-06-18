@@ -1,65 +1,40 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RouteItem } from '../../routing/RouteItem.type';
+import { AppBar, Box, IconButton } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Link} from "react-router-dom";
+import { RouteItem } from "../../routing/RouteItem.type";
+import ProfileCardContainer from "../ProfileCardContainer";
+import ThemeToggle from "../ThemeToggle";
+import { useTheme } from "../../hooks/useTheme";
+import HomeIcon from '@mui/icons-material/Home';
+import { styled } from "styled-components";
+import NavLink from "../NavLink";
+import { withAnimations } from "../../hooks/animation/withAnimations";
+
 
 interface NavBarProps {
   links: RouteItem[]
-  theme: string,
   toggleTheme: () => void
 }
-
-// Define your styled components
-const Nav = styled.nav`
-  background: ${props => props.theme.background};
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-`;
-
-const NavLink = styled(motion(Link))`
-  color: ${props => props.theme.text};
-  text-decoration: none;
-  margin-right: 1rem;
-
-  &:hover {
-    color: ${props => props.theme.primary};
-  }
-`;
-
 const AdditionalItemsContainer = styled(motion.div)`
+  // Add your styles here
   display: flex;
+  flex-direction: row;
   align-items: center;
-`;
-
-const ProfileCardContainer = styled(motion.div)`
-  position: absolute;
-  bottom: -10px;
-`;
-
-const ThemeToggleButton = styled.button`
-  color: ${props => props.theme.text};
-  background: ${props => props.theme.background};
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  
-  &:hover {
-    color: ${props => props.theme.primary};
-  }
+  align-content: center;
+  gap: 1rem;
 `;
 
 
-// Modify the NavBar function to destructure the new props
-export default function NavBar({ links, theme, toggleTheme }: NavBarProps) {
+function NavBar({ links, toggleTheme }: NavBarProps) {
+  const theme = useTheme()
   const [isHovered, setHovered] = useState(false);
 
   const hoverAnimations = {
     hover: { scale: 1.2 },
     tap: { scale: 0.95 },
   };
+
 
   const linkHoverInAnimation = { opacity: 1, x: 0 };
   const linkHoverOutAnimation = { opacity: 0, x: -100 };
@@ -68,52 +43,52 @@ export default function NavBar({ links, theme, toggleTheme }: NavBarProps) {
   const profileCardHoverOutAnimation = { opacity: 0, y: 100 };
   
   return (
-    <Nav onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <NavLink
-        to="/"
-        whileHover={hoverAnimations.hover}
-        whileTap={hoverAnimations.tap}
-      >
-        Home
-      </NavLink>
+    <AppBar position="fixed" color="transparent" elevation={0} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+     <Box display="flex" justifyContent="space-between" alignItems="center" padding="1rem">
+        <motion.div whileHover={hoverAnimations.hover} whileTap={hoverAnimations.tap}>
+          <IconButton component={Link} to="/" color="inherit" aria-label="home">
+            <HomeIcon />
+          </IconButton>
+        </motion.div>
 
-      <AnimatePresence>
-        {isHovered && (
-          <AdditionalItemsContainer
-            initial={linkHoverOutAnimation}
-            animate={linkHoverInAnimation}
-            exit={linkHoverOutAnimation}
-          >
-            {links.map((link, index) => (
-              <NavLink
-                key={index}
-                to={link.path}
-                whileHover={hoverAnimations.hover}
-                whileTap={hoverAnimations.tap}
-              >
-                {link.name}
-              </NavLink>
-            ))}
-            {/* Include the theme toggle button */}
-            <ThemeToggleButton onClick={toggleTheme}>
-              {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-            </ThemeToggleButton>
-          </AdditionalItemsContainer>
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {isHovered && (
+            <AdditionalItemsContainer
+              initial={linkHoverOutAnimation}
+              animate={linkHoverInAnimation}
+              exit={linkHoverOutAnimation}
+            >
+              {links.map((link, index) => link.name !== 'Home' && (
+                <NavLink
+                  key={index}
+                  to={link.path}
+                  whileHover={hoverAnimations.hover}
+                  whileTap={hoverAnimations.tap}
+                  className="clickable"
+                >
+                  {link.name}
+                </NavLink>
+              ))}
+              <ThemeToggle onClick={toggleTheme}/>
+            </AdditionalItemsContainer>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {isHovered && (
-          <ProfileCardContainer
-            initial={profileCardHoverOutAnimation}
-            animate={profileCardHoverInAnimation}
-            exit={profileCardHoverOutAnimation}
-          >
-            <div>profile</div>
-          </ProfileCardContainer>
-        )}
-      </AnimatePresence>
-    </Nav>
+        <AnimatePresence>
+          {isHovered && (
+            <ProfileCardContainer
+              initial={profileCardHoverOutAnimation}
+              animate={profileCardHoverInAnimation}
+              exit={profileCardHoverOutAnimation}
+              theme={theme}
+            >
+              <div>profile</div>
+            </ProfileCardContainer>
+          )}
+        </AnimatePresence>
+      </Box>
+    </AppBar>
   );
 }
 
+export default withAnimations('slideIn')(NavBar);
