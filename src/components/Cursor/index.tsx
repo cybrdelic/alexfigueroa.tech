@@ -1,24 +1,61 @@
-// Cursor.js
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { CursorContext } from '../../contexts/CursorContext';
 
-const StyledCursor = styled.div`
+const Cursor = styled.div`
   position: fixed;
-  width: 50px;
-  height: 50px;
-  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 9999;
   border: 2px solid white;
   border-radius: 50%;
-  pointer-events: none;
   mix-blend-mode: difference;
-  transition: transform 0.1s ease-in-out;
-  transform: translate(-50%, -50%) scale(1);
+  transition: all 150ms ease;
+  transition-property: background-color, opacity, transform, mix-blend-mode;
+  will-change: width, height, transform;
 `;
 
-const Cursor = ({ position }: any) => {
+export default function CustomCursor() {
+  const cursorType = useContext(CursorContext);
+  console.log('CursorContext value in CustomCursor:', cursorType); // Log here
+
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updateCursorPos = (event) => {
+      setCursorPos({ x: event.clientX, y: event.clientY });
+    };
+
+    document.addEventListener("mousemove", updateCursorPos);
+
+    return () => {
+      document.removeEventListener("mousemove", updateCursorPos);
+    };
+  }, []);
+
+  const defaultCursorStyles: React.CSSProperties = {
+    backgroundColor: 'transparent',
+    opacity: 0.7,
+    mixBlendMode: 'difference',
+    left: `${cursorPos.x}px`,
+    top: `${cursorPos.y}px`,
+  };
+
+  const hoveredCursorStyles: React.CSSProperties = {
+    backgroundColor: 'white',
+    opacity: 1,
+    transform: 'scale(3)',
+  };
+
+  const outerCursorStyles = {
+    width: '56px',
+    height: '56px',
+    ...defaultCursorStyles,
+    ...(cursorType === 'hovered' ? hoveredCursorStyles : {}),
+  };
+
   return (
-    <StyledCursor style={{ left: `${position.x}px`, top: `${position.y}px` }} />
+    <>
+      <Cursor style={outerCursorStyles} />
+    </>
   );
 };
-
-export default Cursor;
