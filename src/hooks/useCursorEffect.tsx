@@ -4,15 +4,13 @@ export const useCursorEffect = () => {
   const [cursorType, setCursorType] = useState<'normal' | 'hovered'>('normal');
 
   useEffect(() => {
-    const elements = document.querySelectorAll('[data-id="special"], a, button');
+    const elements = document.querySelectorAll('[data-id="special"], a, li, button');
 
     const mouseoverFunc = () => {
-      console.log('Mouseover detected.'); // Log here
       setCursorType('hovered');
     };
 
     const mouseoutFunc = () => {
-      console.log('Mouseout detected.'); // Log here
       setCursorType('normal');
     };
 
@@ -28,8 +26,6 @@ export const useCursorEffect = () => {
       });
     };
   }, []);
-
-  console.log('Cursor type:', cursorType); // Log here
 
   return cursorType;
 };

@@ -7,7 +7,6 @@ import { darkTheme } from '../../theming/theme';
 
 const BackgroundCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { gridScale } = usePageTransitions();
   const theme = useTheme();
 
   useEffect(() => {
@@ -31,12 +30,12 @@ const BackgroundCanvas = () => {
     };
     window.addEventListener('mousemove', mouseMove);
 
-    drawGridPattern(ctx, mousePos, state, gridScale, theme);
+    drawGridPattern(ctx, mousePos, state, theme);
 
     return () => {
       window.removeEventListener('mousemove', mouseMove);
     };
-  }, [gridScale, theme]);
+  }, [ theme]);
 
   return (
     <canvas ref={canvasRef} style={{ position: 'absolute', zIndex: 0, backgroundColor: theme === darkTheme ? 'black' : 'white' }} />

@@ -8,7 +8,7 @@ import { getProjectTitleFonts } from './projects/getProjectTitleFonts';
 export type ProjectType = {
     id: string;
     name: string;
-    logo: React.ReactNode;
+    logo: string;
     overview: string;
     titleFont: string;
 }
@@ -17,7 +17,7 @@ type ProjectKey = 'x1dra' | 'extranyx' | 'cybrnet' | 'oversoulDb' | 'portfolio';
 
 const projectKeys: ProjectKey[] = ['x1dra', 'extranyx', 'cybrnet', 'oversoulDb', 'portfolio'];
 
-type ProjectData = {
+export type ProjectData = {
     [key in ProjectKey]: ProjectType;
 }
 

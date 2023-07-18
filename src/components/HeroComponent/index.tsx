@@ -8,11 +8,12 @@ import ParticlesBg from 'particles-bg';
 import { animated, useSpring } from 'react-spring';
 import { useCursorEffect } from '../../hooks/useCursorEffect';
 import { CursorContext } from '../../contexts/CursorContext';
+import { duration } from '@mui/material';
 
 const HeroContainer = styled(motion.div)`
   position: relative;
   display: flex;
-  overflow: hidden; 
+  overflow: hidden;
   width: 100%;
   min-width: 100vw;
 `;
@@ -68,7 +69,7 @@ const HeroButton = styled(motion.button)`
   padding: 1rem 3rem;
   font-weight: 900;
 
-  
+
   &:hover {
     transform: scale(1.1);
     box-shadow: 0px 0px 10px ${props => props?.theme?.colors?.buttonBackground};
@@ -93,15 +94,15 @@ const ButtonContainer = styled(motion.div)`
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { delay: 0.5, duration: 1.5 }},
-  exit: { opacity: 0, transition: { ease: 'easeInOut' }},
+  visible: { opacity: 1, transition: { delay: 0.5, duration: 1.5 } },
+  exit: { opacity: 0, transition: { ease: 'easeInOut' } },
 };
 
 const TEXTS = [
-    "Full Stack, Full Circle - From Idea Generation to Implementation to Deployment",
-    "Where Innovation Intersects with Implementation: Crafting Digital Experiences",
-    "Reshaping the Digital Landscape: Expertise that Delivers Impact",
-    "Beyond Code: Crafting Interconnected Systems for a Smarter World"
+  "Full Stack, Full Circle - From Idea Generation to Implementation to Deployment",
+  "Where Innovation Intersects with Implementation: Crafting Digital Experiences",
+  "Reshaping the Digital Landscape: Expertise that Delivers Impact",
+  "Beyond Code: Crafting Interconnected Systems for a Smarter World"
 ];
 
 const HeroComponent = () => {
@@ -110,16 +111,17 @@ const HeroComponent = () => {
   const cursorType = useCursorEffect();
 
   const springProps = useSpring({
-    
+
     opacity: 1,
     from: { opacity: 0 },
-    config: { tension: 80, friction: 14 }
+    config: { tension: 0, friction: 14 },
+    duration: 0.1
   });
 
   React.useEffect(() => {
     const intervalId = setInterval(() =>
       setIndex(prevIndex => prevIndex + 1),
-    3000); 
+      3000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -129,8 +131,8 @@ const HeroComponent = () => {
         <RightPane>
           <HeroTitle theme={theme} style={springProps}>
             <div data-id="special">
-              <TextTransition springConfig={ presets.gentle }>
-                {TEXTS[index % TEXTS.length]} 
+              <TextTransition springConfig={presets.gentle}>
+                {TEXTS[index % TEXTS.length]}
               </TextTransition>
             </div>
           </HeroTitle>
@@ -139,11 +141,11 @@ const HeroComponent = () => {
             Full-Stack Software Engineer
           </HeroTagline>
           <ButtonContainer>
-              <HeroButton>
-                  View Projects
-              </HeroButton>
+            <HeroButton>
+              View Projects
+            </HeroButton>
           </ButtonContainer>
-          
+
         </RightPane>
       </HeroContainer>
     </CursorContext.Provider>

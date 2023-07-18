@@ -19,7 +19,6 @@ const HomePage: React.FC<HomePageProps> = () => {
       <HeroComponent />
       <RecentProjects />
       <RecentBlogs />
-      <Introduction />
       <Footer />
     </div>
   );

@@ -16,7 +16,7 @@ const Introduction = () => {
   return (
     <IntroContainer theme={theme}>
       <h1>About Me</h1>
-      <p>Here is some information about me...</p>
+      <p>I'm Alex Figueroa, a full-stack software engineer focused on developing autonomous and semi-autonomous applications.</p>
     </IntroContainer>
   );
 }

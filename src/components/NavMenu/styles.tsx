@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
+import { createStyledMotionComponent } from "../../utils/createStyledMotionComponent";
+import { adjustTransparency } from "../../utils/adjustTransparency";
 
-export const HamburgerBar = styled(motion.div)(({theme}) => `
+export const HamburgerBar = styled(motion.div)(({ theme }) => `
     width: 2.5rem;
     height: 0.3rem;
     background: ${theme.text};
@@ -14,14 +16,19 @@ export const StyledHamburger = styled(motion.div)`
     flex-direction: column;
 `;
 
-export const AdditionalItemsContainer = styled(motion.div)`
+export const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1rem;
     min-width: 80rem;
     justify-content: space-evenly;
-`;
+    background: ${props.theme.gradient};
+    border-radius: 100px;
+    padding: 0rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+`);
 
 export const MenuContainer = styled.div`
     position: relative;
@@ -31,11 +38,11 @@ export const MenuContainer = styled.div`
     justify-content: space-between;
 `;
 
-export const StyledNavLink = styled(motion(Link))(({theme}) => `
+export const StyledNavLink = styled(motion(Link))(({ theme }) => `
     font-family: 'Orbitron', sans-serif;
     color: ${theme.text};
     text-decoration: none;
-    height: 80px;
+    padding: 1rem;
     display: flex;
     flex-direction: columns;
     justify-content: center;

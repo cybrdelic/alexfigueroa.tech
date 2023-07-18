@@ -27,22 +27,23 @@ export const HoverItemsContainer = ({
 }: HoverItemsContainerProps) => (
     <div>
         <AnimatePresence>
-        {isHovered && (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row'
-            }}>
-                <AdditionalItemsContainer
-                    initial={linkHoverOutAnimation}
-                    animate={linkHoverInAnimation}
-                    exit={linkHoverOutAnimation}
-                >
-                    {links.map((link, index) =>
-                        <NavLink data-id="special" key={index} link={link} theme={theme} hoverAnimations={hoverAnimations} />
-                    )}
-                </AdditionalItemsContainer>
-            </div>
-        )}
-    </AnimatePresence>
+            {isHovered && (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}>
+                    <AdditionalItemsContainer
+                        initial={linkHoverOutAnimation}
+                        animate={linkHoverInAnimation}
+                        exit={linkHoverOutAnimation}
+                        theme={theme}
+                    >
+                        {links.map((link, index) =>
+                            <NavLink data-id="special" key={index} link={link} theme={theme} hoverAnimations={hoverAnimations} />
+                        )}
+                    </AdditionalItemsContainer>
+                </div>
+            )}
+        </AnimatePresence>
     </div>
 );

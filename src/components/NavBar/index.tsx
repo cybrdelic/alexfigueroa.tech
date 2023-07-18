@@ -41,12 +41,9 @@ function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <AppBar position="fixed" color="transparent" elevation={0}>
-      <NavBarWrapper display="flex" flexDirection="row"justifyContent="space-between" alignItems="center" padding="1rem">
+      <NavBarWrapper display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" padding="1rem">
         <HomeIcon title="Alex Figueroa" />
-        <NavMenu links={links} toggleTheme={toggleTheme}/>
-        <ProfileCardContainer theme={theme}>
-          <div>profile</div>
-        </ProfileCardContainer>
+        <NavMenu links={links} toggleTheme={toggleTheme} />
       </NavBarWrapper>
     </AppBar>
   );
