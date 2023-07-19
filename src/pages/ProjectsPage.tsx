@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import ProjectChanger from '../components/ProjectsView/ProjectChanger';
 import { projectsData } from '../data/project.data';
-import ProjectList from '../components/ProjectsView/ProjectList';
+import ProjectsLayout from '../components/ProjectsView/ProjectsLayout';
 
 
 const Container = styled.div`
@@ -34,7 +34,7 @@ const ProjectsPage: React.FC = () => {
   return (
     <Container>
       <ContentWrapper>
-        <ProjectList projects={projectsData} />
+        <ProjectsLayout projects={projectsData} />
       </ContentWrapper>
     </Container>
   );

@@ -15,7 +15,7 @@ import VectorLogoAndText from "../VectorLogoAndText";
 import { ProjectPreview } from "../ProjectPreview";
 import { GridElement } from "../GridElement";
 
-interface ProjectListProps {
+interface ProjectsLayoutProps {
     projects: ProjectData;
 }
 
@@ -42,7 +42,7 @@ const StyledContainer = createStyledMotionComponent('div')(props => `
 `);
 
 
-export default function ProjectList({ projects }: ProjectListProps) {
+export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
     const theme = useTheme();
     const [selectedProject, setSelectedProject] = useState<ProjectType | null>(projects.x1dra);
     const cursorType = useCursorEffect();
