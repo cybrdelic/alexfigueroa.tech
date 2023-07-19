@@ -4,6 +4,7 @@ import { getProjectOverviews } from './projects/getProjectOverview';
 import { getProjectLogos } from './projects/getProjectLogos';
 import { getProjectTitles } from './projects/getProjectTitles';
 import { getProjectTitleFonts } from './projects/getProjectTitleFonts';
+import { getProjectGithubURLs } from './projects/getProjectGithubUrls';
 
 export type ProjectType = {
     id: string;
@@ -11,6 +12,7 @@ export type ProjectType = {
     logo: string;
     overview: string;
     titleFont: string;
+    github_url: string;
 }
 
 type ProjectKey = 'x1dra' | 'extranyx' | 'cybrnet' | 'oversoulDb' | 'portfolio';
@@ -30,6 +32,7 @@ const fetchProjectData = (): ProjectDataType => ({
     logos: getProjectLogos(),
     titles: getProjectTitles(),
     titleFonts: getProjectTitleFonts(),
+    github_urls: getProjectGithubURLs(),
 });
 
 const createProject = (key: ProjectKey, data: ProjectDataType): ProjectType => ({
@@ -38,6 +41,7 @@ const createProject = (key: ProjectKey, data: ProjectDataType): ProjectType => (
     logo: data.logos[key],
     overview: data.overviews[key],
     titleFont: data.titleFonts[key],
+    github_url: data.github_urls[key]
 })
 
 export const generateProjectsData = (): ProjectData => {

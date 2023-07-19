@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import ProjectChanger from '../components/ProjectChanger';
+import ProjectChanger from '../components/ProjectsView/ProjectChanger';
 import { projectsData } from '../data/project.data';
-import ProjectList from '../components/ProjectList';
+import ProjectList from '../components/ProjectsView/ProjectList';
 
 
 const Container = styled.div`

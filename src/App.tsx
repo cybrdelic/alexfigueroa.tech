@@ -5,7 +5,7 @@ import { GlobalStyle } from "./theming/GlobalStyle.ts";
 import BackgroundImage from './components/BackgroundImage/index.tsx';
 import NavBar from './components/NavBar/index.tsx';
 import { ThemeProvider as AppThemeProvider } from './theming/ThemeProvider.tsx';
-import { routes } from './routing/routes.tsx';
+import { baseRoutes, routes } from './routing/routes.tsx';
 import { ThemeContext, ThemeToggleContext } from './contexts/ThemeContext.tsx';
 import AnimatedCursor from 'react-animated-cursor';
 import CustomCursor from './components/Cursor/index.tsx';
@@ -42,7 +42,7 @@ const App: React.FC = () => {
                           <GlobalStyle />
                           <div>
 
-                            <NavBar links={routes} toggleTheme={toggleTheme} />
+                            <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
                             <MainContent>
                               <Routes>
                                 {routes.map((route, index) => (

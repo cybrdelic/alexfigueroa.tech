@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Popover as MuiPopover, Button as MuiButton, ListItem as MuiListItem, ListItemText as MuiListItemText } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
-import { useTheme } from '../../hooks/useTheme';
+import { useTheme } from '../../../hooks/useTheme';
 
 interface Project {
   id: string;
@@ -124,7 +124,7 @@ const ProjectChanger: React.FC<ProjectChangerProps> = ({ projects }) => {
         }}
       >
         {projects.map((project) => (
-          <StyledListItem button key={project.id} onClick={() => handleChangeProject(project)}>
+          <StyledListItem key={project.id} onClick={() => handleChangeProject(project)}>
             <StyledListItemText primary={project.name} />
           </StyledListItem>
         ))}
