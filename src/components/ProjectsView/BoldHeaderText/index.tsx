@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-interface VerticalTextProps {
+interface BoldHeaderTextProps {
     text: string;
     font?: string;
 }
@@ -38,7 +38,7 @@ const StyledText = styled(motion.h1) <{ font?: string }>`
     }
 `;
 
-const VerticalText: React.FC<VerticalTextProps> = ({ text, font }) => {
+const BoldHeaderText: React.FC<BoldHeaderTextProps> = ({ text, font }) => {
     return (
         <StyledWrapper font={font}>
             <StyledText font={font}>
@@ -48,4 +48,4 @@ const VerticalText: React.FC<VerticalTextProps> = ({ text, font }) => {
     );
 }
 
-export default VerticalText;
+export default BoldHeaderText;
