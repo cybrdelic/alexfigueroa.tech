@@ -19,8 +19,9 @@ const Container = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
-  max-width: 1440px; // or any maximum width you prefer
   height: calc(100vh - 60px);  // Subtract the height of your navbar
   overflow-y: auto;  // Add scroll when the content overflows
   overflow-x: hidden;

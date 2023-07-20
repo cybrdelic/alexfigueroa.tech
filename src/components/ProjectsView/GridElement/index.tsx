@@ -22,11 +22,9 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    border-radius: 15px;
-    background: ${adjustTransparency(props.theme.cardBackground, 0.9)};
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border: solid 0.1rem ${props.isActive ? props.projectPrimaryColor : adjustTransparency(props.theme.text, 0)};
+    border-radius: 60px;
     transition: all 0.3s ease-in-out;
-    border: 2px solid transparent; // Add a border to avoid layout glitches on hover
     max-width: 200px;
     min-width: 200px;
     max-height: 200px;
@@ -34,9 +32,7 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
 
     &:hover {
         transform: scale(1.05);
-        box-shadow: 0px 12px 24px 0px rgba(0,0,0,0.3);
-        border-width: 5px; // Increase border width on hover
-        border-color: ${props.projectPrimaryColor ?? 'red'}; // Make the border visible on hover
+        border: solid 0.1rem ${adjustTransparency(props.theme.text, 0.2)};
     }
 `);
 
@@ -62,38 +58,40 @@ interface GridElementProps {
     project: ProjectType;
     handleMouseEnter: (project: ProjectType) => void;
     handleMouseLeave: () => void;
+    isActive: boolean;
 }
 
-export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEnter, handleMouseLeave }) => {
+export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEnter, handleMouseLeave, isActive }) => {
     const { isHovered, onHoverStart, onHoverEnd } = useHoveredState();
     const theme = useTheme();
     const cursorType = useCursorEffect();
 
     return (
         <CursorContext.Provider value={cursorType}>
-            <Tilt tiltMaxAngleX={15} tiltMaxAngleY={15}>
-                <StyledFlexElement
-                    projectPrimaryColor={project.primaryColor}
-                    isHovered={isHovered}
-                    key={project.id}
-                    onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
-                    onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
-                    whileHover={hoverEffects.hover}
-                    theme={theme}
-                    style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
-                    data-id="special"
-                >
-                    <ConstantSizeWrapper>
-                        <VectorLogoAndText
-                            text={project.name}
-                            logo={project.logo}
-                            font={project.titleFont}
-                            theme={theme}
-                            data-id="special"
-                        />
-                    </ConstantSizeWrapper>
-                </StyledFlexElement>
-            </Tilt>
+            <StyledFlexElement
+                projectPrimaryColor={project.primaryColor}
+                isHovered={isHovered}
+                key={project.id}
+                onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
+                onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
+                whileHover={hoverEffects.hover}
+                theme={theme}
+                style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
+                data-id="special"
+                isActive={isActive}
+            >
+                <ConstantSizeWrapper>
+                    <VectorLogoAndText
+                        text={project.name}
+                        logo={project.logo}
+                        font={project.titleFont}
+                        theme={theme}
+                        data-id="special"
+                    />
+                </ConstantSizeWrapper>
+            </StyledFlexElement>
         </CursorContext.Provider>
     );
 };
+
+export const MotionGridElement = createStyledMotionComponent(GridElement);

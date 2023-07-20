@@ -1,135 +1,89 @@
+// ProjectPreview.tsx
 import React from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectType } from "../../../data/project.data";
+import { motion, AnimatePresence } from "framer-motion";
+import styled from 'styled-components';
 import { ProjectTitleAndLogo } from "../ProjectLogoAndText";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
-import Tilt from 'react-parallax-tilt';
 
-const ProjectPreviewWrapper = createStyledMotionComponent(motion.div)(props => `
+const ProjectWrapper = styled(motion.div)`
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem;
-    border-radius: 15px;
-    backdrop-filter: blur(4px);
-    border: 2rem solid ${props.theme.text}
-    background: rgba(0,0,0, 0.1);
-    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.5);
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: 10px;
+    background-color: ${(props) => props.theme.cardBackground};
     padding: 2rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+`;
 
-    @media (max-width: 768px) {
-        width: 90vw;
-    }
-`);
-const StyledProjectOverview = createStyledMotionComponent('p')(props => `
-    color: ${props.theme.text};
-    margin-bottom: 2rem;
-`);
+const ProjectOverview = styled.p`
+    color: ${(props) => props.theme.text};
+    margin-top: 1rem;
+    line-height: 1.6;
+`;
 
-const StyledProjectDetailsLink = createStyledMotionComponent('div')(props => `
+const ProjectDetailsLink = styled.div`
     display: flex;
-    justify-content: flex-end;
-    grid-gap: 2rem;
-    padding-top: 1rem;
-    margin: 1rem;
-    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    grid-gap: 1.5rem;
+    margin-top: 2rem;
     a {
-        color: ${props.theme.text};
+        color: ${(props) => props.theme.primary};
         text-decoration: none;
-        padding: 0.5rem 1rem;
-        border: 1px solid ${props.theme.text};
+        padding: 0.6rem 1.2rem;
+        border: 1px solid ${(props) => props.theme.primary};
         border-radius: 5px;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        transition: all 0.3s ease;
 
         &:hover {
-            background-color: ${props.theme.text};
-            color: ${props.theme.background};
-        }
-
-        @media (max-width: 768px) {
-            margin-bottom: 0.5rem;
+            background-color: ${(props) => props.theme.primary};
+            color: ${(props) => props.theme.background};
         }
     }
+`;
 
-    @media (max-width: 768px) {
-        flex-direction: column;
-    }
-`);
-
-const MotionAnchor = createStyledMotionComponent(motion.a)(props => `
-    color: ${props.theme.text};
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-
-    &:hover {
-        background-color: ${props.theme.text};
-        color: ${props.theme.background};
-    }
-
-    @media (max-width: 768px) {
-        margin-bottom: 0.5rem;
-    }
-`);
-
-// Tilt effect
-const tiltMotion = {
-    hover: {
-        rotateX: [0, -20, 20, -20, 0],
-        rotateY: [0, 20, -20, 20, 0],
-        transition: { delay: 0.2 }
-    }
-};
 export const ProjectPreview = ({ project }: { project: ProjectType | null }) => {
     const theme = useTheme();
-
-    // For parallax tilt effect
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const rotateX = useTransform(y, [-100, 100], [60, -60]);
-    const rotateY = useTransform(x, [-100, 100], [-60, 60]);
 
     if (!project) return <div>No project selected.</div>;
 
     return (
-        <AnimatePresence mode="wait">
-            <Tilt tiltMaxAngleX={5} tiltMaxAngleY={5}>
-                <ProjectPreviewWrapper
-                    initial="hidden"
-                    animate="show"
-                    theme={theme}
-                >
-                    <ProjectTitleAndLogo project={project} />
-                    <StyledProjectOverview theme={theme}>{project.overview}</StyledProjectOverview>
-                    <StyledProjectDetailsLink theme={theme}>
-                        <MotionAnchor
-                            href={`/project/${project.name}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            data-id="special"
-                        >
-                            View Details
-                        </MotionAnchor>
-                        <MotionAnchor
-                            href={project.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            style={{
-                                backgroundColor: project.primaryColor
-                            }}
-                            data-id="special"
-                        >
-                            View Repo
-                        </MotionAnchor>
-                    </StyledProjectDetailsLink>
-                </ProjectPreviewWrapper>
-            </Tilt>
+        <AnimatePresence>
+            <ProjectWrapper
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+            >
+                <ProjectTitleAndLogo project={project} />
+                <ProjectOverview theme={theme}>{project.overview}</ProjectOverview>
+                <ProjectDetailsLink theme={theme}>
+                    <motion.a
+                        href={`/project/${project.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        View Details
+                    </motion.a>
+                    <motion.a
+                        href={project.github_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                            backgroundColor: project.primaryColor
+                        }}
+                    >
+                        View Repo
+                    </motion.a>
+                </ProjectDetailsLink>
+            </ProjectWrapper>
         </AnimatePresence>
     );
 };
