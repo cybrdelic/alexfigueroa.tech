@@ -10,6 +10,7 @@ import VectorLogoAndText from "../VectorLogoAndText";
 import styled from 'styled-components';
 import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
 import { adjustTransparency } from '../../../utils/adjustTransparency';
+import Tilt from 'react-parallax-tilt';
 
 interface StyledFlexElementProps {
     theme: any;
@@ -70,27 +71,29 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
 
     return (
         <CursorContext.Provider value={cursorType}>
-            <StyledFlexElement
-                projectPrimaryColor={project.primaryColor}
-                isHovered={isHovered}
-                key={project.id}
-                onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
-                onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
-                whileHover={hoverEffects.hover}
-                theme={theme}
-                style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
-                data-id="special"
-            >
-                <ConstantSizeWrapper>
-                    <VectorLogoAndText
-                        text={project.name}
-                        logo={project.logo}
-                        font={project.titleFont}
-                        theme={theme}
-                        data-id="special"
-                    />
-                </ConstantSizeWrapper>
-            </StyledFlexElement>
+            <Tilt tiltMaxAngleX={15} tiltMaxAngleY={15}>
+                <StyledFlexElement
+                    projectPrimaryColor={project.primaryColor}
+                    isHovered={isHovered}
+                    key={project.id}
+                    onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
+                    onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
+                    whileHover={hoverEffects.hover}
+                    theme={theme}
+                    style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
+                    data-id="special"
+                >
+                    <ConstantSizeWrapper>
+                        <VectorLogoAndText
+                            text={project.name}
+                            logo={project.logo}
+                            font={project.titleFont}
+                            theme={theme}
+                            data-id="special"
+                        />
+                    </ConstantSizeWrapper>
+                </StyledFlexElement>
+            </Tilt>
         </CursorContext.Provider>
     );
 };
