@@ -99,7 +99,6 @@ export const ProjectDetailsLayout: React.FC<ProjectDetailsLayoutProps> = ({ proj
                 {project.overview}
             </TopMiddlePane>
             <BottomLeftPane variants={bottomLeftPaneVariants} transition={{ duration: 0.3 }}>
-                {/* <button onClick={() => window.open(project.github_url, "_blank")}>Github</button> */}
                 <BoldHeaderText text={project.subtitle} font={generateProjectsData().x1dra.titleFont} size={TextSize.MEDIUM} opacity={0.6} />
                 <BoldHeaderText text={project.name} font={generateProjectsData().x1dra.titleFont} size={TextSize.EXTRA_LARGE} opacity={0.6} color={project.primaryColor} />
             </BottomLeftPane>
