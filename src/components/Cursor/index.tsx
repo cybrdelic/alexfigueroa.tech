@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { CursorContext } from '../../contexts/CursorContext';
 
 const Cursor = styled.div`
@@ -13,6 +13,28 @@ const Cursor = styled.div`
   transition-property: background-color, opacity, transform, mix-blend-mode;
   will-change: width, height, transform;
 `;
+
+const ripple = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    opacity: 0;
+  }
+`;
+
+const CursorRipple = styled.div`
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  border: 2px solid white;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  animation: ${ripple} 1s infinite;
+  will-change: width, height, transform;
+`;
+
 
 export default function CustomCursor() {
   const cursorType = useContext(CursorContext);
@@ -41,21 +63,33 @@ export default function CustomCursor() {
   };
 
   const hoveredCursorStyles: React.CSSProperties = {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(240,240,240,1)',
     opacity: 1,
     transform: 'scale(3)',
   };
 
   const outerCursorStyles = {
-    width: '56px',
-    height: '56px',
+    width: '30px',
+    height: '30px',
+    left: `${cursorPos.x}px`, // Subtract half the size of the cursor
+    top: `${cursorPos.y}px`, // Subtract half the size of the cursor
     ...defaultCursorStyles,
     ...(cursorType === 'hovered' ? hoveredCursorStyles : {}),
   };
 
+  const rippleCursorStyles = {
+    width: '30px',
+    height: '30px',
+    left: `${cursorPos.x}px`, // Subtract half the size of the cursor
+    top: `${cursorPos.y}px`, // Subtract half the size of the cursor
+    transform: cursorType === 'hovered' ? 'scale(3)' : 'scale(1)',
+  };
+
+
   return (
     <>
       <Cursor style={outerCursorStyles} />
+      {cursorType === 'hovered' && <CursorRipple style={rippleCursorStyles} />}
     </>
   );
 };
