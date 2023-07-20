@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectData, ProjectType } from "../../../data/project.data";
 import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
@@ -92,7 +92,6 @@ const StyledContainer = createStyledMotionComponent(motion.div)(props => `
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
 `);
 
 const GridElementContainer = createStyledMotionComponent(motion.div)(props => `
@@ -105,28 +104,16 @@ const MemoizedGridElement = memo(GridElement);
 
 export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
     const theme = useTheme();
-    const [selectedProject, setSelectedProject] = useState<ProjectType | null>(projects.x1dra);
-    const [animateProjectDetails, setAnimateProjectDetails] = useState<"open" | "closed">("closed");
-    const [hoveredProject, setHoveredProject] = useState<ProjectType | null>(null);
-
-
+    const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
     const cursorType = useCursorEffect();
 
     const handleMouseEnter = (project: ProjectType) => {
-        setHoveredProject(project);
+        setSelectedProject(project);
     }
 
-    useEffect(() => {
-        if (hoveredProject) {
-            setAnimateProjectDetails("closed");
-            setSelectedProject(null);
-
-            requestAnimationFrame(() => {
-                setSelectedProject(hoveredProject);
-                setAnimateProjectDetails("open");
-            });
-        }
-    }, [hoveredProject]);
+    const handleMouseLeave = () => {
+        setSelectedProject(null);
+    }
 
     return (
         <CursorContext.Provider value={cursorType}>
@@ -149,7 +136,7 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                                 project={project}
                                 handleMouseEnter={handleMouseEnter}
                                 isActive={selectedProject?.id === project.id}
-                                handleMouseLeave={() => { }}
+                                handleMouseLeave={handleMouseLeave}
                             />
                         </GridElementContainer>
                     ))}
@@ -157,7 +144,7 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                 {selectedProject && (
                     <ProjectDetailsLayout
                         project={selectedProject}
-                        animate={animateProjectDetails}
+                        animate={selectedProject ? "open" : "closed"}
                     />
                 )}
             </StyledContainer>

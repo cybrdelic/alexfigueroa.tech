@@ -31,8 +31,10 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
     overflow: hidden;
 
     &:hover {
-        transform: scale(1.05);
-        border: solid 0.1rem ${adjustTransparency(props.theme.text, 0.2)};
+        border: solid 0.1rem ${adjustTransparency(props.projectPrimaryColor, 1)};
+        div {
+            transform: scale(0.9);
+        }
     }
 `);
 
