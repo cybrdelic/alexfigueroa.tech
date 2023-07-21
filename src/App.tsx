@@ -1,17 +1,39 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { GlobalStyle } from "./theming/GlobalStyle.ts";
-import BackgroundImage from './components/BackgroundImage/index.tsx';
-import NavBar from './components/NavBar/index.tsx';
+
 import { ThemeProvider as AppThemeProvider } from './theming/ThemeProvider.tsx';
 import { baseRoutes, routes } from './routing/routes.tsx';
 import { ThemeContext, ThemeToggleContext } from './contexts/ThemeContext.tsx';
+// AnimatedCursor seems to be a library component. Lazy loading is not needed for libraries.
 import AnimatedCursor from 'react-animated-cursor';
-import CustomCursor from './components/Cursor/index.tsx';
 import { CursorContext } from './contexts/CursorContext.tsx';
 import { useCursorEffect } from './hooks/useCursorEffect.tsx';
-import ThemeToggle from './components/ThemeToggle/index.tsx';
+import { AnimatePresence } from 'framer-motion';
+
+// Your styles and other non-component imports remain the same.
+
+const NavBar = lazy(() => import('./components/NavBar/index.tsx'));
+const ThemeToggle = lazy(() => import('./components/ThemeToggle/index.tsx'));
+// BackgroundImage and CustomCursor are components, so we can lazy load them.
+const BackgroundImage = lazy(() => import('./components/BackgroundImage/index.tsx'));
+const CustomCursor = lazy(() => import('./components/Cursor/index.tsx'));
+
+
+const RoutesWrapper = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 const MainContent = styled.div`
   padding-top: 70px; // Adjust this value based on the height of your navbar
@@ -30,39 +52,35 @@ const App: React.FC = () => {
     <AppThemeProvider>
       <CursorContext.Provider value={cursorType}>
         <Router>
-          <CustomCursor />
-          <ThemeContext.Consumer>
-            {(theme) =>
-              <ThemeToggleContext.Consumer>
-                {(toggleTheme) =>
-                  theme && toggleTheme ?
-                    <>
-                      <BackgroundImage imageurl={process.env.PUBLIC_URL + '/background.png'}>
-                        <StyledThemeProvider theme={theme}>
-                          <GlobalStyle />
-                          <div>
-
-                            <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
-                            <MainContent>
-                              <Routes>
-                                {routes.map((route, index) => (
-                                  <Route key={index} path={route.path} element={route.element} />
-                                ))}
-                              </Routes>
-                            </MainContent>
-
-                          </div>
-                          <ThemeToggleWrapper>
-                            <ThemeToggle onClick={toggleTheme} />
-                          </ThemeToggleWrapper>
-                        </StyledThemeProvider>
-                      </BackgroundImage>
-                    </>
-                    : null
-                }
-              </ThemeToggleContext.Consumer>
-            }
-          </ThemeContext.Consumer>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CustomCursor />
+            <ThemeContext.Consumer>
+              {(theme) =>
+                <ThemeToggleContext.Consumer>
+                  {(toggleTheme) =>
+                    theme && toggleTheme ?
+                      <>
+                        <BackgroundImage imageurl={process.env.PUBLIC_URL + '/background.png'}>
+                          <StyledThemeProvider theme={theme}>
+                            <GlobalStyle />
+                            <div>
+                              <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
+                              <MainContent>
+                                <RoutesWrapper />
+                              </MainContent>
+                            </div>
+                            <ThemeToggleWrapper>
+                              <ThemeToggle onClick={toggleTheme} />
+                            </ThemeToggleWrapper>
+                          </StyledThemeProvider>
+                        </BackgroundImage>
+                      </>
+                      : null
+                  }
+                </ThemeToggleContext.Consumer>
+              }
+            </ThemeContext.Consumer>
+          </Suspense>
         </Router>
       </CursorContext.Provider>
     </AppThemeProvider>
