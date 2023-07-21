@@ -1,6 +1,6 @@
 // GridElement.tsx
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectType } from "../../../data/project.data";
 import { useHoveredState } from "../../../hooks/animation/useHoveredState";
@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
 import { adjustTransparency } from '../../../utils/adjustTransparency';
 import Tilt from 'react-parallax-tilt';
+import { useNavigate } from 'react-router-dom';
 
 interface StyledFlexElementProps {
     theme: any;
@@ -56,6 +57,23 @@ const hoverEffects = {
     }
 };
 
+const exitTransition = {
+    scale: [1, 2, 10],
+    opacity: [1, 0, 0],
+    transition: {
+        duration: 0.5
+    }
+};
+
+const activeGridElementExitTransition = {
+    scale: [1, 2, 10],
+    rotate: [0, 0],
+    opacity: [1, 1],
+    transition: {
+        duration: 1
+    }
+}
+
 interface GridElementProps {
     project: ProjectType;
     handleMouseEnter: (project: ProjectType) => void;
@@ -67,6 +85,24 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
     const { isHovered, onHoverStart, onHoverEnd } = useHoveredState();
     const theme = useTheme();
     const cursorType = useCursorEffect();
+    const navigate = useNavigate();
+    const [exitAnim, setExitAnim] = useState(exitTransition); // NEW
+
+    const handleClick = () => {
+        setExitAnim(activeGridElementExitTransition); // NEW
+        setTimeout(() => {
+            navigate(`/project/${project.name}`);
+        }, 500); // Adjust the delay as needed
+    };
+
+
+    const clickTransition = {
+        scale: [1, 0.7, 1],
+        transition: {
+            duration: 0.7,
+        }
+    };
+
 
     return (
         <CursorContext.Provider value={cursorType}>
@@ -76,13 +112,17 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
                 key={project.id}
                 onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
                 onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
+                onClick={handleClick}
                 whileHover={hoverEffects.hover}
+                whileTap={clickTransition}
                 theme={theme}
                 style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
                 data-id="special"
                 isActive={isActive}
+                as={motion.div} // or whatever tag you want to animate
+                exit={exitAnim}
             >
-                <ConstantSizeWrapper>
+                <ConstantSizeWrapper exit={exitTransition}>
                     <VectorLogoAndText
                         text={project.name}
                         logo={project.logo}
@@ -92,7 +132,7 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
                     />
                 </ConstantSizeWrapper>
             </StyledFlexElement>
-        </CursorContext.Provider>
+        </CursorContext.Provider >
     );
 };
 
