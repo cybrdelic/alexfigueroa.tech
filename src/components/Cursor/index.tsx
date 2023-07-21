@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { CursorContext } from '../../contexts/CursorContext';
 import { throttle } from 'lodash';
@@ -39,19 +39,19 @@ export default function CustomCursor() {
   const cursorType = useContext(CursorContext);
 
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const updateCursorPosRef = useRef(null);
 
   useEffect(() => {
-    const updateCursorPos = throttle((event) => {
+    updateCursorPosRef.current = throttle((event) => {
       setCursorPos({ x: event.clientX, y: event.clientY });
-    }, 60);
+    }, 140);
 
-    document.addEventListener("mousemove", updateCursorPos);
+    document.addEventListener("mousemove", updateCursorPosRef.current);
 
     return () => {
-      document.removeEventListener("mousemove", updateCursorPos);
+      document.removeEventListener("mousemove", updateCursorPosRef.current);
     };
   }, []);
-
   const defaultCursorStyles: React.CSSProperties = {
     backgroundColor: 'transparent',
     opacity: 0.7,
