@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { CursorContext } from '../../contexts/CursorContext';
+import { throttle } from 'lodash';
 
 const Cursor = styled.div`
   position: fixed;
@@ -9,8 +10,7 @@ const Cursor = styled.div`
   border: 2px solid white;
   border-radius: 50%;
   mix-blend-mode: difference;
-  transition: all 150ms ease;
-  transition-property: background-color, opacity, transform, mix-blend-mode;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: width, height, transform;
 `;
 
@@ -35,17 +35,15 @@ const CursorRipple = styled.div`
   will-change: width, height, transform;
 `;
 
-
 export default function CustomCursor() {
   const cursorType = useContext(CursorContext);
-  console.log('CursorContext value in CustomCursor:', cursorType); // Log here
 
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const updateCursorPos = (event) => {
+    const updateCursorPos = throttle((event) => {
       setCursorPos({ x: event.clientX, y: event.clientY });
-    };
+    }, 60);
 
     document.addEventListener("mousemove", updateCursorPos);
 
@@ -60,6 +58,7 @@ export default function CustomCursor() {
     mixBlendMode: 'difference',
     left: `${cursorPos.x}px`,
     top: `${cursorPos.y}px`,
+    transition: 'background-color 0.3s, opacity 0.3s, transform 0.3s, left 0.2s, top 0.2s'
   };
 
   const hoveredCursorStyles: React.CSSProperties = {
@@ -68,23 +67,31 @@ export default function CustomCursor() {
     transform: 'scale(3)',
   };
 
+  const clickedCursorStyles: React.CSSProperties = {
+    backgroundColor: 'rgba(200,200,200,1)',
+    opacity: 0.8,
+    transform: 'scale(5) rotate(360deg)',
+    transition: 'background-color 0.5s, opacity 0.5s, transform 0.1s, left 0.5s, top 0.5s'
+  };
+
   const outerCursorStyles = {
     width: '30px',
     height: '30px',
-    left: `${cursorPos.x}px`, // Subtract half the size of the cursor
-    top: `${cursorPos.y}px`, // Subtract half the size of the cursor
+    left: `${cursorPos.x}px`,
+    top: `${cursorPos.y}px`,
+    transform: cursorType === 'hovered' ? 'scale(3)' : cursorType === 'clicked' ? 'scale(1.2)' : 'scale(1)',
     ...defaultCursorStyles,
     ...(cursorType === 'hovered' ? hoveredCursorStyles : {}),
+    ...(cursorType === 'clicked' ? clickedCursorStyles : {}),
   };
 
   const rippleCursorStyles = {
     width: '30px',
     height: '30px',
-    left: `${cursorPos.x}px`, // Subtract half the size of the cursor
-    top: `${cursorPos.y}px`, // Subtract half the size of the cursor
-    transform: cursorType === 'hovered' ? 'scale(3)' : 'scale(1)',
+    left: `${cursorPos.x}px`,
+    top: `${cursorPos.y}px`,
+    transform: cursorType === 'hovered' ? 'scale(3)' : cursorType === 'clicked' ? 'scale(1.2)' : 'scale(1)',
   };
-
 
   return (
     <>
