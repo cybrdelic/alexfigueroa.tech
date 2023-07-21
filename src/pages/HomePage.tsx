@@ -7,20 +7,21 @@ import Footer from '../components/Footer';
 import styled from 'styled-components';
 import { withAnimations } from "../hooks/animation/withAnimations";
 import { useTheme } from "../hooks/useTheme";
+import PageTransition from "../components/PageTransition";
 
 interface HomePageProps {
 
 }
 
 const HomePage: React.FC<HomePageProps> = () => {
-  
+
   return (
-    <div>
+    <PageTransition>
       <HeroComponent />
       <RecentProjects />
       <RecentBlogs />
       <Footer />
-    </div>
+    </PageTransition>
   );
 }
 

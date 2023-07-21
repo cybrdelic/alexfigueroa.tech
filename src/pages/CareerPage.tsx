@@ -5,6 +5,7 @@ import ListWithHoverEffect from "../components/ListWithHoverEffect/index";
 import { useTheme } from '../hooks/useTheme';
 import { CareerDataType, careerData as careerDataValues } from '../data/career.data'; // assumed import
 import { usePageTransitions } from '../hooks/usePageTransitions';
+import PageTransition from '../components/PageTransition';
 
 const Container = styled(motion.div)`
   display: flex;
@@ -76,8 +77,8 @@ export default function CareerPage() {
   };
 
   return (
-   <Wrapper>
-      <AnimatePresence mode="wait">
+    <PageTransition>
+      <Wrapper>
         <Container
           key={'CAREER'}
           animate={controls}
@@ -90,38 +91,38 @@ export default function CareerPage() {
             animate="visible"
             exit="exit"
           >
-            <Title 
-              theme={theme} 
+            <Title
+              theme={theme}
               variants={{ ...fadeVariant, hidden: { ...fadeVariant.hidden, y: 20 }, visible: { ...fadeVariant.visible, y: 0, transition: { ...fadeVariant.visible.transition, delay: 0.1 } } }}
             >
               {careerData?.jobTitle}
             </Title>
-            <Company 
-              theme={theme} 
+            <Company
+              theme={theme}
               variants={{ ...fadeVariant, hidden: { ...fadeVariant.hidden, y: 20 }, visible: { ...fadeVariant.visible, y: 0, transition: { ...fadeVariant.visible.transition, delay: 0.2 } } }}
             >
               {careerData?.company}
             </Company>
-              <Period theme={theme} variants={fadeVariant} initial="hidden" animate="visible">{careerData?.period}</Period>
-              <Description variants={fadeVariant} initial="hidden" animate="visible">{careerData?.description}</Description>
-              <h4>Responsibilities:</h4>
-              <ListWithHoverEffect items={careerData?.responsibilities ?? ['']} onItemClick={handleClick}/>
-              <h4>Achievements:</h4>
-              <ListWithHoverEffect items={careerData?.achievements ?? ['']} onItemClick={handleClick}/>
-                {additionalInfo && (
-                  <AdditionalInfo
-                    variants={fadeVariant}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  >
-                    <p>You clicked on: {additionalInfo}</p>
-                    <button onClick={() => setAdditionalInfo(null)}>Close</button>
-                  </AdditionalInfo>
-                )}
-            </Card>
+            <Period theme={theme} variants={fadeVariant} initial="hidden" animate="visible">{careerData?.period}</Period>
+            <Description variants={fadeVariant} initial="hidden" animate="visible">{careerData?.description}</Description>
+            <h4>Responsibilities:</h4>
+            <ListWithHoverEffect items={careerData?.responsibilities ?? ['']} onItemClick={handleClick} />
+            <h4>Achievements:</h4>
+            <ListWithHoverEffect items={careerData?.achievements ?? ['']} onItemClick={handleClick} />
+            {additionalInfo && (
+              <AdditionalInfo
+                variants={fadeVariant}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <p>You clicked on: {additionalInfo}</p>
+                <button onClick={() => setAdditionalInfo(null)}>Close</button>
+              </AdditionalInfo>
+            )}
+          </Card>
         </Container>
-    </AnimatePresence>
-    </Wrapper>
+      </Wrapper >
+    </PageTransition>
   );
 }

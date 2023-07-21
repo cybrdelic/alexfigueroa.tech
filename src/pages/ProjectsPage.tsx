@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import ProjectChanger from '../components/ProjectsView/ProjectChanger';
 import { projectsData } from '../data/project.data';
 import ProjectsLayout from '../components/ProjectsView/ProjectsLayout';
+import PageTransition from '../components/PageTransition';
 
 
 const Container = styled.div`
@@ -28,17 +29,41 @@ const ContentWrapper = styled.div`
 `;
 
 
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.99,
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 50,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 
 
 const ProjectsPage: React.FC = () => {
 
   return (
-    <Container>
-      <ContentWrapper>
-        <ProjectsLayout projects={projectsData} />
-      </ContentWrapper>
-    </Container>
+    <PageTransition>
+      <Container>
+        <ContentWrapper>
+          <ProjectsLayout projects={projectsData} />
+        </ContentWrapper>
+      </Container>
+    </PageTransition>
   );
 };
+
 
 export default ProjectsPage;
