@@ -22,7 +22,7 @@ const StyledMotionDiv = createStyledMotionComponent('div')(props => `
 const TopMiddlePane = createStyledMotionComponent('div')(props => `
     position: absolute;
     top: 25%;
-    left: 50%;
+    left: 25%;
     transform: translate(-50%, -50%);
     color: ${props.theme.text};
     font-size: 1.25rem;
