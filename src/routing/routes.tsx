@@ -16,7 +16,7 @@ export const baseRoutes: RouteItem[] = [
 
 const getProjectRouteItem = (project: ProjectType) => {
   const routeItem: RouteItem = {
-    path: `/projects/${project.name}`,
+    path: `/project/${project.name}`,
     element: <ProjectDetail project={project} />,
     name: project.name
   }
