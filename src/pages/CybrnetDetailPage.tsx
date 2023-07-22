@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import ProjectChanger from '../components/ProjectChanger';
 import { projectsData } from '../data/project.data';
+import PageTransition from '../components/PageTransition';
 
 const projectData = [
   {
@@ -73,26 +74,10 @@ const ContentWrapper = styled.div`
 `;
 
 
-const ProjectList = styled.div`
-  width: 40%;
-  margin-right: 2rem;
-  overflow-y: auto;
-`;
-
 const ProjectPreview = styled.div`
   width: 60%;
   display: flex;
   flex-direction: column;
-`;
-
-const ProjectCard = styled(motion.div)`
-  background-color: ${props => props.theme.cardBackground};
-  color: ${props => props.theme.text};
-  border-radius: 5px;
-  padding: 2rem;
-  margin: 1rem;
-  cursor: pointer;
-  width: 100%;
 `;
 
 const PreviewContainer = styled.div`
@@ -133,34 +118,36 @@ const ProjectsPage: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState(projectData[0]);
 
   return (
-    <Container>
-      <ContentWrapper>
-        <ProjectChanger projects={projectsData}/>
+    <PageTransition>
+      <Container>
+        <ContentWrapper>
+          <ProjectChanger projects={projectsData} />
 
-        <ProjectPreview>
-          <PreviewContainer>
-            <h2>{selectedProject.title}</h2>
-            <PreviewImage src={selectedProject.media} alt={selectedProject.title} />
-            <h3>Features</h3>
-            <PreviewFeatures>
-              <ul>
-                {selectedProject.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
-            </PreviewFeatures>
-            <PreviewButtonContainer>
-              <PreviewButton href={selectedProject.link} target="_blank" rel="noreferrer">
-                View Project
-              </PreviewButton>
-              <PreviewButton href={selectedProject.github} target="_blank" rel="noreferrer">
-                View GitHub
-              </PreviewButton>
-            </PreviewButtonContainer>
-          </PreviewContainer>
-        </ProjectPreview>
-      </ContentWrapper>
-    </Container>
+          <ProjectPreview>
+            <PreviewContainer>
+              <h2>{selectedProject.title}</h2>
+              <PreviewImage src={selectedProject.media} alt={selectedProject.title} />
+              <h3>Features</h3>
+              <PreviewFeatures>
+                <ul>
+                  {selectedProject.features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+              </PreviewFeatures>
+              <PreviewButtonContainer>
+                <PreviewButton href={selectedProject.link} target="_blank" rel="noreferrer">
+                  View Project
+                </PreviewButton>
+                <PreviewButton href={selectedProject.github} target="_blank" rel="noreferrer">
+                  View GitHub
+                </PreviewButton>
+              </PreviewButtonContainer>
+            </PreviewContainer>
+          </ProjectPreview>
+        </ContentWrapper>
+      </Container>
+    </PageTransition>
   );
 };
 

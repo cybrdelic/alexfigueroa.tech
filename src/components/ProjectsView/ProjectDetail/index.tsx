@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import logo from './logo.png'; // please replace with your actual logo path
+import { ProjectType } from '../../../data/project.data';
 
 // types
 type SectionProps = {
@@ -14,7 +14,8 @@ type SectionProps = {
 };
 
 type ProjectDetailProps = {
-  sections: SectionProps[];
+  project: ProjectType;
+  sections?: SectionProps[];
 };
 
 // component
@@ -27,12 +28,11 @@ export default function ProjectDetail(props: ProjectDetailProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <ProjectLogo src={logo} alt="Project Logo" />
       <Typography variant="h2" gutterBottom>Exploring Cybrnet through the Lens of the Distributed Autonomous Intelligence Framework (DAIF)</Typography>
       <Typography variant="h4" gutterBottom>Overview:</Typography>
       <Typography paragraph>This comprehensive guide unravels...</Typography>
       <Typography variant="h4" gutterBottom>Content Map</Typography>
-      {sections.map((section) => (
+      {sections?.map((section) => (
         <div key={section.id}>
           <Typography variant="h6" gutterBottom>
             <StyledLink to={section.link}>{section.title}</StyledLink>

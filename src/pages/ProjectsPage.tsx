@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import ProjectChanger from '../components/ProjectChanger';
+import ProjectChanger from '../components/ProjectsView/ProjectChanger';
 import { projectsData } from '../data/project.data';
-import ProjectList from '../components/ProjectList';
+import ProjectsLayout from '../components/ProjectsView/ProjectsLayout';
+import PageTransition from '../components/PageTransition';
 
 
 const Container = styled.div`
@@ -19,25 +20,50 @@ const Container = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
-  max-width: 1440px; // or any maximum width you prefer
   height: calc(100vh - 60px);  // Subtract the height of your navbar
   overflow-y: auto;  // Add scroll when the content overflows
   overflow-x: hidden;
 `;
 
 
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.99,
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 50,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
+
 
 
 const ProjectsPage: React.FC = () => {
 
   return (
-    <Container>
-      <ContentWrapper>
-        <ProjectList projects={projectsData} />
-      </ContentWrapper>
-    </Container>
+    <PageTransition>
+      <Container>
+        <ContentWrapper>
+          <ProjectsLayout projects={projectsData} />
+        </ContentWrapper>
+      </Container>
+    </PageTransition>
   );
 };
+
 
 export default ProjectsPage;

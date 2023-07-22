@@ -4,6 +4,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { darkTheme } from '../../theming/theme';
 import { usePageTransitions } from '../../hooks/usePageTransitions';
 import { useLocation } from 'react-router-dom';
+import _ from 'lodash';
 
 interface BackgroundImageProps {
   children: React.ReactNode,
@@ -53,7 +54,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
         const easedDist = easing(dist / Math.max(ctx.canvas.width, ctx.canvas.height));
 
         ctx.lineWidth = 1 + 3 * (1 - easedDist);
-        ctx.strokeStyle = theme === darkTheme ? `rgba(255, 255, 255, ${0.05 - easedDist / 15})` : `rgba(0,0,0, ${0.1 - easedDist / 15})`;
+        ctx.strokeStyle = theme === darkTheme ? `rgba(255, 255, 255, ${0.05 - easedDist / 15})` : `rgba(0,0,0, ${0.05 - easedDist / 15})`;
 
         const size = state.gap + Math.sin(dist / state.distortion) * state.gap;
         ctx.beginPath();
@@ -83,21 +84,23 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
     ctx.fillStyle = `rgba(0, 0, 0, 0.05)`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    requestAnimationFrame(draw);
   }, [drawGrid]);
+
+  const debouncedDraw = _.debounce(draw, 100 / 15);
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent) => {
       mousePos.current.x = e.clientX;
       mousePos.current.y = e.clientY;
+      debouncedDraw();
     };
     window.addEventListener('mousemove', mouseMove);
-    draw();
+    debouncedDraw();
     return () => {
       window.removeEventListener('mousemove', mouseMove);
     };
-  }, [draw]);
+  }, [debouncedDraw]);
+
 
   return (
     <ParentContainer>

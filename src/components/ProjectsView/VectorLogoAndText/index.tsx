@@ -1,8 +1,8 @@
+import { motion } from 'framer-motion';
 import React from 'react';
-import { createStyledMotionComponent } from "../../utils/createStyledMotionComponent";
-import { useTheme } from "../../hooks/useTheme";
-import { motion } from "framer-motion";
-import { Theme } from '../../theming/theme';
+import { Theme } from 'styled-components';
+import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
+
 
 interface VectorLogoAndTextProps {
     text: string;

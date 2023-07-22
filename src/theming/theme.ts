@@ -15,6 +15,7 @@ export interface Theme {
     error: string;
     success: string;
     cardColor: string;
+    name: string;
 }
 
 // lightTheme.ts
@@ -34,7 +35,8 @@ export const lightTheme: Theme = {
     fontFamily: '"Roboto", sans-serif',
     error: 'rgba(255, 0, 0, 1)',
     success: 'rgba(0, 255, 0, 1)',
-    cardColor: 'rgba(250,250,250,0.9)'
+    cardColor: 'rgba(250,250,250,0.9)',
+    name: 'lightTheme'
 };
 
 // darkTheme.ts
@@ -54,5 +56,6 @@ export const darkTheme: Theme = {
     fontFamily: '"Roboto", sans-serif',
     error: 'rgba(255, 0, 0, 1)',
     success: 'rgba(0, 255, 0, 1)',
-    cardColor: 'rgba(5,5,5,0.9)'
+    cardColor: 'rgba(5,5,5,0.9)',
+    name: 'darkTheme'
 };
