@@ -1,62 +1,89 @@
 // imports
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Box, Chip, Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ProjectType } from '../../../data/project.data';
+import { ProjectTitleAndLogo } from '../ProjectLogoAndText';
+import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
+import BoldHeaderText from '../BoldHeaderText';
 
 // types
-type SectionProps = {
-  id: string;
-  title: string;
-  link: string;
-};
-
 type ProjectDetailProps = {
   project: ProjectType;
-  sections?: SectionProps[];
 };
 
 // component
-export default function ProjectDetail(props: ProjectDetailProps) {
-  const { sections } = props;
+export default function ProjectDetail({ project }: ProjectDetailProps) {
+  // Assuming 'technologies', 'team', 'images', 'features' exist in your ProjectType
+  const { technologies, team, images, features } = project;
 
   return (
-    <motion.div
+    <StyledMotionDiv
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <Typography variant="h2" gutterBottom>Exploring Cybrnet through the Lens of the Distributed Autonomous Intelligence Framework (DAIF)</Typography>
-      <Typography variant="h4" gutterBottom>Overview:</Typography>
-      <Typography paragraph>This comprehensive guide unravels...</Typography>
-      <Typography variant="h4" gutterBottom>Content Map</Typography>
-      {sections?.map((section) => (
-        <div key={section.id}>
-          <Typography variant="h6" gutterBottom>
-            <StyledLink to={section.link}>{section.title}</StyledLink>
-          </Typography>
-        </div>
-      ))}
+      {/* Project Images Carousel
+      <div>
+        {images.map((image, index) => (
+          <img key={index} src={image} alt={`Project Slide ${index + 1}`} />
+        ))}
+      </div> */}
+      <BoldHeaderText text={project.name} />
+      <Typography variant="h4" gutterBottom>Technologies Used:</Typography>
+      <Box display="flex" flexWrap="wrap" gap={1}>
+        {technologies.map((tech, index) => (
+          <Chip key={index} label={tech} />
+        ))}
+      </Box>
+
+      {/* Project Features */}
+      <Typography variant="h4" gutterBottom>Features:</Typography>
+      <List>
+        {features.map((feature, index) => (
+          <ListItem key={index}>
+            <ListItemText primary={feature} />
+          </ListItem>
+        ))}
+      </List>
+
+      {/* Project Team */}
+      <Typography variant="h4" gutterBottom>Team:</Typography>
+      <Box display="flex" flexWrap="wrap" gap={1}>
+        {team.map((member, index) => (
+          <Box key={index} display="flex" flexDirection="column" alignItems="center">
+            <Avatar src={member.avatar} alt={member.name} />
+            <Typography variant="body2">{member.name}</Typography>
+            <Typography variant="caption">{member.role}</Typography>
+          </Box>
+        ))}
+      </Box>
+
+      {/* View Documentation Button */}
       <StyledButton variant="outlined" color="primary">View Documentation</StyledButton>
-    </motion.div>
+    </StyledMotionDiv>
   );
 }
 
 // styled components
-const ProjectLogo = styled.img`
-  height: 100px;
-  width: 100px;
-`;
+const StyledMotionDiv = createStyledMotionComponent('div')(props => `
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #111;
+  color: white;
+  border-radius: 15px;
+  transition: all 0.3s ease-in-out;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
+  min-width: 80%;
   &:hover {
-    color: #5a9;
+    transform: scale(1.02);
   }
-`;
+`);
 
 const StyledButton = styled(Button)`
   && {
