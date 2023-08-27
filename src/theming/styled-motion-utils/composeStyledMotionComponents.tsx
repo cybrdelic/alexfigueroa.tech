@@ -7,7 +7,7 @@ type Component = ComponentType<any> | keyof JSX.IntrinsicElements;
 type StyleFunction = (props: any) => CSSProp;
 
 // Function to compose an arbitrary number of styled motion components
-const composeStyledMotionComponents = (
+export const composeStyledMotionComponents = (
     // Initial component to be styled
     initialComponent: Component,
     // Rest parameter to take multiple style functions
