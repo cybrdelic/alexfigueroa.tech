@@ -1,4 +1,5 @@
-// For centering elements absolutely
+import { mq } from "./responsive";
+
 export const absoluteCenter = `
     position: absolute;
     top: 50%;
@@ -11,150 +12,246 @@ export const relative = `
     position: relative;
 `;
 
-// For fixing an element to the top of the viewport
+// Fixed positions with defaults for padding
 export const fixedTop = `
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    padding: 0;
+
+    ${mq('sm')} {
+        padding: 0 10px;
+    }
+
+    ${mq('lg')} {
+        padding: 0 30px;
+    }
 `;
 
-// For fixing an element to the bottom of the viewport
 export const fixedBottom = `
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
+    padding: 0;
+
+    ${mq('sm')} {
+        padding: 0 10px;
+    }
+
+    ${mq('lg')} {
+        padding: 0 30px;
+    }
 `;
 
-// For fixing an element to the left of the viewport
+export const fixedBottomRight = `
+    position: fixed;
+    bottom: 0;
+    right: 0;
+
+    ${mq('sm')} {
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    ${mq('lg')} {
+        padding-right: 30px;
+        padding-bottom: 30px;
+    }
+`;
+
+
+
+
 export const fixedLeft = `
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
+
+    ${mq('md')} {
+        width: 60px;  // Example, adjust as needed
+    }
 `;
 
-// For fixing an element to the right of the viewport
 export const fixedRight = `
     position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
+
+    ${mq('md')} {
+        width: 60px;  // Example, adjust as needed
+    }
 `;
 
-// For sticky positioning, typically used with headers or navigation that should stick at the top while scrolling
+// Sticky positions, can have different 'top' or 'bottom' values at various breakpoints
 export const stickyTop = `
     position: sticky;
     top: 0;
+
+    ${mq('lg')} {
+        top: 10px;
+    }
 `;
 
-// For sticky positioning at the bottom, possibly for footers
 export const stickyBottom = `
     position: sticky;
     bottom: 0;
+
+    ${mq('lg')} {
+        bottom: 10px;
+    }
 `;
 
-// For absolute positioning at the top-left corner
-export const absoluteTopLeft = `
-    position: absolute;
-    top: 0;
-    left: 0;
-`;
+// ... rest of the utilities can follow the same pattern ...
 
-// For absolute positioning at the top-right corner
-export const absoluteTopRight = `
-    position: absolute;
-    top: 0;
-    right: 0;
-`;
-
-// For absolute positioning at the bottom-left corner
-export const absoluteBottomLeft = `
-    position: absolute;
-    bottom: 0;
-    left: 0;
-`;
-
-// For absolute positioning at the bottom-right corner
-export const absoluteBottomRight = `
-    position: absolute;
-    bottom: 0;
-    right: 0;
-`;
-
-// For ensuring an element takes up the full viewport height
-export const fullHeight = `
+export const aboveTheFold = `
     height: 100vh;
+    overflow: hidden;
+
+    ${mq('md')} {
+        height: 90vh;
+    }
+
+    ${mq('lg')} {
+        height: 85vh;
+    }
 `;
 
-// For ensuring an element takes up the full viewport width
-export const fullWidth = `
-    width: 100vw;
-`;
-
-// Our previously defined positions...
-// ...
-
-// Full viewport dimensions
 export const fullViewport = `
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
+
+    ${mq('sm')} {
+        height: 95vh;
+    }
+`;
+export const absoluteTopLeft = `
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    ${mq('sm')} {
+        top: 5px;
+        left: 5px;
+    }
 `;
 
-// Above the fold (the part of the webpage visible without scrolling)
-export const aboveTheFold = `
+export const absoluteTopRight = `
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    ${mq('sm')} {
+        top: 5px;
+        right: 5px;
+    }
+`;
+
+export const absoluteBottomLeft = `
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    ${mq('sm')} {
+        bottom: 5px;
+        left: 5px;
+    }
+`;
+
+export const absoluteBottomRight = `
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    ${mq('sm')} {
+        bottom: 5px;
+        right: 5px;
+    }
+`;
+
+// For adjusting viewport dimensions
+export const fullHeight = `
     height: 100vh;
-    overflow: hidden;
+
+    ${mq('sm')} {
+        height: 95vh;
+    }
 `;
 
-// Positioned relative and offset from the top
+export const fullWidth = `
+    width: 100vw;
+
+    ${mq('sm')} {
+        width: 95vw;
+    }
+`;
+
+// Adjusting relative positions
 export const relativeTop = (offset: string) => `
     position: relative;
     top: ${offset};
+
+    ${mq('sm')} {
+        top: calc(${offset} + 5px);  // Adjusting by 5px as an example
+    }
 `;
 
-// Positioned relative and offset from the bottom
 export const relativeBottom = (offset: string) => `
     position: relative;
     bottom: ${offset};
+
+    ${mq('sm')} {
+        bottom: calc(${offset} + 5px);
+    }
 `;
 
-// Positioned relative and offset from the left
 export const relativeLeft = (offset: string) => `
     position: relative;
     left: ${offset};
+
+    ${mq('sm')} {
+        left: calc(${offset} + 5px);
+    }
 `;
 
-// Positioned relative and offset from the right
 export const relativeRight = (offset: string) => `
     position: relative;
     right: ${offset};
+
+    ${mq('sm')} {
+        right: calc(${offset} + 5px);
+    }
 `;
 
-// Element covering its parent, usually used for overlays or background elements
+// Covering parent - Often used for background images or overlays.
 export const coverParent = `
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+
+    ${mq('sm')} {
+        padding: 10px;  // Example to slightly move from the edges on smaller screens
+    }
 `;
 
-// To ensure that an element is stacked above others
+// Z-index adjustments might not need responsive variations unless your design specifically needs them
 export const zAbove = (value: number) => `
     z-index: ${value};
 `;
 
-// To ensure that an element is stacked below others
 export const zBelow = (value: number) => `
     z-index: -${value};
 `;
 
-// For elements you want to hide visually but make accessible for screen readers
+// Accessibility utility
 export const srOnly = `
     position: absolute;
     width: 1px;
@@ -166,18 +263,26 @@ export const srOnly = `
     border: 0;
 `;
 
-// For creating a new local stacking context
+// Stacking context. Assuming you might need to adjust stack order based on device sizes.
 export const stackingContext = `
     position: relative;
     z-index: 0;
+
+    ${mq('sm')} {
+        z-index: 1;
+    }
 `;
 
-// For fixed position at a specific point in the viewport
+// Fixed position, often used for modal dialogs or notifications.
 export const fixedPosition = (x: string, y: string) => `
     position: fixed;
     top: ${y};
     left: ${x};
+
+    ${mq('sm')} {
+        top: calc(${y} + 5px);  // Small adjustments as an example
+        left: calc(${x} + 5px);
+    }
 `;
 
-// And more...
-
+// ... and other
