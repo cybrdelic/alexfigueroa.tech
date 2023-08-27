@@ -7,6 +7,31 @@ import { getProjectTitleFonts } from './projects/getProjectTitleFonts';
 import { getProjectGithubURLs } from './projects/getProjectGithubUrls';
 import { getProjectPrimaryColors } from './projects/getProjectPrimaryColors';
 import { getProjectSubtitles } from './projects/getProjectSubtitles';
+import { getProjectImages } from './projects/getProjectImages';
+import { getProjectTechnologies } from './projects/getProjectTechnologies';
+import { getProjectFeatures } from './projects/getProjectFeatures';
+import { getProjectTeam } from './projects/getProjectTeam';
+import { getProjectRoadmaps } from './projects/getProjectRoadmap';
+import { getProjectCaseStudies } from './projects/getProjectCaseStudies';
+
+export type TimelineItemType = {
+    timelineIndex: number;
+    datetime: string;
+    title: string;
+    description: string;
+    subtitle?: string;
+}
+
+export type CaseStudyType = {
+    title: string;
+    subtitle: string;
+    abstract: string;
+    problem: string;
+    solution: string;
+    technologies: string[];
+    implementation: string[];
+    results: string;
+}
 
 export type ProjectType = {
     id: string;
@@ -17,9 +42,19 @@ export type ProjectType = {
     github_url: string;
     primaryColor: string;
     subtitle: string;
+    images: string[];
+    technologies: string[];
+    features: string[];
+    team: {
+        name: string;
+        avatar: string;
+        role: string;
+    }[];
+    roadmap: TimelineItemType[];
+    caseStudies: CaseStudyType[];
 }
 
-type ProjectKey = 'x1dra' | 'extranyx' | 'cybrnet' | 'oversoulDb' | 'portfolio';
+export type ProjectKey = 'x1dra' | 'extranyx' | 'cybrnet' | 'oversoulDb' | 'portfolio';
 
 const projectKeys: ProjectKey[] = ['x1dra', 'extranyx', 'cybrnet', 'oversoulDb', 'portfolio'];
 
@@ -39,7 +74,14 @@ const fetchProjectData = (): ProjectDataType => ({
     github_urls: getProjectGithubURLs(),
     primaryColors: getProjectPrimaryColors(),
     subtitles: getProjectSubtitles(),
+    images: getProjectImages(),
+    technologies: getProjectTechnologies(),
+    features: getProjectFeatures(),
+    team: getProjectTeam(),
+    roadmaps: getProjectRoadmaps(),
+    caseStudies: getProjectCaseStudies(),
 });
+
 
 const createProject = (key: ProjectKey, data: ProjectDataType): ProjectType => ({
     id: uuidv4(),
@@ -49,8 +91,15 @@ const createProject = (key: ProjectKey, data: ProjectDataType): ProjectType => (
     titleFont: data.titleFonts[key],
     github_url: data.github_urls[key],
     primaryColor: data.primaryColors[key],
-    subtitle: data.subtitles[key]
+    subtitle: data.subtitles[key],
+    images: data.images[key],
+    technologies: data.technologies[key],
+    features: data.features[key],
+    team: data.team[key],
+    roadmap: data.roadmaps[key],
+    caseStudies: data.caseStudies[key],
 })
+
 
 export const generateProjectsData = (): ProjectData => {
     const projectData = fetchProjectData();
