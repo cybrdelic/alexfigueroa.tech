@@ -1,13 +1,17 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
-import { createStyledMotionComponent } from "../../utils/createStyledMotionComponent";
+import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { adjustTransparency } from "../../utils/adjustTransparency";
+import { setBackground, setGradientBackground } from "../../theming/util-style-functions/colors";
+import { flexBetween, flexColumn } from "../../theming/util-style-functions/layout";
+import { padding } from "../../theming/util-style-functions/spacing";
+import { stickyTop } from "../../theming/util-style-functions/position";
 
 export const HamburgerBar = styled(motion.div)(({ theme }) => `
     width: 2.5rem;
     height: 0.3rem;
-    background: ${theme.text};
+    ${setBackground(theme.text)}
     margin-top: 0.5rem;
 `);
 
@@ -25,27 +29,18 @@ export const AdditionalItemsContainer = createStyledMotionComponent('div')(props
     justify-content: space-evenly;
     background: ${props.theme.gradient};
     border-radius: 100px;
-    padding: 0rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
 `);
 
 export const MenuContainer = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: row;
+    ${flexBetween}
     width: 70%;
-    justify-content: space-between;
 `;
 
 export const StyledNavLink = styled(motion(Link))(({ theme }) => `
     font-family: 'Orbitron', sans-serif;
     color: ${theme.text};
     text-decoration: none;
-    padding: 1rem;
-    display: flex;
-    flex-direction: columns;
-    justify-content: center;
-    align-items: center;
+    ${padding('md')}
+    ${flexColumn}
     font-weight: 900;
 `);
