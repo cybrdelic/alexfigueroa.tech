@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { adjustTransparency } from "../../utils/adjustTransparency";
 import { setBackground, setGradientBackground } from "../../theming/util-style-functions/colors";
-import { flexBetween, flexColumn } from "../../theming/util-style-functions/layout";
+import { flexBetween, flexCenter, flexColumn } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
 import { stickyTop } from "../../theming/util-style-functions/position";
 
@@ -21,20 +21,18 @@ export const StyledHamburger = styled(motion.div)`
 `;
 
 export const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    ${flexCenter}
     gap: 1rem;
-    min-width: 80rem;
+    width: 100%;
     justify-content: space-evenly;
     background: ${props.theme.gradient};
     border-radius: 100px;
 `);
 
-export const MenuContainer = styled.div`
+export const MenuContainer = createStyledMotionComponent('div')(props => `
     ${flexBetween}
-    width: 70%;
-`;
+    min-width: 80%;
+`);
 
 export const StyledNavLink = styled(motion(Link))(({ theme }) => `
     font-family: 'Orbitron', sans-serif;

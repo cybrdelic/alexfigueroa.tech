@@ -6,6 +6,7 @@ import { MenuContainer } from "./styles";
 import { HoverItemsContainer } from "../HoverItemsContainer";
 import { HamburgerMenu } from "../HamburgerMenu";
 import { useAlternateTheme } from "../../hooks/theming/useAlternateTheme";
+import useElementWidth from "../../hooks/useElementWidth";
 
 interface NavMenuProps {
     links: RouteItem[];
@@ -16,6 +17,9 @@ export default function NavMenu(props: NavMenuProps) {
     const altTheme = useAlternateTheme();
     const theme = useTheme()
     const { isHovered, setHovered, hoverAnimations } = useHoverAnimations();
+    const [menuWidth, menuRef] = useElementWidth(isHovered);
+
+
 
     const linkHoverInAnimation = { opacity: 1, x: 0 };
     const linkHoverOutAnimation = { opacity: 0, x: 100 };
@@ -24,6 +28,8 @@ export default function NavMenu(props: NavMenuProps) {
         <MenuContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            ref={menuRef}
+            menuWidth={'20rem'}
         >
             <HoverItemsContainer
                 links={props.links}
@@ -33,8 +39,13 @@ export default function NavMenu(props: NavMenuProps) {
                 hoverAnimations={hoverAnimations}
                 linkHoverInAnimation={linkHoverInAnimation}
                 linkHoverOutAnimation={linkHoverOutAnimation}
+
             />
-            <HamburgerMenu theme={theme} isHovered={isHovered} />
+            <HamburgerMenu
+                theme={theme}
+                isHovered={isHovered}
+                menuWidth={menuWidth}
+            />
 
         </MenuContainer>
     )
