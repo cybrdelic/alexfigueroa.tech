@@ -11,6 +11,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { withAnimations } from "../../hooks/animation/withAnimations";
 import HomeIcon from "../HomeIcon";
 import NavMenu from "../NavMenu";
+import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
+import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
+import { setBackground } from "../../theming/util-style-functions/colors";
 
 interface NavBarProps {
   links: RouteItem[];
@@ -21,31 +24,22 @@ const NavBarWrapper = styled(Box)`
   height: 80px;
 `
 
+const NavBarContainer = createStyledMotionComponent('div')(props => `
+  ${stickyTop}
+  ${setBackground('green')}
+`)
+
 
 
 function NavBar({ links, toggleTheme }: NavBarProps) {
-  const theme = useTheme();
-  const [isHovered, setHovered] = useState(false);
-
-  const hoverAnimations = {
-    hover: { scale: 1.2 },
-    tap: { scale: 0.95 },
-  };
-
-
-  const linkHoverInAnimation = { opacity: 1, x: 0 };
-  const linkHoverOutAnimation = { opacity: 0, x: 100 };
-
-  const profileCardHoverInAnimation = { opacity: 1, y: 0 };
-  const profileCardHoverOutAnimation = { opacity: 0, y: 100 };
 
   return (
-    <AppBar position="fixed" color="transparent" elevation={0}>
+    <NavBarContainer>
       <NavBarWrapper display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" padding="1rem">
         <HomeIcon title="Alex Figueroa" />
         <NavMenu links={links} toggleTheme={toggleTheme} />
       </NavBarWrapper>
-    </AppBar>
+    </NavBarContainer>
   );
 }
 
