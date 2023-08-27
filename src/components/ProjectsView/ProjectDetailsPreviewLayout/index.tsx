@@ -2,9 +2,10 @@ import React from "react";
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectType, generateProjectsData } from "../../../data/project.data";
 import { motion } from "framer-motion";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
 import BoldHeaderText, { TextSize } from "../BoldHeaderText";
 import { adjustTransparency } from "../../../utils/adjustTransparency";
+import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
+import { absoluteBottomLeft, absoluteCenter, coverParent } from "../../../theming/util-style-functions/position";
 
 interface ProjectDetailsLayoutProps {
     project: ProjectType;
@@ -12,18 +13,11 @@ interface ProjectDetailsLayoutProps {
 }
 
 const StyledMotionDiv = createStyledMotionComponent('div')(props => `
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    ${coverParent}
 `);
 
 const TopMiddlePane = createStyledMotionComponent('div')(props => `
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    transform: translate(-50%, -50%);
+    ${absoluteCenter}
     color: ${props.theme.text};
     font-size: 1.25rem;
     background: ${props.theme.panelBg};
@@ -32,36 +26,16 @@ const TopMiddlePane = createStyledMotionComponent('div')(props => `
 `)
 
 const BottomLeftPane = createStyledMotionComponent('div')(props => `
-    position: absolute;
-    bottom: 0%;
-    left: 0%;
+    ${absoluteBottomLeft}
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     background: ${props.theme.panelBg};
     border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
     padding-bottom: 2rem;
 `);
 
-const StyledButton = createStyledMotionComponent('button')(props => `
-    font-size: 1rem;
-    padding: 0.75em 1em;
-    margin-top: 1em;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: ${props.theme.accent};
-    color: ${props.theme.text};
-    cursor: pointer;
-    transition: background-color 0.5s ease;
-    &:hover {
-        background-color: ${props.theme.accentHover};
-    }
-`);
 
 const layoutVariants = {
     open: { opacity: 1 },
