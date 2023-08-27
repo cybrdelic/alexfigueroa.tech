@@ -1,24 +1,20 @@
 import React, { memo } from "react";
 import { ProjectData, ProjectType } from "../../../data/project.data";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
+import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import { GridElement } from "../GridElement";
-import { adjustTransparency } from "../../../utils/adjustTransparency";
 import { useCursorEffect } from "../../../hooks/useCursorEffect";
-import { spacing } from "../../../theming/style-guide/spacing";
-import { zIndex } from "../../../theming/style-guide/zIndex";
+import { backgroundColor } from "../../../theming/util-style-functions/colors";
+import { mq } from "../../../theming/util-style-functions/responsive";
+import { padding } from "../../../theming/util-style-functions/spacing";
+import { zIndex } from "../../../theming/design-tokens/spacing";
 
 interface ProjectPickerProps {
     projects: ProjectData,
     selectedProject: ProjectType | null,
     setSelectedProject: (project: ProjectType | null) => void,
 }
-interface ProjectPickerProps {
-    projects: ProjectData,
-    selectedProject: ProjectType | null,
-    setSelectedProject: (project: ProjectType | null) => void,
-}
 
-const ProjectPickerWrapper: any = createStyledMotionComponent('div')(props => `
+const ProjectPickerWrapper = createStyledMotionComponent('div')(props => `
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -27,22 +23,22 @@ const ProjectPickerWrapper: any = createStyledMotionComponent('div')(props => `
 const ProjectPickerContainer = createStyledMotionComponent('div')(props => `
     display: flex;
     z-index: ${zIndex.dropdown};
-    background-color: ${adjustTransparency(props.theme.cardBackground, 0.9)};
+    ${backgroundColor('light')} // use the light color from the design tokens
     justify-content: space-evenly;
     width: 100%;
-    bottom: ${spacing.sm};
-    @media (min-width: 768px) {
-      bottom: ${spacing.md};
+    ${padding('sm')}
+    ${mq('md')} {
+      ${padding('md')}
     }
-`)
+`);
 
 const GridElementContainer = createStyledMotionComponent('div')(props => `
-  display: flex;
-  padding: ${spacing.sm};
-  @media (min-width: 768px) {
-    padding: ${spacing.md};
-  }
-`)
+    display: flex;
+    ${padding('sm')}
+    ${mq('md')} {
+      ${padding('md')}
+    }
+`);
 
 const MemoizedGridElement = memo(GridElement);
 
@@ -73,8 +69,8 @@ const listVariants = {
     },
     in: {
         transition: {
-            staggerChildren: 0.1, // this will animate each child with a delay of 0.1s
-            delayChildren: 0.3 // this will delay the animation of all children by 0.3s
+            staggerChildren: 0.1,
+            delayChildren: 0.3
         },
         y: 0,
         scale: 1,
@@ -96,8 +92,6 @@ export default function ProjectPicker(props: ProjectPickerProps) {
     const handleMouseLeave = () => {
         setSelectedProject(null);
     }
-
-
 
     return (
         <ProjectPickerWrapper variants={listVariants}>
