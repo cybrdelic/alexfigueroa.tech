@@ -40,7 +40,7 @@ const RoutesWrapper = () => {
 
 const ThemeToggleWrapper = styled.div`
   ${fixedBottomRight}
-  z-index: ${zIndex.default};
+  z-index: ${zIndex.modal};
 
   ${mq('md')} {
     bottom: ${spacing.md};
