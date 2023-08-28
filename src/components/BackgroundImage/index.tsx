@@ -5,37 +5,27 @@ import { darkTheme } from '../../theming/theme';
 import { usePageTransitions } from '../../hooks/usePageTransitions';
 import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+import { aboveTheFold, absoluteCenter, absoluteTopLeft, fullViewport, relative } from '../../theming/util-style-functions/position';
+import { flexCenter } from '../../theming/util-style-functions/layout';
+import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 
 interface BackgroundImageProps {
   children: React.ReactNode,
 }
 
 const ParentContainer = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  ${absoluteTopLeft};
 `;
 
 const CanvasContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
+  ${absoluteTopLeft};
 `;
 
-const ContentContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-`;
+const ContentContainer = createStyledMotionComponent('div')(props => `
+  ${fullViewport};
+`);
 
 const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const theme = useTheme();
@@ -89,16 +79,18 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const debouncedDraw = _.debounce(draw, 100 / 15);
 
   useEffect(() => {
-    const mouseMove = (e: MouseEvent) => {
-      mousePos.current.x = e.clientX;
-      mousePos.current.y = e.clientY;
+    if (window.innerWidth > 768) {
+      const mouseMove = (e: MouseEvent) => {
+        mousePos.current.x = e.clientX;
+        mousePos.current.y = e.clientY;
+        debouncedDraw();
+      };
+      window.addEventListener('mousemove', mouseMove);
       debouncedDraw();
-    };
-    window.addEventListener('mousemove', mouseMove);
-    debouncedDraw();
-    return () => {
-      window.removeEventListener('mousemove', mouseMove);
-    };
+      return () => {
+        window.removeEventListener('mousemove', mouseMove);
+      };
+    }
   }, [debouncedDraw]);
 
 
