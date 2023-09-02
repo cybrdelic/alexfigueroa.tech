@@ -1,4 +1,4 @@
-import { useAnimation } from 'framer-motion';
+import { useAnimation } from "framer-motion";
 
 export const usePageTransitions = () => {
   const controls = useAnimation();
@@ -24,8 +24,17 @@ export const usePageTransitions = () => {
     });
   };
 
+  const onPageExit = () => {
+    return controls.start({
+      opacity: 0,
+      x: '-100vw',
+      transition: { duration: 0.4 }
+    });
+  };
+
   return {
     onPageEnter,
+    onPageExit,
     controls
   };
 };
