@@ -11,42 +11,37 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { withAnimations } from "../../hooks/animation/withAnimations";
 import HomeIcon from "../HomeIcon";
 import NavMenu from "../NavMenu";
+import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
+import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
+import { setBackground } from "../../theming/util-style-functions/colors";
+import { flexBetween } from "../../theming/util-style-functions/layout";
+import { padding } from "../../theming/util-style-functions/spacing";
 
 interface NavBarProps {
   links: RouteItem[];
   toggleTheme: () => void;
 }
 
-const NavBarWrapper = styled(Box)`
-  height: 80px;
-`
+
+const NavBarContainer = createStyledMotionComponent('div')(props => `
+  min-height: 10%;
+  max-height: 10%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  ${padding('xl')};
+  ${flexBetween};
+  ${stickyTop};
+`)
 
 
 
-function NavBar({ links, toggleTheme }: NavBarProps) {
-  const theme = useTheme();
-  const [isHovered, setHovered] = useState(false);
-
-  const hoverAnimations = {
-    hover: { scale: 1.2 },
-    tap: { scale: 0.95 },
-  };
-
-
-  const linkHoverInAnimation = { opacity: 1, x: 0 };
-  const linkHoverOutAnimation = { opacity: 0, x: 100 };
-
-  const profileCardHoverInAnimation = { opacity: 1, y: 0 };
-  const profileCardHoverOutAnimation = { opacity: 0, y: 100 };
+export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
-    <AppBar position="fixed" color="transparent" elevation={0}>
-      <NavBarWrapper display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" padding="1rem">
-        <HomeIcon title="Alex Figueroa" />
-        <NavMenu links={links} toggleTheme={toggleTheme} />
-      </NavBarWrapper>
-    </AppBar>
+    <NavBarContainer>
+      <HomeIcon title="Alex Figueroa" />
+      <NavMenu links={links} toggleTheme={toggleTheme} />
+    </NavBarContainer>
   );
 }
-
-export default withAnimations("slideIn")(NavBar);

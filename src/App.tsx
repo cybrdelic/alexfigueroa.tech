@@ -11,14 +11,16 @@ import AnimatedCursor from 'react-animated-cursor';
 import { CursorContext } from './contexts/CursorContext.tsx';
 import { useCursorEffect } from './hooks/useCursorEffect.tsx';
 import { AnimatePresence } from 'framer-motion';
+import SiteLayout from './components/Layout/index.tsx';
+import { padding } from './theming/util-style-functions/spacing.ts';
+import { mq } from './theming/util-style-functions/responsive.ts';
+import { spacing, zIndex } from './theming/design-tokens/spacing.ts';
+import { fixedBottomRight } from './theming/util-style-functions/position.ts';
 
-// Your styles and other non-component imports remain the same.
-
-const NavBar = lazy(() => import('./components/NavBar/index.tsx'));
-const ThemeToggle = lazy(() => import('./components/ThemeToggle/index.tsx'));
-// BackgroundImage and CustomCursor are components, so we can lazy load them.
-const BackgroundImage = lazy(() => import('./components/BackgroundImage/index.tsx'));
+// BackgroundImage and CustomCursor are components, so we can lazy load them
 const CustomCursor = lazy(() => import('./components/Cursor/index.tsx'));
+
+const ThemeToggle = lazy(() => import('./components/ThemeToggle/index.tsx'));
 
 
 const RoutesWrapper = () => {
@@ -35,16 +37,18 @@ const RoutesWrapper = () => {
   );
 };
 
-const MainContent = styled.div`
-  padding-top: 70px; // Adjust this value based on the height of your navbar
-`;
 
 const ThemeToggleWrapper = styled.div`
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  z-index: 9998;
+  ${fixedBottomRight}
+  z-index: ${zIndex.modal};
+
+  ${mq('md')} {
+    bottom: ${spacing.md};
+    right: ${spacing.md};
+  }
 `;
+
+
 const App: React.FC = () => {
   const cursorType = useCursorEffect();
 
@@ -59,22 +63,12 @@ const App: React.FC = () => {
                 <ThemeToggleContext.Consumer>
                   {(toggleTheme) =>
                     theme && toggleTheme ?
-                      <>
-                        <BackgroundImage imageurl={process.env.PUBLIC_URL + '/background.png'}>
-                          <StyledThemeProvider theme={theme}>
-                            <GlobalStyle />
-                            <div>
-                              <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
-                              <MainContent>
-                                <RoutesWrapper />
-                              </MainContent>
-                            </div>
-                            <ThemeToggleWrapper>
-                              <ThemeToggle onClick={toggleTheme} />
-                            </ThemeToggleWrapper>
-                          </StyledThemeProvider>
-                        </BackgroundImage>
-                      </>
+                      <SiteLayout toggleTheme={toggleTheme}>
+                        <RoutesWrapper />
+                        <ThemeToggleWrapper>
+                          <ThemeToggle onClick={toggleTheme} />
+                        </ThemeToggleWrapper>
+                      </SiteLayout>
                       : null
                   }
                 </ThemeToggleContext.Consumer>

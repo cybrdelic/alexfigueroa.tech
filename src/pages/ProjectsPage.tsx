@@ -5,28 +5,17 @@ import ProjectChanger from '../components/ProjectsView/ProjectChanger';
 import { projectsData } from '../data/project.data';
 import ProjectsLayout from '../components/ProjectsView/ProjectsLayout';
 import PageTransition from '../components/PageTransition';
+import { flexColumn } from '../theming/util-style-functions/layout';
+import { absoluteCenter } from '../theming/util-style-functions/position';
 
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
   justify-content: center;
-  padding: 2rem;
-  box-sizing: border-box;
-  position: absolute;  // Add this line to position the component
-  top: 60px;  // Adjust to the height of your navbar
-  left: 0;
+
 `;
 
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: calc(100vh - 60px);  // Subtract the height of your navbar
-  overflow-y: auto;  // Add scroll when the content overflows
-  overflow-x: hidden;
-`;
+
 
 
 const pageVariants = {
@@ -57,9 +46,7 @@ const ProjectsPage: React.FC = () => {
   return (
     <PageTransition>
       <Container>
-        <ContentWrapper>
-          <ProjectsLayout projects={projectsData} />
-        </ContentWrapper>
+        <ProjectsLayout projects={projectsData} />
       </Container>
     </PageTransition>
   );

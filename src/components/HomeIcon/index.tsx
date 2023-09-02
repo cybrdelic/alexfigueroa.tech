@@ -1,67 +1,96 @@
 import React from "react";
 import { styled } from "styled-components";
 import { motion } from "framer-motion";
-import {ReactComponent as Logo} from './logo.svg'
+import { ReactComponent as Logo } from './logo.svg';
 import { IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
-import { withAnimations } from "../../hooks/animation/withAnimations";
 import { useTheme } from "../../hooks/useTheme";
+import { flexCenter } from "../../theming/util-style-functions/layout";
+import { mq } from "../../theming/util-style-functions/responsive";
+
+const centeredContent = `
+  ${flexCenter}
+`;
 
 interface HomeIconProps {
-    title: string
+  title: string;
 }
 
 const StyledLogo = styled(motion(Logo))`
-  width: 80px;
-  height: 80px;
-  display: flex; // added
-  justify-content: center; // added
-  align-items: center;
+  width: 20px;
+  height: 20px;
+  ${centeredContent}
+
+  ${mq('sm')} {
+    width: 15px;
+    height: 15px;
+  }
+
+  ${mq('md')} {
+    width: 18px;
+    height: 18px;
+  }
+
+  ${mq('lg')} {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
-const StyledLogoText = styled(motion.h2)(({theme}) => `
+const StyledLogoText = styled(motion.h2)(({ theme }) => `
   font-family: 'Orbitron';
-  font-size: 2rem;
-  height: 80px;
-  display: flex; // added
-  justify-content: center; // added
-  align-items: center;
+  ${centeredContent}
   color: ${theme.text}
+
+  ${mq('sm')} {
+    font-size: 1.5rem;
+  }
+
+  ${mq('md')} {
+    font-size: 1.8rem;
+  }
+
+  ${mq('lg')} {
+    font-size: 2rem;
+  }
 `);
 
-const StyledIconButton = styled(motion(IconButton))(({theme}) => `
-  display: flex;
+const StyledIconButton = styled(motion(IconButton))`
+  ${flexCenter}
   flex-direction: row;
-  grid-gap: 0rem;
-  align-items: center;
+  grid-gap: 0.5rem; // Added a gap for clarity on smaller devices
   border-radius: 0px;
-`);
+
+  ${mq('sm')} {
+    grid-gap: 0.3rem;
+  }
+`;
 
 function HomeIcon(props: HomeIconProps) {
-    const theme = useTheme()
-    const hoverEffect = {
-        scale: 1.2,
-    };
+  const theme = useTheme();
+  const hoverEffect = {
+    scale: 1.2,
+  };
 
-    const tapEffect = {
-        scale: 0.9
-    };
-    
-    return (
-        <Link to="/">
-            <StyledIconButton 
-                whileHover={hoverEffect} 
-                whileTap={tapEffect}
-                color="inherit" 
-                aria-label="home"
-            >
-              <StyledLogo/>
-              <StyledLogoText>
-                {props.title}
-              </StyledLogoText>
-            </StyledIconButton>
-        </Link>
-    )
+  const tapEffect = {
+    scale: 0.9
+  };
+
+  return (
+    <Link to="/" role="button">
+      <StyledIconButton
+        whileHover={hoverEffect}
+        whileTap={tapEffect}
+        color="inherit"
+        aria-label="home"
+      >
+        <StyledLogo />
+        <StyledLogoText theme={theme}>
+          {props.title}
+        </StyledLogoText>
+      </StyledIconButton>
+    </Link>
+  );
 }
 
-export default (HomeIcon)
+export default HomeIcon;

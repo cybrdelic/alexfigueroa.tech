@@ -11,22 +11,19 @@ import { CursorContext } from '../../contexts/CursorContext';
 import { duration } from '@mui/material';
 
 const HeroContainer = styled(motion.div)`
-  position: relative;
   display: flex;
-  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
-  min-width: 100vw;
 `;
 
 const Pane = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  width: 50%;
-  max-width: 50%;
 `;
 
 const LeftPane = styled(Pane)`
@@ -98,6 +95,7 @@ const containerVariants = {
   exit: { opacity: 0, transition: { ease: 'easeInOut' } },
 };
 
+
 const TEXTS = [
   "Full Stack, Full Circle - From Idea Generation to Implementation to Deployment",
   "Where Innovation Intersects with Implementation: Crafting Digital Experiences",
@@ -118,38 +116,26 @@ const HeroComponent = () => {
     duration: 0.1
   });
 
-  React.useEffect(() => {
-    const intervalId = setInterval(() =>
-      setIndex(prevIndex => prevIndex + 1),
-      3000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
-    <CursorContext.Provider value={cursorType}>
-      <HeroContainer variants={containerVariants} initial="hidden" animate="visible" exit="exit">
-        <RightPane>
-          <HeroTitle theme={theme} style={springProps}>
-            <div data-id="special">
-              <TextTransition springConfig={presets.gentle}>
-                {TEXTS[index % TEXTS.length]}
-              </TextTransition>
-            </div>
-          </HeroTitle>
+    <HeroContainer>
+      <RightPane>
+        <HeroTitle theme={theme} style={springProps}>
+          <div data-id="special">
+            <div>Implementing solutions</div>
+          </div>
+        </HeroTitle>
 
-          <HeroTagline theme={theme} style={springProps}>
-            Full-Stack Software Engineer
-          </HeroTagline>
-          <ButtonContainer>
-            <HeroButton>
-              View Projects
-            </HeroButton>
-          </ButtonContainer>
+        <HeroTagline theme={theme} style={springProps}>
+          Full-Stack Software Engineer
+        </HeroTagline>
+        <ButtonContainer>
+          <HeroButton>
+            View Projects
+          </HeroButton>
+        </ButtonContainer>
 
-        </RightPane>
-      </HeroContainer>
-    </CursorContext.Provider>
+      </RightPane>
+    </HeroContainer>
   );
 };
-
-export default withAnimations('fadeIn')(HeroComponent);
+export default HeroComponent

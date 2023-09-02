@@ -2,11 +2,12 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { CursorContext } from '../../contexts/CursorContext';
 import { throttle } from 'lodash';
+import { zIndex } from '../../theming/design-tokens/spacing';
 
 const Cursor = styled.div`
   position: fixed;
   pointer-events: none;
-  z-index: 9999;
+  z-index: ${zIndex.foreground};
   border: 2px solid white;
   border-radius: 50%;
   mix-blend-mode: difference;
@@ -27,7 +28,7 @@ const ripple = keyframes`
 const CursorRipple = styled.div`
   position: fixed;
   pointer-events: none;
-  z-index: 9998;
+  z-index: ${zIndex.foreground + 1};
   border: 2px solid white;
   border-radius: 50%;
   mix-blend-mode: difference;

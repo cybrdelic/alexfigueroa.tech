@@ -5,12 +5,13 @@ import Brightness3Icon from '@mui/icons-material/Brightness3'; // Moon icon
 import WbSunnyIcon from '@mui/icons-material/WbSunny'; // Sun icon
 import { useTheme, useToggleTheme } from '../../hooks/useTheme';
 import { lightTheme } from '../../theming/theme';
-import { createStyledMotionComponent } from '../../utils/createStyledMotionComponent';
+import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
+import { fixedBottomRight } from '../../theming/util-style-functions/position';
+import { zIndex } from '../../theming/design-tokens/spacing';
 
 const StyledIconButton = createStyledMotionComponent(IconButton)(props => `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    ${fixedBottomRight}
+    z-index: ${zIndex.modal};
 `);
 
 const ThemeToggle = ({ onClick }: { onClick: () => void }) => {

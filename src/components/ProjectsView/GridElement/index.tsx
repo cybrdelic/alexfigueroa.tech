@@ -8,24 +8,26 @@ import { CursorContext } from "../../../contexts/CursorContext";
 import { useCursorEffect } from "../../../hooks/useCursorEffect";
 import VectorLogoAndText from "../VectorLogoAndText";
 import styled from 'styled-components';
-import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
+import { createStyledMotionComponent } from '../../../theming/styled-motion-utils/createStyledMotionComponent';
 import { adjustTransparency } from '../../../utils/adjustTransparency';
 import Tilt from 'react-parallax-tilt';
 import { useNavigate } from 'react-router-dom';
+import { flexCenter } from '../../../theming/util-style-functions/layout';
+import { padding } from '../../../theming/util-style-functions/spacing';
+import { rounded } from '../../../theming/util-style-functions/misc';
+import { transition } from '../../../theming/util-style-functions/effects';
 
 interface StyledFlexElementProps {
     theme: any;
 }
 
 const StyledFlexElement = createStyledMotionComponent('div')(props => `
-    display: flex;
+    ${flexCenter}
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
+    ${padding('md')}
     border: solid 0.1rem ${props.isActive ? props.projectPrimaryColor : adjustTransparency(props.theme.text, 0)};
-    border-radius: 60px;
-    transition: all 0.3s ease-in-out;
+    ${rounded('lg')}
+    ${transition('normal')}
     max-width: 200px;
     min-width: 200px;
     max-height: 200px;
@@ -42,7 +44,7 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
 const ConstantSizeWrapper = createStyledMotionComponent('div')(props => `
     width: 100%;
     height: 100%;
-    display: flex;
+    ${flexCenter}
     overflow: hidden;
 `);
 
@@ -119,7 +121,7 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
                 style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
                 data-id="special"
                 isActive={isActive}
-                as={motion.div} // or whatever tag you want to animate
+                as={motion.div}
                 exit={exitAnim}
             >
                 <ConstantSizeWrapper exit={exitTransition}>
