@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { zIndex } from "../../theming/design-tokens/spacing";
 const animationConfiguration = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -12,6 +13,7 @@ const PageTransition = ({ children }) => {
             animate="animate"
             exit="exit"
             transition={{ duration: 1 }}
+            style={{ zIndex: zIndex.foreground }}
         >
             {children}
         </motion.div>
