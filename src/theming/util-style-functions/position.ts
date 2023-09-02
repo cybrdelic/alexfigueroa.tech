@@ -1,3 +1,4 @@
+import { zIndex } from "../design-tokens/spacing";
 import { mq } from "./responsive";
 
 export const absoluteCenter = `
@@ -126,7 +127,6 @@ export const fullViewport = `
     position: absolute;
     top: 0;
     left: 0;
-
     ${mq('sm')} {
         height: 95vh;
     }
@@ -135,7 +135,6 @@ export const absoluteTopLeft = `
     position: absolute;
     top: 0;
     left: 0;
-
     ${mq('sm')} {
         top: 5px;
         left: 5px;

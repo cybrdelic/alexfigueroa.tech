@@ -12,15 +12,7 @@ interface SiteLayoutProps {
 }
 
 const MainContent = createStyledMotionComponent('div')(props => `
-  ${padding('md')}
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
-  ${mq('md')} {
-    ${padding('lg')}
-  }
 `);
 export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
     return (
