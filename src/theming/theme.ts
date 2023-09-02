@@ -1,23 +1,28 @@
 import * as tokens from "./design-tokens";
 
-export interface Theme {
-    body: string;
-    text: string;
-    toggleBorder: string;
-    gradient: string;
-    cardBackground: string;
+// Extracting the color properties to its own interface for clarity
+export interface ThemeColors {
     primary: string;
     secondary: string;
-    accent: string;
-    hover: string;
-    shadow: string;
-    borderRadius: string;
-    transition: string;
-    fontFamily: string;
-    error: string;
     success: string;
-    cardColor: string;
-    name: string;
+    danger: string;
+    warning: string;
+    info: string;
+    light: string;
+    dark: string;
+    gray: string;
+    text: string;
+    background: string;
+}
+
+export interface Theme {
+    typography: typeof tokens.typography;
+    transitions: typeof tokens.transitions;
+    spacing: typeof tokens.spacing;
+    zIndex: typeof tokens.zIndex;
+    breakpoints: typeof tokens.breakpoints;
+    boxShadow: typeof tokens.boxShadow;
+    colors: ThemeColors;
 }
 
 const common = {
@@ -30,7 +35,7 @@ const common = {
     boxShadow: tokens.boxShadow,
 };
 
-const createTheme = (colorMode: 'dark' | 'light') => ({
+const createTheme = (colorMode: 'dark' | 'light'): Theme => ({
     ...common,
     colors: {
         primary: tokens.colors.primary[colorMode],
