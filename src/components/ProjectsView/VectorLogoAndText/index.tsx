@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Theme } from 'styled-components';
-import { createStyledMotionComponent } from '../../../utils/createStyledMotionComponent';
+import { createStyledMotionComponent } from '../../../theming/styled-motion-utils/createStyledMotionComponent';
+import { flexColumn } from '../../../theming/util-style-functions/layout';
+import { margin } from '../../../theming/util-style-functions/spacing';
+import { fontWeight } from '../../../theming/util-style-functions/typography';
 
 
 interface VectorLogoAndTextProps {
@@ -12,22 +15,16 @@ interface VectorLogoAndTextProps {
 }
 
 const StyledWrapper = createStyledMotionComponent('div')(props => `
+    ${flexColumn}
     color: ${props.theme.text};
     font-family: '${props.font ?? 'Roboto'}';
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 100%;
 `);
 
 const AlignmentStyles = createStyledMotionComponent('div')(props => `
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    ${flexColumn}
     font-size: ${props.font === 'Teko' ? '5rem' : '2.5rem'};
-    font-weight: 700;
+    ${fontWeight('bold')}
     width: 100%;
     color: ${props.theme.text};
 `);
@@ -36,9 +33,8 @@ const StyledLogo = createStyledMotionComponent('img')(props => `
     height: auto;
     max-height: 15rem;
     width: auto;
-    margin-bottom: 0.5rem;
+    ${margin('xs')}
 `);
-
 
 
 export default function VectorLogoAndText({ text, logo, font, theme }: VectorLogoAndTextProps) {
