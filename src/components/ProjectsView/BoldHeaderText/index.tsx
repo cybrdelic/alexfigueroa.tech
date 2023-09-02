@@ -37,7 +37,7 @@ const getTextColor = (theme: Theme, fontColor: string, opacity: number) => {
     }
 
     if (!fontColor) {
-        fontColor = theme.text
+        fontColor = theme.colors.text
     }
 
     const textColor = adjustTransparency(fontColor, opacity)
@@ -59,7 +59,7 @@ const MotionDiv = createStyledMotionComponent('div')(props => `
 
 const StyledText = createStyledMotionComponent('h1')(props => `
     color: ${getTextColor(props.theme, props.fontColor, props.opacity)};
-    font-size: ${sizeMap[props.size]};
+    font-size: ${sizeMap['medium']};
     letter-spacing: -2px;
     word-spacing: 5px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
