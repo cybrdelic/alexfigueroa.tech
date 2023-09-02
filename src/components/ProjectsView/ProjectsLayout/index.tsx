@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectData, ProjectType } from "../../../data/project.data";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
+import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import { motion } from "framer-motion";
 import { useHoveredState } from "../../../hooks/animation/useHoveredState";
 import { useAlternateTheme } from "../../../hooks/theming/useAlternateTheme";
@@ -69,12 +69,7 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                     projects={projects}
                 />
 
-                {selectedProject && (
-                    <ProjectDetailsLayout
-                        project={selectedProject}
-                        animate={selectedProject ? "open" : "closed"}
-                    />
-                )}
+
             </StyledContainer>
         </CursorContext.Provider>
     );

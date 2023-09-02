@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "../../../hooks/useTheme";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
+import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import BoldHeaderText from "../BoldHeaderText";
 import { ProjectType } from "../../../data/project.data";
 

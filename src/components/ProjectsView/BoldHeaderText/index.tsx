@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { createStyledMotionComponent } from "../../../utils/createStyledMotionComponent";
+import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import { adjustTransparency } from "../../../utils/adjustTransparency";
 import { Theme } from "../../../theming/theme";
 
