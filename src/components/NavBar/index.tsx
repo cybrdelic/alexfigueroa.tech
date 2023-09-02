@@ -14,33 +14,34 @@ import NavMenu from "../NavMenu";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
 import { setBackground } from "../../theming/util-style-functions/colors";
+import { flexBetween } from "../../theming/util-style-functions/layout";
+import { padding } from "../../theming/util-style-functions/spacing";
 
 interface NavBarProps {
   links: RouteItem[];
   toggleTheme: () => void;
 }
 
-const NavBarWrapper = styled(Box)`
-  height: 80px;
-`
 
 const NavBarContainer = createStyledMotionComponent('div')(props => `
-  ${stickyTop}
-  ${setBackground('green')}
+  min-height: 10%;
+  max-height: 10%;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  ${padding('xl')};
+  ${flexBetween};
+  ${stickyTop};
 `)
 
 
 
-function NavBar({ links, toggleTheme }: NavBarProps) {
+export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <NavBarContainer>
-      <NavBarWrapper display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" padding="1rem">
-        <HomeIcon title="Alex Figueroa" />
-        <NavMenu links={links} toggleTheme={toggleTheme} />
-      </NavBarWrapper>
+      <HomeIcon title="Alex Figueroa" />
+      <NavMenu links={links} toggleTheme={toggleTheme} />
     </NavBarContainer>
   );
 }
-
-export default withAnimations("slideIn")(NavBar);
