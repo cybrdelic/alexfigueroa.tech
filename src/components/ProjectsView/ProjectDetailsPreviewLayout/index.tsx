@@ -6,36 +6,44 @@ import BoldHeaderText, { TextSize } from "../BoldHeaderText";
 import { adjustTransparency } from "../../../utils/adjustTransparency";
 import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import { absoluteBottomLeft, absoluteCenter, coverParent } from "../../../theming/util-style-functions/position";
+import { backgroundColor, textColor } from "../../../theming/util-style-functions/colors";
+import { borderRadius } from "../../../theming/design-tokens/effects";
+import { mq } from "../../../theming/util-style-functions/responsive";
+import { fontSize } from "../../../theming/util-style-functions/typography";
+import { padding } from "../../../theming/util-style-functions/spacing";
 
 interface ProjectDetailsLayoutProps {
     project: ProjectType;
     animate: "open" | "closed";
 }
 
-const StyledMotionDiv = createStyledMotionComponent('div')(props => `
-    ${coverParent}
+const TopMiddlePane = createStyledMotionComponent('div')(props => `
+    ${absoluteCenter};
+    ${textColor(props.theme, 'secondary')};
+    ${fontSize('large')};
+    ${backgroundColor('info')};
+    ${borderRadius.md};
+    text-align: center;
+
+    ${mq('md')} {
+        ${fontSize('base')};
+    }
 `);
 
-const TopMiddlePane = createStyledMotionComponent('div')(props => `
-    ${absoluteCenter}
-    color: ${props.theme.text};
-    font-size: 1.25rem;
-    background: ${props.theme.panelBg};
-    border-radius: 1rem;
-    text-align: center;
-`)
-
 const BottomLeftPane = createStyledMotionComponent('div')(props => `
-    ${absoluteBottomLeft}
+    ${absoluteBottomLeft};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    background: ${props.theme.panelBg};
-    border-radius: 1rem;
-    padding-bottom: 2rem;
-`);
+    ${backgroundColor('info')};
+    ${borderRadius.md};
+    ${padding('lg')};
 
+    ${mq('md')} {
+        ${padding('md')};
+    }
+`);
 
 const layoutVariants = {
     open: { opacity: 1 },
@@ -58,11 +66,24 @@ const bottomLeftPaneVariants = {
     }
 }
 
+const ProjectDetailsContainer = createStyledMotionComponent('div')(props => `
+    ${coverParent}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    ${mq('md')} {
+        gap: 3rem;
+    }
+`);
+
 export const ProjectDetailsLayout: React.FC<ProjectDetailsLayoutProps> = ({ project, animate }) => {
     const theme = useTheme();
 
     return (
-        <StyledMotionDiv
+        <ProjectDetailsContainer
             initial="closed"
             animate={animate}
             variants={layoutVariants}
@@ -76,6 +97,6 @@ export const ProjectDetailsLayout: React.FC<ProjectDetailsLayoutProps> = ({ proj
                 <BoldHeaderText text={project.subtitle} font={generateProjectsData().x1dra.titleFont} size={TextSize.MEDIUM} opacity={0.6} />
                 <BoldHeaderText text={project.name} font={generateProjectsData().x1dra.titleFont} size={TextSize.EXTRA_LARGE} opacity={0.6} color={project.primaryColor} />
             </BottomLeftPane>
-        </StyledMotionDiv>
+        </ProjectDetailsContainer>
     );
 };
