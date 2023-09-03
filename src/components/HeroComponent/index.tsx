@@ -100,27 +100,25 @@ const HeroComponent = () => {
   });
 
   return (
-    <ThemeProvider>
-      <HeroContainer>
-        <RightPane>
-          <HeroTitle theme={theme} style={springProps}>
-            <div data-id="special">
-              <div>Implementing solutions</div>
-            </div>
-          </HeroTitle>
+    <HeroContainer>
+      <RightPane>
+        <HeroTitle theme={theme} style={springProps}>
+          <div data-id="special">
+            <div>Implementing solutions</div>
+          </div>
+        </HeroTitle>
 
-          <HeroTagline theme={theme} style={springProps}>
-            Full-Stack Software Engineer
-          </HeroTagline>
-          <ButtonContainer>
-            <HeroButton theme={theme}>
-              View Projects
-            </HeroButton>
-          </ButtonContainer>
+        <HeroTagline theme={theme} style={springProps}>
+          Full-Stack Software Engineer
+        </HeroTagline>
+        <ButtonContainer>
+          <HeroButton theme={theme}>
+            View Projects
+          </HeroButton>
+        </ButtonContainer>
 
-        </RightPane>
-      </HeroContainer>
-    </ThemeProvider>
+      </RightPane>
+    </HeroContainer>
   );
 };
 export default HeroComponent
