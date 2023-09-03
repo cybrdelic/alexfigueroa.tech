@@ -28,9 +28,9 @@ const NavBarContainer = createStyledMotionComponent('div')(props => `
   height: 10%;
   display: flex;
   flex-direction: row;
-  ${padding('xl')};
   ${flexBetween};
   ${stickyTop};
+
 `)
 
 

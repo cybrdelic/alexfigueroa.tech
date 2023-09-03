@@ -2,14 +2,14 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
-import { backgroundColor } from "../../theming/util-style-functions/colors";
+import { backgroundColor, gradientBackground, neonizedTextColor, textColor } from "../../theming/util-style-functions/colors";
 import { flexBetween, flexCenter, flexColumn } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
 
-export const HamburgerBar = styled(motion.div)(({ theme }) => `
+export const HamburgerBar = createStyledMotionComponent('div')(props => `
     width: 2.5rem;
     height: 0.3rem;
-    ${backgroundColor(theme, 'background')}
+    ${backgroundColor(props.theme, 'text')}
     margin-top: 0.5rem;
 `);
 
@@ -23,7 +23,7 @@ export const AdditionalItemsContainer = createStyledMotionComponent('div')(props
     gap: 1rem;
     width: 100%;
     justify-content: space-evenly;
-    background: ${props.theme.gradient};
+    ${gradientBackground(props.theme, 'background')}
     border-radius: 100px;
 `);
 
@@ -34,7 +34,7 @@ export const MenuContainer = createStyledMotionComponent('div')(props => `
 
 export const StyledNavLink = styled(motion(Link))(({ theme }) => `
     font-family: 'Orbitron', sans-serif;
-    color: ${theme.text};
+    ${textColor(theme, 'text')}
     text-decoration: none;
     ${padding('md')}
     ${flexColumn}

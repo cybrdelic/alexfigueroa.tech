@@ -42,7 +42,6 @@ export default function NavMenu(props: NavMenuProps) {
 
             />
             <HamburgerMenu
-                theme={theme}
                 isHovered={isHovered}
                 menuWidth={menuWidth}
             />
