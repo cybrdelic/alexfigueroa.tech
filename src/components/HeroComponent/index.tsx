@@ -9,21 +9,20 @@ import { animated, useSpring } from 'react-spring';
 import { useCursorEffect } from '../../hooks/useCursorEffect';
 import { CursorContext } from '../../contexts/CursorContext';
 import { duration } from '@mui/material';
+import { flexColumn } from '../../theming/util-style-functions/layout';
+import { padding } from '../../theming/util-style-functions/spacing';
+import { backgroundColor, textColor } from '../../theming/util-style-functions/colors';
+import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
+import { rounded } from '../../theming/util-style-functions/misc';
 
 const HeroContainer = styled(motion.div)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  ${flexColumn}
   width: 100%;
 `;
 
 const Pane = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  ${flexColumn}
+  ${padding('sm')}
 `;
 
 const LeftPane = styled(Pane)`
@@ -35,47 +34,46 @@ const RightPane = styled(Pane)`
 `;
 
 
-const HeroTitle = styled(animated.h1)`
+const HeroTitle = createStyledMotionComponent(animated.h1)(props => `
   font-size:5rem;
-  color: ${props => props?.theme?.colors?.primary};
-  text-shadow: 0px 0px 10px ${props => props?.theme?.colors?.primary};
-  text-aligh: flex-start;
+  ${textColor('text', props?.theme?.mode)};
+  text-shadow: 0px 0px 10px ${props?.theme?.colors?.primary};
+  text-align: flex-start;
   font-family: 'Orbitron';
   width: 100%;
-`;
+`);
 
-const HeroTagline = styled(animated.h2)`
+const HeroTagline = createStyledMotionComponent(animated.h2)(props => `
   font-size: 1.5rem;
-  color: ${props => props?.theme?.colors?.secondary};
-  text-shadow: 0px 0px 10px ${props => props?.theme?.colors?.secondary};
+  ${textColor('secondary', props?.theme?.mode)}
+  text-shadow: 0px 0px 10px ${props?.theme?.colors?.secondary};
   text-aligh: flex-start;
   width: 100%;
   text-transform: uppercase;
   letter-spacing: 0.3rem;
-`;
+`);
 
-const HeroButton = styled(motion.button)`
-  background-color: ${props => props?.theme?.colors?.primary ?? 'purple'};
-  color: ${props => props?.theme?.colors?.buttonText ?? 'white'};
-  padding: 1rem;
+const HeroButton = createStyledMotionComponent('button')(props => `
+  ${backgroundColor('background', props?.theme?.mode)}
+  ${textColor('secondary')}
+  ${padding('md')}
   border: none;
-  border-radius: 5px;
+  ${rounded('lg')}
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
   text-transform: uppercase;
-  padding: 1rem 3rem;
   font-weight: 900;
 
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0px 0px 10px ${props => props?.theme?.colors?.buttonBackground};
+    box-shadow: 0px 0px 10px ${props?.theme?.colors?.buttonBackground};
   }
 
   &:active {
     transform: scale(0.95);
   }
-`;
+`);
 
 const ButtonContainer = styled(motion.div)`
   display: flex;
