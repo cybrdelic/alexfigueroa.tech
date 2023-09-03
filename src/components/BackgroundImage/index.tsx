@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../hooks/useTheme';
 import { darkTheme } from '../../theming/theme';
@@ -27,9 +27,13 @@ const ContentContainer = createStyledMotionComponent('div')(props => `
   ${fullViewport};
 `);
 
+
+
 const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const isDarkMode = useMemo(() => theme.mode === 'dark', [theme]);
 
   const mousePos = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
 
@@ -44,7 +48,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
         const easedDist = easing(dist / Math.max(ctx.canvas.width, ctx.canvas.height));
 
         ctx.lineWidth = 1 + 3 * (1 - easedDist);
-        ctx.strokeStyle = theme === darkTheme ? `rgba(255, 255, 255, ${0.05 - easedDist / 15})` : `rgba(0,0,0, ${0.05 - easedDist / 15})`;
+        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 - easedDist / 15})` : `rgba(0,0,0, ${0.05 - easedDist / 15})`;
 
         const size = state.gap + Math.sin(dist / state.distortion) * state.gap;
         ctx.beginPath();
@@ -76,28 +80,29 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, [drawGrid]);
 
-  const debouncedDraw = _.debounce(draw, 100 / 15);
+  const throttledDraw = _.throttle(draw, 100 / 15);
+
 
   useEffect(() => {
     if (window.innerWidth > 768) {
       const mouseMove = (e: MouseEvent) => {
         mousePos.current.x = e.clientX;
         mousePos.current.y = e.clientY;
-        debouncedDraw();
+        throttledDraw();
       };
       window.addEventListener('mousemove', mouseMove);
-      debouncedDraw();
+      throttledDraw();
       return () => {
         window.removeEventListener('mousemove', mouseMove);
       };
     }
-  }, [debouncedDraw]);
+  }, [throttledDraw]);
 
 
   return (
     <ParentContainer>
       <CanvasContainer>
-        <canvas ref={canvasRef} style={{ position: 'absolute', zIndex: 0, backgroundColor: theme === darkTheme ? 'black' : 'white' }} />
+        <canvas ref={canvasRef} style={{ position: 'absolute', zIndex: 0, backgroundColor: isDarkMode ? 'black' : 'white' }} />
       </CanvasContainer>
       <ContentContainer>
         {children}
