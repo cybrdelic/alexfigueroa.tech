@@ -13,7 +13,6 @@ import HomeIcon from "../HomeIcon";
 import NavMenu from "../NavMenu";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
-import { setBackground } from "../../theming/util-style-functions/colors";
 import { flexBetween } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
 
