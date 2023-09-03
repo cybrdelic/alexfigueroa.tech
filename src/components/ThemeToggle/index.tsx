@@ -8,10 +8,14 @@ import { lightTheme } from '../../theming/theme';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import { fixedBottomRight } from '../../theming/util-style-functions/position';
 import { zIndex } from '../../theming/design-tokens/spacing';
+import { margin } from '../../theming/util-style-functions/spacing';
+import { textColor } from '../../theming/util-style-functions/colors';
 
 const StyledIconButton = createStyledMotionComponent(IconButton)(props => `
     ${fixedBottomRight}
     z-index: ${zIndex.modal};
+    ${margin('md')}
+    color: white;
 `);
 
 const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
@@ -19,12 +23,11 @@ const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
 
     return (
         <StyledIconButton
-            edge="end"
-            color="inherit"
             aria-label="mode"
             onClick={onClick}
+            theme={theme}
         >
-            {theme === lightTheme
+            {theme.mode === 'light'
                 ? <Brightness3Icon fontSize="large" />
                 : <WbSunnyIcon fontSize="large" />}
         </StyledIconButton>

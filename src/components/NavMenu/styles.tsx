@@ -2,16 +2,14 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
-import { adjustTransparency } from "../../utils/adjustTransparency";
-import { setBackground, setGradientBackground } from "../../theming/util-style-functions/colors";
+import { backgroundColor } from "../../theming/util-style-functions/colors";
 import { flexBetween, flexCenter, flexColumn } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
-import { stickyTop } from "../../theming/util-style-functions/position";
 
 export const HamburgerBar = styled(motion.div)(({ theme }) => `
     width: 2.5rem;
     height: 0.3rem;
-    ${setBackground(theme.text)}
+    ${backgroundColor(theme, 'background')}
     margin-top: 0.5rem;
 `);
 
