@@ -42,21 +42,43 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D, state: { gap: number, distortion: number }) => {
     for (let i = 0; i < ctx.canvas.width; i += state.gap) {
       for (let j = 0; j < ctx.canvas.height; j += state.gap) {
-        const dx = mousePos.current.x - i;
-        const dy = mousePos.current.y - j;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const easedDist = easing(dist / Math.max(ctx.canvas.width, ctx.canvas.height));
+        // Distance from current point to the mouse
+        const dxMouse = mousePos.current.x - i;
+        const dyMouse = mousePos.current.y - j;
+        const distFromMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+        const easedDistFromMouse = easing(distFromMouse / Math.max(ctx.canvas.width, ctx.canvas.height));
 
-        ctx.lineWidth = 1 + 3 * (1 - easedDist);
-        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 - easedDist / 15})` : `rgba(0,0,0, ${0.05 - easedDist / 15})`;
+        // Calculate distance from current point to its nearest corner
+        const cornerDistances = [
+          Math.sqrt(i * i + j * j), // top left
+          Math.sqrt((ctx.canvas.width - i) * (ctx.canvas.width - i) + j * j), // top right
+          Math.sqrt(i * i + (ctx.canvas.height - j) * (ctx.canvas.height - j)), // bottom left
+          Math.sqrt((ctx.canvas.width - i) * (ctx.canvas.width - i) + (ctx.canvas.height - j) * (ctx.canvas.height - j)) // bottom right
+        ];
+        const minCornerDist = Math.min(...cornerDistances);
 
-        const size = state.gap + Math.sin(dist / state.distortion) * state.gap;
+        // Calculate distance from mouse to nearest corner
+        const mouseToCornerDistances = [
+          Math.sqrt(mousePos.current.x * mousePos.current.x + mousePos.current.y * mousePos.current.y), // top left
+          Math.sqrt((ctx.canvas.width - mousePos.current.x) * (ctx.canvas.width - mousePos.current.x) + mousePos.current.y * mousePos.current.y), // top right
+          Math.sqrt(mousePos.current.x * mousePos.current.x + (ctx.canvas.height - mousePos.current.y) * (ctx.canvas.height - mousePos.current.y)), // bottom left
+          Math.sqrt((ctx.canvas.width - mousePos.current.x) * (ctx.canvas.width - mousePos.current.x) + (ctx.canvas.height - mousePos.current.y) * (ctx.canvas.height - mousePos.current.y)) // bottom right
+        ];
+        const minMouseToCornerDist = Math.min(...mouseToCornerDistances);
+
+        const alpha = 1 - (minMouseToCornerDist / Math.sqrt(ctx.canvas.width * ctx.canvas.width + ctx.canvas.height * ctx.canvas.height));
+
+        ctx.lineWidth = 1 + 3 * (1 - easedDistFromMouse);
+        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * alpha - easedDistFromMouse / 15})` : `rgba(0,0,0, ${0.05 * alpha - easedDistFromMouse / 15})`;
+
+        const size = state.gap + Math.sin(distFromMouse / state.distortion) * state.gap;
         ctx.beginPath();
         ctx.rect(i - size / 2, j - size / 2, size, size);
         ctx.stroke();
       }
     }
   }, [easing, theme]);
+
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
