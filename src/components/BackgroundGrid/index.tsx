@@ -39,37 +39,52 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
   const easing = useCallback((t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, []);
 
-  const drawGrid = useCallback((ctx: CanvasRenderingContext2D, state: { gap: number, distortion: number }) => {
-    for (let i = 0; i < ctx.canvas.width; i += state.gap) {
-      for (let j = 0; j < ctx.canvas.height; j += state.gap) {
-        // Distance from current point to the mouse
-        const dxMouse = mousePos.current.x - i;
-        const dyMouse = mousePos.current.y - j;
-        const distFromMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-        const easedDistFromMouse = easing(distFromMouse / Math.max(ctx.canvas.width, ctx.canvas.height));
+  const distanceBetweenPoints = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number) => {
+    const dx = x1 - x2;
+    const dy = y1 - y2;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 
-        // Calculate distance from current point to its nearest corner
-        const cornerDistances = [
-          Math.sqrt(i * i + j * j), // top left
-          Math.sqrt((ctx.canvas.width - i) * (ctx.canvas.width - i) + j * j), // top right
-          Math.sqrt(i * i + (ctx.canvas.height - j) * (ctx.canvas.height - j)), // bottom left
-          Math.sqrt((ctx.canvas.width - i) * (ctx.canvas.width - i) + (ctx.canvas.height - j) * (ctx.canvas.height - j)) // bottom right
-        ];
-        const minCornerDist = Math.min(...cornerDistances);
+  const cornerDistancesForPoint = (
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) => {
+    return [
+      distanceBetweenPoints(x, y, 0, 0),
+      distanceBetweenPoints(x, y, width, 0),
+      distanceBetweenPoints(x, y, 0, height),
+      distanceBetweenPoints(x, y, width, height)
+    ];
+  }
 
-        // Calculate distance from mouse to nearest corner
-        const mouseToCornerDistances = [
-          Math.sqrt(mousePos.current.x * mousePos.current.x + mousePos.current.y * mousePos.current.y), // top left
-          Math.sqrt((ctx.canvas.width - mousePos.current.x) * (ctx.canvas.width - mousePos.current.x) + mousePos.current.y * mousePos.current.y), // top right
-          Math.sqrt(mousePos.current.x * mousePos.current.x + (ctx.canvas.height - mousePos.current.y) * (ctx.canvas.height - mousePos.current.y)), // bottom left
-          Math.sqrt((ctx.canvas.width - mousePos.current.x) * (ctx.canvas.width - mousePos.current.x) + (ctx.canvas.height - mousePos.current.y) * (ctx.canvas.height - mousePos.current.y)) // bottom right
-        ];
-        const minMouseToCornerDist = Math.min(...mouseToCornerDistances);
+  const minDistanceToCorner = (x, y, width, height) => {
+    return Math.min(...cornerDistancesForPoint(x, y, width, height));
+  }
 
-        const alpha = 1 - (minMouseToCornerDist / Math.sqrt(ctx.canvas.width * ctx.canvas.width + ctx.canvas.height * ctx.canvas.height));
+  const drawGrid = useCallback((ctx, state) => {
+    const { width, height } = ctx.canvas;
+
+    for (let i = 0; i < width; i += state.gap) {
+      for (let j = 0; j < height; j += state.gap) {
+        const distFromMouse = distanceBetweenPoints(mousePos.current.x, mousePos.current.y, i, j);
+        const easedDistFromMouse = easing(distFromMouse / Math.max(width, height));
+
+        const minMouseToCornerDist = minDistanceToCorner(mousePos.current.x, mousePos.current.y, width, height);
+
+        const baseAlpha = 1 - (minMouseToCornerDist / Math.sqrt(width * width + height * height));
+        const fadeFactor = j / height * 0.9; // Cells at the top will have a value closer to 0, and cells at the bottom closer to 1
+
+        // Combine the baseAlpha with the fadeFactor. You can adjust the fadeFactor multiplier (0.5 here) to influence the fading intensity.
+        const combinedAlpha = baseAlpha * fadeFactor;
 
         ctx.lineWidth = 1 + 3 * (1 - easedDistFromMouse);
-        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * alpha - easedDistFromMouse / 15})` : `rgba(0,0,0, ${0.05 * alpha - easedDistFromMouse / 15})`;
+        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 15})` : `rgba(0,0,0, ${0.05 * combinedAlpha - easedDistFromMouse / 15})`;
 
         const size = state.gap + Math.sin(distFromMouse / state.distortion) * state.gap;
         ctx.beginPath();
@@ -78,6 +93,8 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
       }
     }
   }, [easing, theme]);
+
+
 
 
   const draw = useCallback(() => {
