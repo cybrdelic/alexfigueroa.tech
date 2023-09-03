@@ -1,10 +1,13 @@
+import { projectsData } from "../../data/project.data";
+
 export const typography = {
-    fontFamily: "'Helvetica Neue', sans-serif",
+    fontFamily: projectsData.x1dra.titleFont,
     fontSize: {
         xsmall: '0.625rem',
         small: '0.875rem',
         base: '1rem',
         large: '1.25rem',
+        poster: '6rem',
         h1: '2.5rem',
         h2: '2rem',
         h3: '1.75rem',

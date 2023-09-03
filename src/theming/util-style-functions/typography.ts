@@ -1,3 +1,4 @@
+import { projectsData } from "../../data/project.data";
 import { typography } from "../design-tokens/typography";
 export const fontSize = (size: keyof typeof typography.fontSize) => `
   font-size: ${typography.fontSize[size]};
@@ -14,5 +15,9 @@ export const letterSpacing = (spacing: keyof typeof typography.letterSpacing) =>
 export const lineHeight = (height: keyof typeof typography.lineHeight) => `
   line-height: ${typography.lineHeight[height]};
 `;
+
+export const fontFamily = (customFont?: string) => {
+  return `font-family: ${customFont ?? projectsData.x1dra.titleFont};`
+}
 
 // ... Add more as needed
