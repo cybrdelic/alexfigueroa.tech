@@ -1,21 +1,37 @@
 import * as tokens from "./design-tokens";
+import { colors } from "./design-tokens";
 
-// Extracting the color properties to its own interface for clarity
-export interface ThemeColors {
-    primary: string;
-    secondary: string;
-    success: string;
-    danger: string;
-    warning: string;
-    info: string;
+type SimpleColorKey = 'text' | 'background' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'gray';
+
+export interface ColorMode {
     light: string;
     dark: string;
-    gray: string;
+}
+export interface ThemeColors {
+    primary: ColorMode;
+    secondary: ColorMode;
+    success: ColorMode;
+    danger: ColorMode;
+    warning: ColorMode;
+    info: ColorMode;
+    light: ColorMode;
+    dark: ColorMode;
+    gray: ColorMode;
     text: string;
     background: string;
+    common: {
+        white: string;
+        black: string;
+    };
+    neon: {
+        blue: string;
+        green: string;
+        red: string;
+    };
 }
 
 export interface Theme {
+    mode: 'light' | 'dark'
     typography: typeof tokens.typography;
     transitions: typeof tokens.transitions;
     spacing: typeof tokens.spacing;
@@ -38,19 +54,23 @@ const common = {
 const createTheme = (colorMode: 'dark' | 'light'): Theme => ({
     ...common,
     colors: {
-        primary: tokens.colors.primary[colorMode],
-        secondary: tokens.colors.secondary[colorMode],
-        success: tokens.colors.success[colorMode],
-        danger: tokens.colors.danger[colorMode],
-        warning: tokens.colors.warning[colorMode],
-        info: tokens.colors.info[colorMode],
-        light: tokens.colors.light[colorMode],
-        dark: tokens.colors.dark[colorMode],
-        gray: tokens.colors.gray[colorMode],
-        text: tokens.colors.common[colorMode === 'dark' ? 'white' : 'black'],
-        background: tokens.colors.dark[colorMode],
-    }
+        primary: colors.primary,
+        secondary: colors.secondary,
+        success: colors.success,
+        danger: colors.danger,
+        warning: colors.warning,
+        info: colors.info,
+        light: colors.light,
+        dark: colors.dark,
+        gray: colors.gray,
+        text: colorMode === 'dark' ? colors.common.white : colors.common.black,
+        background: colorMode === 'dark' ? colors.dark.dark : colors.light.light,
+        common: colors.common,
+        neon: colors.neon,
+    },
+    mode: colorMode
 });
+
 
 export const lightTheme = createTheme('dark');
 export const darkTheme = createTheme('light');
