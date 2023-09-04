@@ -78,13 +78,13 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
         const minMouseToCornerDist = minDistanceToCorner(mousePos.current.x, mousePos.current.y, width, height);
 
         const baseAlpha = 1 - (minMouseToCornerDist / Math.sqrt(width * width + height * height));
-        const fadeFactor = j / height * 0.9; // Cells at the top will have a value closer to 0, and cells at the bottom closer to 1
+        const fadeFactor = j / height * 1.2; // Cells at the top will have a value closer to 0, and cells at the bottom closer to 1
 
         // Combine the baseAlpha with the fadeFactor. You can adjust the fadeFactor multiplier (0.5 here) to influence the fading intensity.
         const combinedAlpha = baseAlpha * fadeFactor;
 
-        ctx.lineWidth = 1 + 3 * (1 - easedDistFromMouse);
-        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 15})` : `rgba(0,0,0, ${0.05 * combinedAlpha - easedDistFromMouse / 15})`;
+        ctx.lineWidth = 1.25 + 4 * (easedDistFromMouse);
+        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 20})` : `rgba(0,0,0, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`;
 
         const size = state.gap + Math.sin(distFromMouse / state.distortion) * state.gap;
         ctx.beginPath();
@@ -105,8 +105,8 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
     if (!ctx) return;
 
     const state = {
-      gap: 20,
-      distortion: 10000,
+      gap: 15,
+      distortion: 100000,
     };
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
