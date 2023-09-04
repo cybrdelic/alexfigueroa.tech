@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../hooks/useTheme';
-import { darkTheme } from '../../theming/theme';
-import { usePageTransitions } from '../../hooks/usePageTransitions';
-import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
-import { aboveTheFold, absoluteCenter, absoluteTopLeft, fullViewport, relative } from '../../theming/util-style-functions/position';
-import { flexCenter } from '../../theming/util-style-functions/layout';
+import { absoluteTopLeft, fullViewport } from '../../theming/util-style-functions/position';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 
 interface BackgroundImageProps {
-  children: React.ReactNode,
+  children: React.ReactNode;
 }
 
 const ParentContainer = styled.div`
@@ -27,45 +23,23 @@ const ContentContainer = createStyledMotionComponent('div')(props => `
   ${fullViewport};
 `);
 
-
-
 const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const isDarkMode = useMemo(() => theme.mode === 'dark', [theme]);
-
   const mousePos = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
 
-  const easing = useCallback((t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, []);
+  const distanceBetweenPoints = (x1, y1, x2, y2) =>
+    Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
-  const distanceBetweenPoints = (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number) => {
-    const dx = x1 - x2;
-    const dy = y1 - y2;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
+  const cornerDistancesForPoint = (x, y, width, height) => [
+    distanceBetweenPoints(x, y, 0, 0),
+    distanceBetweenPoints(x, y, width, 0),
+    distanceBetweenPoints(x, y, 0, height),
+    distanceBetweenPoints(x, y, width, height)
+  ];
 
-  const cornerDistancesForPoint = (
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ) => {
-    return [
-      distanceBetweenPoints(x, y, 0, 0),
-      distanceBetweenPoints(x, y, width, 0),
-      distanceBetweenPoints(x, y, 0, height),
-      distanceBetweenPoints(x, y, width, height)
-    ];
-  }
-
-  const minDistanceToCorner = (x, y, width, height) => {
-    return Math.min(...cornerDistancesForPoint(x, y, width, height));
-  }
+  const easing = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
   const drawGrid = useCallback((ctx, state) => {
     const { width, height } = ctx.canvas;
@@ -74,17 +48,15 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
       for (let j = 0; j < height; j += state.gap) {
         const distFromMouse = distanceBetweenPoints(mousePos.current.x, mousePos.current.y, i, j);
         const easedDistFromMouse = easing(distFromMouse / Math.max(width, height));
+        const minMouseToCornerDist = Math.min(...cornerDistancesForPoint(mousePos.current.x, mousePos.current.y, width, height));
+        const baseAlpha = 1 - (minMouseToCornerDist / Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
+        const fadeFactor = j / height * 1.2;
 
-        const minMouseToCornerDist = minDistanceToCorner(mousePos.current.x, mousePos.current.y, width, height);
-
-        const baseAlpha = 1 - (minMouseToCornerDist / Math.sqrt(width * width + height * height));
-        const fadeFactor = j / height * 1.2; // Cells at the top will have a value closer to 0, and cells at the bottom closer to 1
-
-        // Combine the baseAlpha with the fadeFactor. You can adjust the fadeFactor multiplier (0.5 here) to influence the fading intensity.
         const combinedAlpha = baseAlpha * fadeFactor;
-
         ctx.lineWidth = 1.25 + 4 * (easedDistFromMouse);
-        ctx.strokeStyle = isDarkMode ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 20})` : `rgba(0,0,0, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`;
+        ctx.strokeStyle = isDarkMode
+          ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`
+          : `rgba(0, 0, 0, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`;
 
         const size = state.gap + Math.sin(distFromMouse / state.distortion) * state.gap;
         ctx.beginPath();
@@ -93,9 +65,6 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
       }
     }
   }, [easing, theme]);
-
-
-
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -112,15 +81,12 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
     canvas.height = window.innerHeight;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     drawGrid(ctx, state);
-
     ctx.fillStyle = `rgba(0, 0, 0, 0.05)`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, [drawGrid]);
 
   const throttledDraw = _.throttle(draw, 100 / 15);
-
 
   useEffect(() => {
     if (window.innerWidth > 768) {
@@ -129,6 +95,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
         mousePos.current.y = e.clientY;
         throttledDraw();
       };
+
       window.addEventListener('mousemove', mouseMove);
       throttledDraw();
       return () => {
@@ -136,7 +103,6 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
       };
     }
   }, [throttledDraw]);
-
 
   return (
     <ParentContainer>
