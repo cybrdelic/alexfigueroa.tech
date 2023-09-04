@@ -10,7 +10,8 @@ interface BackgroundImageProps {
 }
 
 const ParentContainer = styled.div`
-  ${absoluteTopLeft};
+  ${absoluteTopLeft}
+  pointer-events: none;
 `;
 
 const CanvasContainer = styled.div`
