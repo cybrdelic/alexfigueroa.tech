@@ -12,65 +12,45 @@ import { CursorContext } from "../../../contexts/CursorContext";
 import { Link } from "react-router-dom";
 import { isCloseToWhite } from "../../../utils/theming";
 import VectorLogoAndText from "../VectorLogoAndText";
-import { ProjectPreview } from "../ProjectPreview";
+
 import { GridElement, MotionGridElement } from "../GridElement";
 import { ProjectDetailsLayout } from "../ProjectDetailsPreviewLayout";
 import ProjectPicker from "../ProjectPicker";
+import { FullscreenCarousel } from "../../FullscreenCarousel";
+import Carousel from "../../Carousel";
+import ProjectPreview from "../../ProjectPreview";
 
-// animation variants
-const pageVariants = {
-    initial: {
-        opacity: 0
-    },
-    in: {
-        opacity: 1
-    },
-    out: {
-        opacity: 0
-    }
-};
 
-const pageTransition = {
-    type: "tween",
-    ease: "anticipate",
-    duration: 0.5
-};
 
 
 interface ProjectsLayoutProps {
     projects: ProjectData;
 }
 
-
-const StyledContainer = createStyledMotionComponent(motion.div)(props => `
+const CarouselContainer = createStyledMotionComponent('div')(props => `
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-`);
-
-
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+`)
 export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
-    const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
     const cursorType = useCursorEffect();
+
+    const projectsArray = Object.values(projects);
+
+    const projectPreviews: React.ReactNode[] = projectsArray.map(
+        project => {
+            return (
+                <ProjectPreview project={project} isActive={true} />
+            )
+        }
+    )
 
 
     return (
-        <CursorContext.Provider value={cursorType}>
-            <StyledContainer
-                initial="initial"
-                animate="in"
-                exit="out"
-                variants={pageVariants}
-                transition={pageTransition}
-            >
-                <ProjectPicker
-                    selectedProject={selectedProject}
-                    setSelectedProject={setSelectedProject}
-                    projects={projects}
-                />
-
-
-            </StyledContainer>
-        </CursorContext.Provider>
+        <CarouselContainer>
+            <Carousel items={projectPreviews} />
+        </CarouselContainer>
     );
 }

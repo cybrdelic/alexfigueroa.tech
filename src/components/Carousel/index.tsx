@@ -39,7 +39,7 @@ const NextButton = styled.button`
 export const Container = createStyledMotionComponent('div')(props => `
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   overflow: hidden;
   perspective: 1500px;
 `);
@@ -53,11 +53,9 @@ export const CarouselItem = createStyledMotionComponent('div')(props => css`
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  border-radius: 10px;
   transition: all 0.3s ease-in;  // enhanced timing
   transform-style: preserve-3d;
-  filter: brightness(1.2);
-  box-shadow: 0px 0px 20px rgba(0,0,0,0.3);  // subtle shadow
+  filter: brightness(1.2);subtle shadow
 `);
 
 const Carousel = ({ items }) => {
