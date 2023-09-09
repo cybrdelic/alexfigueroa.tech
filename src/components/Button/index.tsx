@@ -3,6 +3,7 @@ import { createStyledMotionComponent } from '../../theming/styled-motion-utils/c
 import { motion, useAnimation } from 'framer-motion';
 import { useTheme } from '../../hooks/useTheme';
 import { zIndex } from '../../theming/design-tokens';
+import { fontFamily } from '../../theming/util-style-functions/typography';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     backgroundColor?: string;
@@ -26,33 +27,78 @@ const glitchAnimation = `
   }
 `;
 
-const ProfessionalButtonBase = createStyledMotionComponent(motion.button)(props => `
+const glitchPositionAnimation = `
+  @keyframes glitchPosition {
+    0%, 9% {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+    9.5% {
+      transform: translate(-10px, 5px);
+      opacity: 0.2;
+    }
+    10% {
+      transform: translate(10px, -5px);
+      opacity: 0.2;
+    }
+    10.5% {
+      transform: translate(-5px, 3px);
+      opacity: 0.2;
+    }
+    11% {
+      transform: translate(5px, -2px);
+      opacity: 0.2;
+    }
+    11.5% {
+      transform: translate(-3px, 2px);
+      opacity: 0.2;
+    }
+    12% {
+      transform: translate(3px, -1px);
+      opacity: 0.2;
+    }
+    12.5% {
+      transform: translate(0, 0);
+      opacity: 0.3;
+    }
+    13% {
+      transform: translate(-2px, 1px);
+      opacity: 0.2;
+    }
+    13.5%, 100% {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+  };
+`;
+
+
+const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
     background-color: ${'transparent'};
     overflow: visible;
     border: 2px solid ${props.backgroundColor};
     border-radius: 5px;
     padding: 15px 30px;
     font-size: 18px;
+    ${fontFamily()}
+    text-transform: uppercase;
     cursor: pointer;
     outline: none;
     position: relative;
     overflow: hidden;
-    color: white;
-    text-shadow: 0 0 5px ${props.backgroundColor}, 0 0 10px ${props.backgroundColor};
+    color: ${props.backgroundColor};10px ${props.backgroundColor};
     transition: transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px ${props.backgroundColor};
-
+    animation: glitchPosition 5.5s ease-in-out infinite;  // Now, the entire cycle is 5.5 seconds
+    ${glitchPositionAnimation}
     ${glitchAnimation}
-
     &:hover {
-    box-shadow: 0 8px 20px ${props.backgroundColor};
-    transform: scale(1.05);
-}
-
+        box-shadow: 0 8px 20px ${props.backgroundColor};
+        transform: scale(5);
+    };
     &:active {
-    box-shadow: 0 2px 5px ${props.backgroundColor};
-    transform: scale(0.95);
-}
+        box-shadow: 0 2px 5px ${props.backgroundColor};
+        transform: scale(0.95);
+    };
 
     &:before, &:after {
         content: "";
@@ -92,7 +138,7 @@ const ElectricButton: React.FC<ButtonProps> = (props) => {
 
     const handleMouseEnter = () => {
         controls.start({
-            scale: 1.05,
+            scale: 5,
             boxShadow: `0 8px 20px ${props.backgroundColor}`,
         });
     };
