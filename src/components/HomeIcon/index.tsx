@@ -1,95 +1,64 @@
 import React from "react";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { motion } from "framer-motion";
-import { ReactComponent as Logo } from './logo.svg';
-import { IconButton } from "@mui/material";
+import { ArrowOutwardSharp } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
-import { flexCenter } from "../../theming/util-style-functions/layout";
-import { mq } from "../../theming/util-style-functions/responsive";
-
-const centeredContent = `
-  ${flexCenter}
-`;
+import { fontFamily, fontSize } from "../../theming/util-style-functions/typography";
+import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
+import { textColor } from "../../theming/util-style-functions/colors";
+import { zIndex } from "../../theming/design-tokens";
 
 interface HomeIconProps {
   title: string;
 }
-
-const StyledLogo = styled(motion(Logo))`
-  width: 20px;
-  height: 20px;
-  ${centeredContent}
-
-  ${mq('sm')} {
-    width: 15px;
-    height: 15px;
-  }
-
-  ${mq('md')} {
-    width: 18px;
-    height: 18px;
-  }
-
-  ${mq('lg')} {
-    width: 20px;
-    height: 20px;
-  }
-`;
-
-const StyledLogoText = styled(motion.h2)(({ theme }) => `
-  font-family: 'Orbitron';
-  ${centeredContent}
-  color: ${theme.text}
-
-  ${mq('sm')} {
-    font-size: 1.5rem;
-  }
-
-  ${mq('md')} {
-    font-size: 1.8rem;
-  }
-
-  ${mq('lg')} {
-    font-size: 2rem;
+const ButtonContainer = createStyledMotionComponent(Link)(props => `
+  display: flex;
+  align-items: flex-end;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  z-index: ${zIndex.foreground + 100};
+  &:hover {
+    transform: scale(1.05);
   }
 `);
 
-const StyledIconButton = styled(motion(IconButton))`
-  ${flexCenter}
-  flex-direction: row;
-  grid-gap: 0.5rem; // Added a gap for clarity on smaller devices
-  border-radius: 0px;
+const StyledText = createStyledMotionComponent('h2')(props => `
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  ${textColor(props.theme, 'text')}
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  ${fontSize('h6')}
+  margin: 0;  // Reset default margin
+  align-self: flex-end;  // Push to the bottom
+  ${fontFamily()}
+`);
 
-  ${mq('sm')} {
-    grid-gap: 0.3rem;
-  }
-`;
+const StyledIconContainer = createStyledMotionComponent('div')(props => `
+  display: inline-flex;
+  ${fontSize('h4')}
+  ${textColor(props.theme, 'text')}
+  transition: all 0.3s ease-in-out;
+  transform: rotate(270deg);
+  height: 100%;
+  align-self: flex-end;  // Push to the bottom
+`);
 
-function HomeIcon(props: HomeIconProps) {
+// ... rest of the component remains unchanged
+
+
+function HomeIcon({ title }: HomeIconProps) {
   const theme = useTheme();
-  const hoverEffect = {
-    scale: 1.2,
-  };
-
-  const tapEffect = {
-    scale: 0.9
-  };
 
   return (
-    <Link to="/" role="button">
-      <StyledIconButton
-        whileHover={hoverEffect}
-        whileTap={tapEffect}
-        color="inherit"
-        aria-label="home"
-      >
-        <StyledLogo />
-        <StyledLogoText theme={theme}>
-          {props.title}
-        </StyledLogoText>
-      </StyledIconButton>
-    </Link>
+    <ButtonContainer to="/" role="button">
+      <StyledIconContainer theme={theme}>
+        <ArrowOutwardSharp fontSize="inherit" />
+      </StyledIconContainer>
+      <StyledText theme={theme}>{title}</StyledText>
+    </ButtonContainer>
   );
 }
 
