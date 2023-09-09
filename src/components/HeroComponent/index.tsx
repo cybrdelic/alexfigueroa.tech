@@ -15,6 +15,7 @@ import { backgroundColor, textColor } from '../../theming/util-style-functions/c
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import { rounded } from '../../theming/util-style-functions/misc';
 import { ThemeProvider } from '../../theming/ThemeProvider';
+import { fontFamily } from '../../theming/util-style-functions/typography';
 
 const HeroContainer = styled(motion.div)`
   ${flexColumn}
@@ -40,7 +41,7 @@ const HeroTitle = createStyledMotionComponent(animated.h1)(props => `
   ${textColor(props.theme, 'text')}
   text-shadow: 0px 0px 10px ${props?.theme?.colors?.text};
   text-align: flex-start;
-  font-family: 'Orbitron';
+  ${fontFamily()}
   width: 100%;
 `);
 
