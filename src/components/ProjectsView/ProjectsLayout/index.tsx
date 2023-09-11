@@ -1,33 +1,12 @@
-import React, { memo, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useTheme } from "../../../hooks/useTheme";
-import { ProjectData, ProjectType } from "../../../data/project.data";
+import { ProjectData } from "../../../data/project.data";
 import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
-import { motion } from "framer-motion";
-import { useHoveredState } from "../../../hooks/animation/useHoveredState";
-import { useAlternateTheme } from "../../../hooks/theming/useAlternateTheme";
-import { adjustTransparency } from "../../../utils/adjustTransparency";
-import VerticalText from "../BoldHeaderText";
-import { useCursorEffect } from "../../../hooks/useCursorEffect";
-import { CursorContext } from "../../../contexts/CursorContext";
-import { Link } from "react-router-dom";
-import VectorLogoAndText from "../VectorLogoAndText";
-
-import { GridElement, MotionGridElement } from "../GridElement";
-import { ProjectDetailsLayout } from "../ProjectDetailsPreviewLayout";
-import ProjectPicker from "../ProjectPicker";
 import Carousel from "../../Carousel";
 import ProjectPreview from "../../ProjectPreview";
-import { absoluteTopLeft, relativeTop } from "../../../theming/util-style-functions/position";
-import { backgroundColor, borderColor, textColor } from "../../../theming/util-style-functions/colors";
-import { Grid4x4, GridOn, ViewCarousel } from "@mui/icons-material";
-import { } from "react-icons"
-import { FaRegWindowMaximize as GridIcon, FaRegClone as CarouselIcon } from 'react-icons/fa';
-import { colors, zIndex } from "../../../theming/design-tokens";
+import { zIndex } from "../../../theming/design-tokens";
 import { css } from "styled-components";
-import { rounded } from "../../../theming/util-style-functions/misc";
-import { padding } from "../../../theming/util-style-functions/spacing";
 import { fontFamily, fontSize } from "../../../theming/util-style-functions/typography";
-import { textCenter } from "../../../theming/util-style-functions/layout";
 import ListCarouselToggleButtons from "../../ListCarouselToggleButtons";
 
 
