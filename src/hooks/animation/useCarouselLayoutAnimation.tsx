@@ -5,12 +5,13 @@ const getAnimationProps = (status) => {
         duration: 0.5,
         ease: [0.9, 0.67, 0.53, 0.99] // your chosen bezier curve
     };
+    const blur = '10px'
 
     switch (status) {
         case 'active':
             return {
                 initial: {
-                    transform: "translateX(0%) scale(10, 0.6) rotateY(0deg)",  // Exaggerated stretch in the Y direction
+                    transform: "scale(0.6, 0.6) rotateY(0deg)",  // Exaggerated stretch in the Y direction
                     opacity: 0.5,
                     filter: 'blur(10px) brightness(0.8)',
                 },
@@ -39,7 +40,7 @@ const getAnimationProps = (status) => {
                 },
                 exit: {
                     transform: "translateX(-300%) scale(0.3, 0.35) rotateY(-60deg)", // Slightly stretch in the Y direction
-                    filter: 'blur(30px) brightness(0.6)',
+                    filter: `blur(${blur}) brightness(0.6)`,
                     opacity: 0
                 },
                 transition: unifiedTransition
@@ -50,17 +51,17 @@ const getAnimationProps = (status) => {
                 initial: {
                     transform: "translateX(60%) scale(10, 9.5) rotateY(45deg)", // Slightly squeeze in the Y direction
                     opacity: 0,
-                    filter: 'blur(30px) brightness(0.6)',
+                    filter: `blur(${blur}) brightness(0.6)`,
                 },
                 animate: {
                     transform: "translateX(60%) scale(0.8, 0.8) rotateY(45deg)", // Slightly squeeze in the Y direction
                     zIndex: 0,
-                    filter: 'blur(20px) brightness(0.7)',
+                    filter: 'blur(70px) brightness(0.7)',
                     opacity: 0.6
                 },
                 exit: {
                     transform: "translateX(60%) scale(0.8, 0.7) rotateY(60deg)", // Slightly squeeze in the Y direction
-                    filter: 'blur(30px) brightness(0.6)',
+                    filter: 'blur(90px) brightness(0.6)',
                     opacity: 0
                 },
                 transition: unifiedTransition
