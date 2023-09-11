@@ -11,6 +11,7 @@ import { styled } from "styled-components";
 import ThemeToggle from "../ThemeToggle";
 import { fontFamily, fontSize, fontWeight } from "../../theming/util-style-functions/typography";
 import { textColor } from "../../theming/util-style-functions/colors";
+import BottomBar from "../BottomBar";
 
 interface SiteLayoutProps {
     children: React.ReactNode[] | React.ReactNode,
@@ -28,20 +29,6 @@ const LayoutContainer = createStyledMotionComponent('div')(props => `
     ${coverParent}
 `)
 
-const BottomBar = styled.div`
-  z-index: ${zIndex.foreground + 10};
-  height: 10%;
-  min-height: 10%;
-  max-height: 10%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  ${mq('md')} {
-    bottom: ${spacing.md};
-    right: ${spacing.md};
-  }
-`;
 
 const BrandTextContainer = createStyledMotionComponent('div')(props => `
   grid-gap: 0rem;
@@ -66,13 +53,7 @@ export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
                 <MainContent>
                     {children}
                 </MainContent>
-                <BottomBar>
-                    <BrandTextContainer>
-                        <Text>Alex Figueroa</Text>
-                        <Text>Full-Stack Software Developer</Text>
-                    </BrandTextContainer>
-                    <ThemeToggle onClick={toggleTheme} />
-                </BottomBar>
+                <BottomBar toggleTheme={toggleTheme} />
             </LayoutContainer>
         </BackgroundImage>
     );
