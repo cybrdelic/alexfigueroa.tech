@@ -25,6 +25,7 @@ const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
             aria-label="mode"
             onClick={onClick}
             theme={theme}
+            data-id="special"
         >
             {theme.mode === 'light'
                 ? <Brightness3Icon fontSize="large" color="inherit" />

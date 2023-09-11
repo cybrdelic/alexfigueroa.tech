@@ -42,11 +42,11 @@ const RoutesWrapper = () => {
 
 
 const App: React.FC = () => {
-  const cursorType = useCursorEffect();
+  const { cursorPos, cursorType } = useCursorEffect();
 
   return (
     <AppThemeProvider>
-      <CursorContext.Provider value={cursorType}>
+      <CursorContext.Provider value={{ cursorPos, cursorType }}>
         <Router>
           <Suspense fallback={<div>Loading...</div>}>
             <CustomCursor />
