@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { zIndex } from "../../theming/design-tokens/spacing";
 const animationConfiguration = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+    initial: { x: -100 },
+    animate: { x: 0 },
+    exit: { x: 100 },  // Jolt upwards then move to the right
 };
 const PageTransition = ({ children }) => {
     return (
