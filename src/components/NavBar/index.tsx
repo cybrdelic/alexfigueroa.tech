@@ -13,9 +13,9 @@ import HomeIcon from "../HomeIcon";
 import NavMenu from "../NavMenu";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
-import { setBackground } from "../../theming/util-style-functions/colors";
 import { flexBetween } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
+import { zIndex } from "../../theming/design-tokens";
 
 interface NavBarProps {
   links: RouteItem[];
@@ -29,9 +29,10 @@ const NavBarContainer = createStyledMotionComponent('div')(props => `
   height: 10%;
   display: flex;
   flex-direction: row;
-  ${padding('xl')};
   ${flexBetween};
   ${stickyTop};
+  z-index: ${zIndex.foreground + 1000}
+
 `)
 
 
@@ -40,7 +41,7 @@ export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <NavBarContainer>
-      <HomeIcon title="Alex Figueroa" />
+      <HomeIcon title="Home" />
       <NavMenu links={links} toggleTheme={toggleTheme} />
     </NavBarContainer>
   );

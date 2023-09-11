@@ -38,15 +38,7 @@ const RoutesWrapper = () => {
 };
 
 
-const ThemeToggleWrapper = styled.div`
-  ${fixedBottomRight}
-  z-index: ${zIndex.modal};
 
-  ${mq('md')} {
-    bottom: ${spacing.md};
-    right: ${spacing.md};
-  }
-`;
 
 
 const App: React.FC = () => {
@@ -65,9 +57,6 @@ const App: React.FC = () => {
                     theme && toggleTheme ?
                       <SiteLayout toggleTheme={toggleTheme}>
                         <RoutesWrapper />
-                        <ThemeToggleWrapper>
-                          <ThemeToggle onClick={toggleTheme} />
-                        </ThemeToggleWrapper>
                       </SiteLayout>
                       : null
                   }

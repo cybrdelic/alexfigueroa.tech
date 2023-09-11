@@ -1,12 +1,47 @@
 export const colors = {
-    primary: '#007BFF',
-    secondary: '#6C757D',
-    success: '#28A745',
-    danger: '#DC3545',
-    warning: '#FFC107',
-    info: '#17A2B8',
-    light: '#F8F9FA',
-    dark: '#343A40',
-    white: '#FFFFFF',
-    black: '#000000',
+    primary: {
+        light: '#FF00FF', // Neon Pink
+        dark: '#8B008B', // Dark Magenta
+    },
+    secondary: {
+        light: '#00FFFF', // Cyan/Aqua
+        dark: '#006363', // Dark Cyan
+    },
+    success: {
+        light: '#4CAF50', // Green
+        dark: '#2F4F4F', // Dark Slate Gray
+    },
+    danger: {
+        light: '#FF4500', // Neon Orange
+        dark: '#8B0000', // Dark Red
+    },
+    warning: {
+        light: '#FFD700', // Golden
+        dark: '#8B6508', // Dark Goldenrod
+    },
+    info: {
+        light: '#1E90FF', // Bright Blue
+        dark: '#001F3F', // Navy
+    },
+    light: {
+        light: '#C0C0C0', // Silver
+        dark: '#696969', // Dim Gray
+    },
+    dark: {
+        light: '#FFFFFF', // Slightly Lighter Gray
+        dark: '#060606', // Almost Black
+    },
+    gray: {
+        light: '#FDFDFD', // Dark Gray
+        dark: '#2F4F4F', // Dark Slate Gray
+    },
+    common: {
+        white: '#FFFFFF',
+        black: '#000000',
+    },
+    neon: {
+        blue: '#0FF',
+        green: '#0F0',
+        red: '#F00',
+    }
 };

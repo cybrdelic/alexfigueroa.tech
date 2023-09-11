@@ -2,14 +2,15 @@ import React from "react";
 import { IconButton } from "@mui/material";
 import { DefaultTheme } from "styled-components/dist/models/ThemeProvider";
 import { HamburgerBar, StyledHamburger } from "../NavMenu/styles";
+import { useTheme } from "../../hooks/useTheme";
 
 interface HamburgerMenuProps {
-    theme: DefaultTheme;
     isHovered: boolean;
     menuWidth: number | null;
 }
 
-export const HamburgerMenu = ({ theme, isHovered, menuWidth }: HamburgerMenuProps) => {
+export const HamburgerMenu = ({ isHovered, menuWidth }: HamburgerMenuProps) => {
+    const theme = useTheme();
     const commonTransition = { type: "spring", stiffness: 2600, damping: 200 };
 
     const animations = isHovered ? {

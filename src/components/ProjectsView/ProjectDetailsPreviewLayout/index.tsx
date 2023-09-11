@@ -19,9 +19,9 @@ interface ProjectDetailsLayoutProps {
 
 const TopMiddlePane = createStyledMotionComponent('div')(props => `
     ${absoluteCenter};
-    ${textColor(props.theme, 'secondary')};
+    ${textColor(props.theme, 'text')};
     ${fontSize('large')};
-    ${backgroundColor('info')};
+    ${backgroundColor(props.theme, 'background')};
     ${borderRadius.md};
     text-align: center;
 
@@ -36,7 +36,7 @@ const BottomLeftPane = createStyledMotionComponent('div')(props => `
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    ${backgroundColor('info')};
+    ${backgroundColor(props.theme, 'info')};
     ${borderRadius.md};
     ${padding('lg')};
 

@@ -25,7 +25,7 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
     ${flexCenter}
     flex-direction: column;
     ${padding('md')}
-    border: solid 0.1rem ${props.isActive ? props.projectPrimaryColor : adjustTransparency(props.theme.text, 0)};
+    border: solid 0.1rem ${props.isActive ? props.projectPrimaryColor : adjustTransparency(props.theme.colors.text, 0)};
     ${rounded('lg')}
     ${transition('normal')}
     max-width: 200px;

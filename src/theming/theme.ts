@@ -1,61 +1,76 @@
-export interface Theme {
-    body: string;
+import * as tokens from "./design-tokens";
+import { colors } from "./design-tokens";
+
+type SimpleColorKey = 'text' | 'background' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'gray';
+
+export interface ColorMode {
+    light: string;
+    dark: string;
+}
+export interface ThemeColors {
+    primary: ColorMode;
+    secondary: ColorMode;
+    success: ColorMode;
+    danger: ColorMode;
+    warning: ColorMode;
+    info: ColorMode;
+    light: ColorMode;
+    dark: ColorMode;
+    gray: ColorMode;
     text: string;
-    toggleBorder: string;
-    gradient: string;
-    cardBackground: string;
-    primary: string;
-    secondary: string;
-    accent: string;
-    hover: string;
-    shadow: string;
-    borderRadius: string;
-    transition: string;
-    fontFamily: string;
-    error: string;
-    success: string;
-    cardColor: string;
-    name: string;
+    background: string;
+    common: {
+        white: string;
+        black: string;
+    };
+    neon: {
+        blue: string;
+        green: string;
+        red: string;
+    };
 }
 
-// lightTheme.ts
-export const lightTheme: Theme = {
-    body: 'rgba(220,220,220,1)',
-    text: 'rgba(0,0,0,1)',
-    toggleBorder: '#FFF',
-    gradient: 'linear-gradient(rgba(250,250,250,1), rgba(240,240,240,1))',
-    cardBackground: 'rgba(240,240,240,0.8)',
-    primary: 'rgba(255, 0, 200, 1)',
-    secondary: 'rgba(0, 255, 200, 1)',
-    accent: 'rgba(200, 0, 255, 1)',
-    hover: 'rgba(0, 0, 255, 0.5)',
-    shadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
-    borderRadius: '10px',
-    transition: 'all 0.3s linear',
-    fontFamily: '"Roboto", sans-serif',
-    error: 'rgba(255, 0, 0, 1)',
-    success: 'rgba(0, 255, 0, 1)',
-    cardColor: 'rgba(250,250,250,0.9)',
-    name: 'lightTheme'
+export interface Theme {
+    mode: 'light' | 'dark'
+    typography: typeof tokens.typography;
+    transitions: typeof tokens.transitions;
+    spacing: typeof tokens.spacing;
+    zIndex: typeof tokens.zIndex;
+    breakpoints: typeof tokens.breakpoints;
+    boxShadow: typeof tokens.boxShadow;
+    colors: ThemeColors;
+}
+
+const common = {
+    typography: tokens.typography,
+    transitions: tokens.transitions,
+    spacing: tokens.spacing,
+    zIndex: tokens.zIndex,
+    breakpoints: tokens.breakpoints,
+    borderRadius: tokens.borderRadius,
+    boxShadow: tokens.boxShadow,
 };
 
-// darkTheme.ts
-export const darkTheme: Theme = {
-    body: 'rgba(10,10,10,1)',
-    text: 'rgba(255,255,255,1)',
-    toggleBorder: '#6B8096',
-    gradient: 'linear-gradient(rgba(0,0,0,1), rgba(10,10,10,1))',
-    cardBackground: 'rgba(5,5,5,0.8)',
-    primary: 'rgba(0, 255, 0, 1)',
-    secondary: 'rgba(255, 0, 0, 1)',
-    accent: 'rgba(0, 0, 255, 1)',
-    hover: 'rgba(255, 255, 255, 0.5)',
-    shadow: '0px 0px 20px rgba(255, 255, 255, 0.2)',
-    borderRadius: '10px',
-    transition: 'all 0.3s linear',
-    fontFamily: '"Roboto", sans-serif',
-    error: 'rgba(255, 0, 0, 1)',
-    success: 'rgba(0, 255, 0, 1)',
-    cardColor: 'rgba(5,5,5,0.9)',
-    name: 'darkTheme'
-};
+const createTheme = (colorMode: 'dark' | 'light'): Theme => ({
+    ...common,
+    colors: {
+        primary: colors.primary,
+        secondary: colors.secondary,
+        success: colors.success,
+        danger: colors.danger,
+        warning: colors.warning,
+        info: colors.info,
+        light: colors.light,
+        dark: colors.dark,
+        gray: colors.gray,
+        text: colorMode === 'dark' ? colors.common.white : colors.common.black,
+        background: colorMode === 'dark' ? colors.dark.dark : colors.light.light,
+        common: colors.common,
+        neon: colors.neon,
+    },
+    mode: colorMode
+});
+
+
+export const lightTheme = createTheme('dark');
+export const darkTheme = createTheme('light');

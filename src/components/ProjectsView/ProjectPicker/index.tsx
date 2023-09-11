@@ -23,7 +23,7 @@ const ProjectPickerWrapper = createStyledMotionComponent('div')(props => `
 const ProjectPickerContainer = createStyledMotionComponent('div')(props => `
     display: flex;
     z-index: ${zIndex.dropdown};
-    ${backgroundColor('light')} // use the light color from the design tokens
+    ${backgroundColor(props.theme, 'background')} // use the light color from the design tokens
     justify-content: space-evenly;
     width: 100%;
     ${padding('sm')}
