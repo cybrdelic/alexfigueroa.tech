@@ -28,11 +28,11 @@ export const colors = {
         dark: '#696969', // Dim Gray
     },
     dark: {
-        light: '#2C2C2C', // Slightly Lighter Gray
-        dark: '#121212', // Almost Black
+        light: '#FFFFFF', // Slightly Lighter Gray
+        dark: '#060606', // Almost Black
     },
     gray: {
-        light: '#A9A9A9', // Dark Gray
+        light: '#FDFDFD', // Dark Gray
         dark: '#2F4F4F', // Dark Slate Gray
     },
     common: {

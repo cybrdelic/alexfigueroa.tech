@@ -1,21 +1,28 @@
-import chroma from 'chroma-js';
+export type RGB = {
+    r: number;
+    g: number;
+    b: number;
+};
 
-export function isCloseToWhite(color: string | number | chroma.Color, threshold = 0.8) {
-    // Convert the color to Lab space and get the luminance
-    const luminance = chroma(color).lab()[0];
-    // Lab luminance is in the range [0, 100], where 100 is white
-    // We consider a color "close to white" if its luminance is greater than the threshold times 100
-    return luminance > threshold * 100;
+export const hexToRgb = (hex: string): RGB => {
+    hex = hex.charAt(0) === '#' ? hex.slice(1) : hex;
+    const bigint = parseInt(hex, 16);
+    return {
+        r: (bigint >> 16) & 255,
+        g: (bigint >> 8) & 255,
+        b: bigint & 255
+    };
 }
 
-export function getZIndexScale() {
-    const Z_INDEXES = {
-        lowest: 1,
-        lower: 10,
-        medium: 100,
-        high: 1000,
-        highest: 10000,
-    };
+export const rgbToHex = (r: number, g: number, b: number): string => {
+    return '#' + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase();
+}
 
-    return Z_INDEXES
+export const shadeColor = (color: RGB, percent: number): RGB => {
+    const amount = Math.round(1.2 * percent);
+    return {
+        r: Math.min(255, Math.max(0, color.r + amount)),
+        g: Math.min(255, Math.max(0, color.g + amount)),
+        b: Math.min(255, Math.max(0, color.b + amount))
+    };
 }

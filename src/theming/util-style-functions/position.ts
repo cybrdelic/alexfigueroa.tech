@@ -54,12 +54,12 @@ export const fixedBottomRight = `
     ${mq('sm')} {
         padding-right: 10px;
         padding-bottom: 10px;
-    }
+    };
 
     ${mq('lg')} {
         padding-right: 30px;
         padding-bottom: 30px;
-    }
+    };
 `;
 
 
@@ -138,7 +138,7 @@ export const absoluteTopLeft = `
     ${mq('sm')} {
         top: 5px;
         left: 5px;
-    }
+    };
 `;
 
 export const absoluteTopRight = `
