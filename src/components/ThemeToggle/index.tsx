@@ -11,11 +11,10 @@ import { zIndex } from '../../theming/design-tokens/spacing';
 import { margin } from '../../theming/util-style-functions/spacing';
 import { textColor } from '../../theming/util-style-functions/colors';
 
-const StyledIconButton = createStyledMotionComponent(IconButton)(props => `
-    ${fixedBottomRight}
+const StyledIconButton = createStyledMotionComponent(IconButton)(({ theme }) => `
     z-index: ${zIndex.modal};
     ${margin('md')}
-    color: white;
+    color: ${textColor(theme, 'text')};
 `);
 
 const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
@@ -28,8 +27,8 @@ const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
             theme={theme}
         >
             {theme.mode === 'light'
-                ? <Brightness3Icon fontSize="large" />
-                : <WbSunnyIcon fontSize="large" />}
+                ? <Brightness3Icon fontSize="large" color="inherit" />
+                : <WbSunnyIcon fontSize="large" color="inherit" />}
         </StyledIconButton>
     );
 };

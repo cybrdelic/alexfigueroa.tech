@@ -15,6 +15,7 @@ import { createStyledMotionComponent } from "../../theming/styled-motion-utils/c
 import { fullViewport, stickyTop } from "../../theming/util-style-functions/position";
 import { flexBetween } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
+import { zIndex } from "../../theming/design-tokens";
 
 interface NavBarProps {
   links: RouteItem[];
@@ -30,6 +31,7 @@ const NavBarContainer = createStyledMotionComponent('div')(props => `
   flex-direction: row;
   ${flexBetween};
   ${stickyTop};
+  z-index: ${zIndex.foreground + 1000}
 
 `)
 
@@ -39,7 +41,7 @@ export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <NavBarContainer>
-      <HomeIcon title="Alex Figueroa" />
+      <HomeIcon title="Home" />
       <NavMenu links={links} toggleTheme={toggleTheme} />
     </NavBarContainer>
   );

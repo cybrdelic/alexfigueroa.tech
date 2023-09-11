@@ -5,6 +5,7 @@ import { createStyledMotionComponent } from "../../theming/styled-motion-utils/c
 import { backgroundColor, gradientBackground, neonizedTextColor, textColor } from "../../theming/util-style-functions/colors";
 import { flexBetween, flexCenter, flexColumn } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
+import { projectsData } from "../../data/project.data";
 
 export const HamburgerBar = createStyledMotionComponent('div')(props => `
     width: 2.5rem;
@@ -33,7 +34,7 @@ export const MenuContainer = createStyledMotionComponent('div')(props => `
 `);
 
 export const StyledNavLink = styled(motion(Link))(({ theme }) => `
-    font-family: 'Orbitron', sans-serif;
+    font-family: ${projectsData.x1dra.titleFont}, sans-serif;
     ${textColor(theme, 'text')}
     text-decoration: none;
     ${padding('md')}
