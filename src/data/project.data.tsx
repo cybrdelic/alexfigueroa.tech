@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getProjectOverviews } from './projects/getProjectOverview';
-import { getProjectLogos } from './projects/getProjectLogos';
+import { getProjectLogoPhotos, getProjectLogos } from './projects/getProjectLogos';
 import { getProjectTitles } from './projects/getProjectTitles';
 import { getProjectTitleFonts } from './projects/getProjectTitleFonts';
 import { getProjectGithubURLs } from './projects/getProjectGithubUrls';
@@ -37,6 +37,7 @@ export type ProjectType = {
     id: string;
     name: string;
     logo: string;
+    logoPhoto: string;
     overview: string;
     titleFont: string;
     github_url: string;
@@ -69,6 +70,7 @@ type ProjectDataType = {
 const fetchProjectData = (): ProjectDataType => ({
     overviews: getProjectOverviews(),
     logos: getProjectLogos(),
+    logoPhotos: getProjectLogoPhotos(),
     titles: getProjectTitles(),
     titleFonts: getProjectTitleFonts(),
     github_urls: getProjectGithubURLs(),
@@ -87,6 +89,7 @@ const createProject = (key: ProjectKey, data: ProjectDataType): ProjectType => (
     id: uuidv4(),
     name: data.titles[key],
     logo: data.logos[key],
+    logoPhoto: data.logoPhotos[key],
     overview: data.overviews[key],
     titleFont: data.titleFonts[key],
     github_url: data.github_urls[key],
