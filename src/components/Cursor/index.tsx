@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { CursorContext } from '../../contexts/CursorContext';
+import { useCursorState } from '../../contexts/CursorContext';
 import { throttle } from 'lodash';
 import { zIndex } from '../../theming/design-tokens/spacing';
 import { useCursorEffect } from '../../hooks/useCursorEffect';
@@ -38,7 +38,8 @@ const CursorRipple = styled.div`
 `;
 
 export default function CustomCursor() {
-  const { cursorType, cursorPos } = useCursorEffect()
+  const [{ cursorType, cursorPos }, setCursorState] = useCursorState();
+
   const defaultCursorStyles: React.CSSProperties = {
     backgroundColor: '#000', // Black color
     mixBlendMode: 'difference',

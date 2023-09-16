@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { ButtonProps } from '..';
 import { useAnimation } from 'framer-motion';
@@ -6,6 +6,8 @@ import { createStyledMotionComponent } from '../../../theming/styled-motion-util
 import { fontFamily } from '../../../theming/util-style-functions/typography';
 import { zIndex } from '../../../theming/design-tokens/spacing';
 import { useTheme } from '../../../hooks/useTheme';
+import eventManager from '../../../event-handling/eventManager';
+import { useCursorEffect } from '../../../hooks/useCursorEffect';
 
 
 const glitchAnimation = `
@@ -132,50 +134,71 @@ const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
 `);
 
 const ElectricButton: React.FC<ButtonProps> = (props) => {
-    const controls = useAnimation();
-    const theme = useTheme();
+  const controls = useAnimation();
+  const theme = useTheme();
+  const buttonRef = useRef(null);
 
-    const handleMouseEnter = () => {
-        controls.start({
-            scale: 5,
-            boxShadow: `0 8px 20px ${props.backgroundColor}`,
-        });
-    };
+  const handleMouseEnter = (e: any) => {
+    controls.start({
+      scale: 5,
+      boxShadow: `0 8px 20px ${props.backgroundColor}`,
+    });
+    eventManager.stopPropagation(e);
+  };
 
-    const handleMouseLeave = () => {
-        controls.start({
-            scale: 1,
-            boxShadow: `0 5px 15px ${props.backgroundColor}`,
-        });
-    };
+  const handleMouseLeave = (e: any) => {
+    controls.start({
+      scale: 1,
+      boxShadow: `0 5px 15px ${props.backgroundColor}`,
+    });
+    eventManager.stopPropagation(e);
+  };
 
-    const handleMouseDown = () => {
-        controls.start({
-            scale: 0.95,
-            boxShadow: `0 2px 5px ${props.backgroundColor}`
-        });
-    };
+  const handleMouseDown = (e: any) => {
+    controls.start({
+      scale: 0.95,
+      boxShadow: `0 2px 5px ${props.backgroundColor}`
+    });
+    eventManager.stopPropagation(e);
+  };
 
-    const handleMouseUp = () => {
-        controls.start({
-            scale: 1.05,
-            boxShadow: `0 8px 20px ${props.backgroundColor}`,
-        });
-    };
+  const handleMouseUp = (e: any) => {
+    controls.start({
+      scale: 1.05,
+      boxShadow: `0 8px 20px ${props.backgroundColor}`,
+    });
+    eventManager.stopPropagation(e);
+  };
 
-    return (
-        <ProfessionalButtonBase
-            animate={controls}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            theme={theme}
-            {...props}
-        >
-            {props.children}
-        </ProfessionalButtonBase>
-    );
+
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      eventManager.register(buttonRef.current, 'mouseover', handleMouseEnter);
+      eventManager.register(buttonRef.current, 'mouseout', handleMouseLeave);
+      eventManager.register(buttonRef.current, 'mouseup', handleMouseUp);
+      eventManager.register(buttonRef.current, 'mousedown', handleMouseDown);
+
+      return () => {
+        eventManager.deregister(buttonRef?.current, 'mouseover', handleMouseEnter);
+        eventManager.deregister(buttonRef?.current, 'mouseout', handleMouseLeave);
+        eventManager.deregister(buttonRef.current, 'mouseup', handleMouseUp);
+        eventManager.deregister(buttonRef.current, 'mousedown', handleMouseDown);
+      };
+    }
+  }, [buttonRef, controls, props.backgroundColor]);
+
+  return (
+    <ProfessionalButtonBase
+      animate={controls}
+      theme={theme}
+      ref={buttonRef}
+      data-id="special"
+      {...props}
+    >
+      {props.children}
+    </ProfessionalButtonBase>
+  );
 }
 
 export default ElectricButton;

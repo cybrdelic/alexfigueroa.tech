@@ -8,7 +8,7 @@ import { baseRoutes, routes } from './routing/routes.tsx';
 import { ThemeContext, ThemeToggleContext } from './contexts/ThemeContext.tsx';
 // AnimatedCursor seems to be a library component. Lazy loading is not needed for libraries.
 import AnimatedCursor from 'react-animated-cursor';
-import { CursorContext } from './contexts/CursorContext.tsx';
+import { CursorProvider } from './contexts/CursorContext.tsx';
 import { useCursorEffect } from './hooks/useCursorEffect.tsx';
 import { AnimatePresence } from 'framer-motion';
 import SiteLayout from './components/Layout/index.tsx';
@@ -42,11 +42,11 @@ const RoutesWrapper = () => {
 
 
 const App: React.FC = () => {
-  const { cursorPos, cursorType } = useCursorEffect();
+
 
   return (
     <AppThemeProvider>
-      <CursorContext.Provider value={{ cursorPos, cursorType }}>
+      <CursorProvider>
         <Router>
           <Suspense fallback={<div>Loading...</div>}>
             <CustomCursor />
@@ -65,7 +65,7 @@ const App: React.FC = () => {
             </ThemeContext.Consumer>
           </Suspense>
         </Router>
-      </CursorContext.Provider>
+      </CursorProvider>
     </AppThemeProvider>
   );
 }
