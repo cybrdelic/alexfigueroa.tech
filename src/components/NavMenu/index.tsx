@@ -9,7 +9,7 @@ import { DefaultTheme } from "styled-components/dist/models/ThemeProvider";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { relative } from "../../theming/util-style-functions/position";
 import { flexBetween, flexCenter } from "../../theming/util-style-functions/layout";
-import { gradientBackground } from "../../theming/util-style-functions/colors";
+import { gradientBackground, textColor } from "../../theming/util-style-functions/colors";
 
 interface HoverItemsContainerProps {
     links: RouteItem[];
@@ -41,24 +41,53 @@ const HoverItemsWrapper = createStyledMotionComponent('div')(props => `
 `)
 
 
-export const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
+const GlassEffect = `
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)),
+              linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05));
+  border-radius: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(50px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+`;
+
+const GlassHoverEffect = `
+  &:hover {
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+`;
+
+const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
+    ${GlassEffect}
+    ${GlassHoverEffect}
+    ${textColor(props.theme, 'text')}
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    background-color: ${props.theme.secondary};
-    ${gradientBackground(props.theme, 'background')}
-    border-radius: 100px;
     padding: 1rem 2rem;
     width: auto;
 `);
 
-export const MenuContainer = createStyledMotionComponent('div')(props => `
+
+const ParallaxEffect = `
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.05) translateY(-5px);
+  }
+`;
+
+const MenuContainer = createStyledMotionComponent('div')(props => `
     ${flexBetween}
+    ${ParallaxEffect}
     gap: 1rem;
     width: 100%;
     max-width: 1200px;
     min-height: 105%;
 `);
+
 const HoverItemsContainer = ({
     links,
     toggleTheme,
@@ -103,10 +132,11 @@ function NavMenu(props) {
     const altTheme = useAlternateTheme();
     const theme = useTheme();
     const [isHovered, setHovered] = React.useState(false);
-    const linkHoverInAnimation = { opacity: 1, x: 0 };
-    const linkHoverOutAnimation = { opacity: 0, x: 100 };
-    const menuContainerRef = useRef();
 
+    const linkHoverInAnimation = { opacity: 1, x: 0, scale: 1 };
+    const linkHoverOutAnimation = { opacity: 0, x: 100, scale: 0.95 };
+
+    const menuContainerRef = useRef();
 
     const handleMouseEnter = debounce(() => setHovered(true), 200);
     const handleMouseLeave = debounce(() => setHovered(false), 200);
@@ -128,7 +158,7 @@ function NavMenu(props) {
                 links={props.links}
                 toggleTheme={props.toggleTheme}
                 isHovered={isHovered}
-                theme={altTheme}
+                theme={theme}
                 hoverAnimations={hoverAnimations}
                 linkHoverInAnimation={linkHoverInAnimation}
                 linkHoverOutAnimation={linkHoverOutAnimation}
