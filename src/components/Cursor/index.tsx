@@ -1,8 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { CursorContext } from '../../contexts/CursorContext';
+import { useCursorState } from '../../contexts/CursorContext';
 import { throttle } from 'lodash';
 import { zIndex } from '../../theming/design-tokens/spacing';
+import { useCursorEffect } from '../../hooks/useCursorEffect';
 
 const Cursor = styled.div`
   position: fixed;
@@ -37,26 +38,12 @@ const CursorRipple = styled.div`
 `;
 
 export default function CustomCursor() {
-  const cursorType = useContext(CursorContext);
+  const [{ cursorType, cursorPos }, setCursorState] = useCursorState();
 
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const updateCursorPosRef = useRef(null);
-
-  useEffect(() => {
-    updateCursorPosRef.current = throttle((event) => {
-      setCursorPos({ x: event.clientX, y: event.clientY });
-    }, 140);
-
-    document.addEventListener("mousemove", updateCursorPosRef.current);
-
-    return () => {
-      document.removeEventListener("mousemove", updateCursorPosRef.current);
-    };
-  }, []);
   const defaultCursorStyles: React.CSSProperties = {
-    backgroundColor: 'transparent',
-    opacity: 0.7,
+    backgroundColor: '#000', // Black color
     mixBlendMode: 'difference',
+    opacity: 0.7,
     left: `${cursorPos.x}px`,
     top: `${cursorPos.y}px`,
     transition: 'background-color 0.3s, opacity 0.3s, transform 0.3s, left 0.2s, top 0.2s'

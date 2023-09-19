@@ -1,28 +1,24 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useCursorState } from '../contexts/CursorContext';
 
 export const useCursorEffect = () => {
-  const [cursorType, setCursorType] = useState<'normal' | 'hovered' | 'clicked'>('normal');
+  const [{ cursorType, cursorPos }, setCursorState] = useCursorState();
+
+
+  const handleMouseMove = useCallback((e) => {
+    setCursorState((prevState) => ({ ...prevState, cursorPos: { x: e.clientX, y: e.clientY } }));
+  }, [setCursorState]);
+
+  const mouseoverFunc = useCallback(() => setCursorState((prevState) => ({ ...prevState, cursorType: 'hovered' })), [setCursorState]);
+  const mouseoutFunc = useCallback(() => setCursorState((prevState) => ({ ...prevState, cursorType: 'normal' })), [setCursorState]);
+  const mousedownFunc = useCallback(() => setCursorState((prevState) => ({ ...prevState, cursorType: 'clicked' })), [setCursorState]);
+  const mouseupFunc = useCallback(() => {
+    const type = document.querySelectorAll(':hover').length > 0 ? 'hovered' : 'normal';
+    setCursorState((prevState) => ({ ...prevState, cursorType: type }));
+  }, [setCursorState]);
 
   useEffect(() => {
     const elements = document.querySelectorAll('[data-id="special"], a, li, button');
-
-    const mouseoverFunc = () => {
-      setCursorType('hovered');
-    };
-
-    const mouseoutFunc = () => {
-      setCursorType('normal');
-    };
-
-    const mousedownFunc = () => {
-      setCursorType('clicked');
-    };
-
-    const mouseupFunc = () => {
-      // Reset to 'normal' or 'hovered' based on if the mouse is still over the element.
-      // This assumes that your elements cannot be simultaneously hovered and clicked.
-      setCursorType(document.querySelectorAll(':hover').length > 0 ? 'hovered' : 'normal');
-    };
 
     elements.forEach(element => {
       element.addEventListener('mouseover', mouseoverFunc);
@@ -31,6 +27,8 @@ export const useCursorEffect = () => {
       element.addEventListener('mouseup', mouseupFunc);
     });
 
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });  // passive improves performance
+
     return () => {
       elements.forEach(element => {
         element.removeEventListener('mouseover', mouseoverFunc);
@@ -38,8 +36,9 @@ export const useCursorEffect = () => {
         element.removeEventListener('mousedown', mousedownFunc);
         element.removeEventListener('mouseup', mouseupFunc);
       });
+      document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [handleMouseMove, mouseoverFunc, mouseoutFunc, mousedownFunc, mouseupFunc]);
 
-  return cursorType;
+  return { cursorPos, cursorType };
 };

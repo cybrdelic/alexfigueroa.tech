@@ -1,34 +1,29 @@
-import React from "react";
-import { RouteItem } from "../../routing/RouteItem.type";
+import React, { useRef } from "react";
 import { useTheme } from "../../hooks/useTheme";
-import { useHoverAnimations } from "../../hooks/animation/useHoverAnimations";
+import { useAlternateTheme } from "../../hooks/theming/useAlternateTheme";
+import HamburgerMenu from "../HamburgerMenu"; // Assuming you have this component somewhere
 import { MenuContainer } from "./styles";
 import { HoverItemsContainer } from "../HoverItemsContainer";
-import { HamburgerMenu } from "../HamburgerMenu";
-import { useAlternateTheme } from "../../hooks/theming/useAlternateTheme";
-import useElementWidth from "../../hooks/useElementWidth";
 
-interface NavMenuProps {
-    links: RouteItem[];
-    toggleTheme: () => void;
-}
-
-export default function NavMenu(props: NavMenuProps) {
+function NavMenu(props) {
     const altTheme = useAlternateTheme();
-    const theme = useTheme()
-    const { isHovered, setHovered, hoverAnimations } = useHoverAnimations();
-    const [menuWidth, menuRef] = useElementWidth(isHovered);
-
-
-
+    const theme = useTheme();
+    const [isHovered, setHovered] = React.useState(false);
     const linkHoverInAnimation = { opacity: 1, x: 0 };
     const linkHoverOutAnimation = { opacity: 0, x: 100 };
+    const menuContainerRef = useRef();
+
+    const hoverAnimations = {
+        // Example:
+        enter: { ...linkHoverInAnimation },
+        leave: { ...linkHoverOutAnimation }
+    };
 
     return (
         <MenuContainer
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            ref={menuRef}
+            ref={menuContainerRef}
             menuWidth={'20rem'}
         >
             <HoverItemsContainer
@@ -39,13 +34,10 @@ export default function NavMenu(props: NavMenuProps) {
                 hoverAnimations={hoverAnimations}
                 linkHoverInAnimation={linkHoverInAnimation}
                 linkHoverOutAnimation={linkHoverOutAnimation}
-
             />
-            <HamburgerMenu
-                isHovered={isHovered}
-                menuWidth={menuWidth}
-            />
-
+            <HamburgerMenu isHovered={isHovered} />
         </MenuContainer>
-    )
+    );
 }
+
+export default React.memo(NavMenu); // Memoizing the main component

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { ButtonProps } from '..';
 import { useAnimation } from 'framer-motion';
@@ -6,6 +6,8 @@ import { createStyledMotionComponent } from '../../../theming/styled-motion-util
 import { fontFamily } from '../../../theming/util-style-functions/typography';
 import { zIndex } from '../../../theming/design-tokens/spacing';
 import { useTheme } from '../../../hooks/useTheme';
+import eventManager from '../../../event-handling/eventManager';
+import { useCursorEffect } from '../../../hooks/useCursorEffect';
 
 
 const glitchAnimation = `
@@ -80,6 +82,7 @@ const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
     padding: 15px 30px;
     font-size: 18px;
     ${fontFamily()}
+    ${zIndex.foreground}
     text-transform: uppercase;
     cursor: pointer;
     outline: none;
@@ -132,50 +135,20 @@ const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
 `);
 
 const ElectricButton: React.FC<ButtonProps> = (props) => {
-    const controls = useAnimation();
-    const theme = useTheme();
+  const controls = useAnimation();
+  const theme = useTheme();
 
-    const handleMouseEnter = () => {
-        controls.start({
-            scale: 5,
-            boxShadow: `0 8px 20px ${props.backgroundColor}`,
-        });
-    };
 
-    const handleMouseLeave = () => {
-        controls.start({
-            scale: 1,
-            boxShadow: `0 5px 15px ${props.backgroundColor}`,
-        });
-    };
-
-    const handleMouseDown = () => {
-        controls.start({
-            scale: 0.95,
-            boxShadow: `0 2px 5px ${props.backgroundColor}`
-        });
-    };
-
-    const handleMouseUp = () => {
-        controls.start({
-            scale: 1.05,
-            boxShadow: `0 8px 20px ${props.backgroundColor}`,
-        });
-    };
-
-    return (
-        <ProfessionalButtonBase
-            animate={controls}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            theme={theme}
-            {...props}
-        >
-            {props.children}
-        </ProfessionalButtonBase>
-    );
+  return (
+    <ProfessionalButtonBase
+      animate={controls}
+      theme={theme}
+      data-id="special"
+      {...props}
+    >
+      {props.children}
+    </ProfessionalButtonBase>
+  );
 }
 
 export default ElectricButton;

@@ -39,25 +39,26 @@ const Text = createStyledMotionComponent('p')(props => `
 `);
 
 interface BottomBarProps {
-    toggleTheme: () => void
+  toggleTheme: () => void
 }
 
 const BottomBar: React.FC<BottomBarProps> = ({ toggleTheme }) => {
-    const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-    return (
-        <Bar>
-            <BrandTextContainer
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                {isHovered && <ProfilePopover />}  {/* Display popover only if isHovered is true */}
-                <Text>Alex Figueroa</Text>
-                <Text>Full-Stack Software Developer</Text>
-            </BrandTextContainer>
-            <ThemeToggle onClick={toggleTheme} />
-        </Bar>
-    );
+  return (
+    <Bar>
+      <BrandTextContainer
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        data-id="special"
+      >
+        {isHovered && <ProfilePopover />}  {/* Display popover only if isHovered is true */}
+        <Text>Alex Figueroa</Text>
+        <Text>Full-Stack Software Developer</Text>
+      </BrandTextContainer>
+      <ThemeToggle onClick={toggleTheme} />
+    </Bar>
+  );
 }
 
 export default BottomBar;
