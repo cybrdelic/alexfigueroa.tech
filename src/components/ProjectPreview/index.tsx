@@ -13,6 +13,7 @@ import { zIndex } from "../../theming/design-tokens";
 import { AnimatePresence, motion } from "framer-motion";
 import { styled } from "styled-components";
 import ElectricButton from "../Button/ElectricButton";
+import { useCursorEffect } from "../../hooks/useCursorEffect";
 
 interface ProjectPreviewProps {
     project: ProjectType;
@@ -38,6 +39,7 @@ const Project3DWrapper = createStyledMotionComponent('div')(props => `
     display: flex;
     align-items: center;
     justify-content: center;
+    ${zIndex.foreground}
 `);
 
 const SlideLeft = createStyledMotionComponent('div')(props => `
@@ -129,6 +131,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
     } = props;
 
     const theme = useTheme();
+    const cursorData = useCursorEffect();
 
     // Determine the animation variant based on `isActive` prop
     const selectedVariant = isActive ? animationVariants.active : animationVariants.inactive;
@@ -148,7 +151,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
 
             <SlideLeft theme={theme}>
                 <SlideLeftTitleContainer>
-                    <ProjectName theme={theme} project={project} projectColor={project.primaryColor}>
+                    <ProjectName data-id="special" theme={theme} project={project} projectColor={project.primaryColor}>
                         {project.name}
                     </ProjectName>
                     <SocialMediaIcons color={colors.common.white} />
@@ -161,6 +164,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                             objectFit: 'cover'
                         }}
                         src={project.logoPhoto}
+                        data-id="special"
                     />
                 </LogoWrapper>
             </SlideLeft>
@@ -172,7 +176,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                 <ProjectOverview theme={theme}>{project.overview}</ProjectOverview>
                 <Bar>
                     <ButtonBar>
-                        <ElectricButton backgroundColor={project.primaryColor} onClick={() => console.log("Button clicked!")}>
+                        <ElectricButton data-id="special" backgroundColor={project.primaryColor} onClick={() => console.log("Button clicked!")}>
                             Explore Project
                         </ElectricButton>
                         <ElectricButton backgroundColor={theme.mode === 'light' ? colors.gray.light : colors.gray.dark} onClick={() => console.log("Button clicked!")}>

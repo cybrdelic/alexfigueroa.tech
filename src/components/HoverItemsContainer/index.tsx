@@ -25,7 +25,8 @@ const Wrapper = createStyledMotionComponent('div')(props => `
 
 const HoverItemsWrapper = createStyledMotionComponent('div')(props => `
     ${relative}
-    min-width: 50%;
+    min-width: 40%;
+    max-width: 40%;
     left: 40%;
 `)
 export const HoverItemsContainer = ({
@@ -37,6 +38,7 @@ export const HoverItemsContainer = ({
     linkHoverInAnimation,
     linkHoverOutAnimation,
 }: HoverItemsContainerProps) => {
+
     return (
         <HoverItemsWrapper>
             <AnimatePresence>

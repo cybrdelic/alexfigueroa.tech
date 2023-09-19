@@ -1,35 +1,58 @@
-import React from "react";
-import { IconButton } from "@mui/material";
-import { DefaultTheme } from "styled-components/dist/models/ThemeProvider";
-import { HamburgerBar, StyledHamburger } from "../NavMenu/styles";
+import React, { FC } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
 import { useTheme } from "../../hooks/useTheme";
+import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
+import { projectsData } from "../../data/project.data";
+import {
+    backgroundColor,
+    gradientBackground,
+    neonizedTextColor,
+    textColor,
+} from "../../theming/util-style-functions/colors";
+import {
+    flexCenter,
+    flexBetween,
+    flexColumn,
+} from "../../theming/util-style-functions/layout";
+import { padding } from "../../theming/util-style-functions/spacing";
+import { Bar, HamburgerContainer } from "../NavMenu/styles";
 
-interface HamburgerMenuProps {
-    isHovered: boolean;
-    menuWidth: number | null;
-}
-
-export const HamburgerMenu = ({ isHovered, menuWidth }: HamburgerMenuProps) => {
+// Hamburger Menu Component
+export default function HamburgerMenu({ isHovered }: HamburgerMenuProps) {
     const theme = useTheme();
     const commonTransition = { type: "spring", stiffness: 2600, damping: 200 };
 
-    const animations = isHovered ? {
-        bar1: { rotate: 45, y: 8 },
-        bar2: { x: menuWidth ? -menuWidth + (menuWidth * 0.325) : -2 },
-        bar3: { rotate: -45, y: -8 }
-    } : {
-        bar1: { rotate: 0, y: 0 },
-        bar2: { x: 0 },
-        bar3: { rotate: 0, y: 0 }
-    };
+    const animations = isHovered
+        ? {
+            bar1: { rotate: 45, y: 10 },
+            bar2: { opacity: 0 },
+            bar3: { rotate: -45, y: -10 },
+        }
+        : {
+            bar1: { rotate: 0, y: 0 },
+            bar2: { opacity: 1 },
+            bar3: { rotate: 0, y: 0 },
+        };
 
     return (
-        <IconButton>
-            <StyledHamburger>
-                <HamburgerBar theme={theme} animate={animations.bar1} transition={commonTransition} />
-                <HamburgerBar theme={theme} animate={animations.bar2} transition={commonTransition} />
-                <HamburgerBar theme={theme} animate={animations.bar3} transition={commonTransition} />
-            </StyledHamburger>
-        </IconButton>
+        <HamburgerContainer>
+            {["bar1", "bar2", "bar3"].map((bar, index) => (
+                <Bar
+                    key={index}
+                    theme={theme}
+                    animate={animations[bar]}
+                    transition={commonTransition}
+                />
+            ))}
+        </HamburgerContainer>
     );
 };
+
+
+
+interface HamburgerMenuProps {
+    isHovered: boolean;
+}
