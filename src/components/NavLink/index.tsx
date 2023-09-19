@@ -12,12 +12,16 @@ const StyledNavLink = createStyledMotionComponent('a')(props => `
   ${textColor(props.theme, 'text')}
   text-decoration: none;
   ${padding('md')}
-  ${flexColumn}
+  display: flex;
+  flex-direction: column;
   font-weight: 900;
-  transition: color 0.3s ease, transform 0.3s ease;
-    &:hover {
-      color: ${neonizedTextColor(props.theme, 'primary')};
-      transform: scale(1.05);
+  position: relative;
+  overflow: hidden;
+  &:hover {
+    &:after {
+      width: 100%;
+    }
+    transform: scale(1.05);
   }
 `);
 
