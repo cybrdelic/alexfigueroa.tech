@@ -1,15 +1,15 @@
 import React, { useRef } from "react";
 import { useTheme } from "../../hooks/useTheme";
 import { useAlternateTheme } from "../../hooks/theming/useAlternateTheme";
-import HamburgerMenu from "../HamburgerMenu"; // Assuming you have this component somewhere
-import { MenuContainer } from "./styles";
+import HamburgerMenu from "../HamburgerMenu";
 import { AnimatePresence } from "framer-motion";
 import { RouteItem } from "../../routing/RouteItem.type";
-import { AdditionalItemsContainer } from "../NavMenu/styles";
 import { NavLink } from "../NavLink";
 import { DefaultTheme } from "styled-components/dist/models/ThemeProvider";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { relative } from "../../theming/util-style-functions/position";
+import { flexBetween, flexCenter } from "../../theming/util-style-functions/layout";
+import { gradientBackground } from "../../theming/util-style-functions/colors";
 
 interface HoverItemsContainerProps {
     links: RouteItem[];
@@ -31,6 +31,23 @@ const HoverItemsWrapper = createStyledMotionComponent('div')(props => `
     max-width: 40%;
     left: 40%;
 `)
+
+export const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
+    ${flexCenter}
+    gap: 1rem;
+    background-color: ${props.theme.secondary};
+    ${gradientBackground(props.theme, 'background')}
+    border-radius: 100px;
+    padding: 1rem 2rem;
+`);
+
+export const MenuContainer = createStyledMotionComponent('div')(props => `
+    ${flexBetween}
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    min-height: 105%;
+`);
 const HoverItemsContainer = ({
     links,
     toggleTheme,

@@ -27,33 +27,6 @@ transition: background - color 0.2s ease;
 }
 `);
 
-export const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
-  ${flexCenter}
-gap: 1rem;
-background - color: ${props.theme.secondary};
-  ${gradientBackground(props.theme, 'background')}
-border - radius: 100px;
-padding: 1rem 2rem;
-`);
 
-export const MenuContainer = createStyledMotionComponent('div')(props => `
-    ${flexBetween}
-    gap: 1rem;
-    width: 100%;
-    max-width: 600px;
-    min-height: 105%;
-`);
 
-export const StyledNavLink = styled(motion(Link))(({ theme }) => `
-font - family: ${projectsData.x1dra.titleFont}, sans - serif;
-  ${textColor(theme, 'text')}
-text - decoration: none;
-  ${padding('md')}
-  ${flexColumn}
-font - weight: 900;
-transition: color 0.3s ease, transform 0.3s ease;
-  &:hover {
-    color: ${neonizedTextColor(theme, 'primary')};
-    transform: scale(1.05);
-}
-`);
+
