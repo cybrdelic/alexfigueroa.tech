@@ -10,6 +10,8 @@ import { fixedBottomRight } from '../../theming/util-style-functions/position';
 import { zIndex } from '../../theming/design-tokens/spacing';
 import { margin } from '../../theming/util-style-functions/spacing';
 import { textColor } from '../../theming/util-style-functions/colors';
+import { CursorContext } from '../../contexts/CursorContext';
+import { useCursorEffect } from '../../hooks/useCursorEffect';
 
 const StyledIconButton = createStyledMotionComponent(IconButton)(({ theme }) => `
     z-index: ${zIndex.modal};
@@ -19,18 +21,16 @@ const StyledIconButton = createStyledMotionComponent(IconButton)(({ theme }) => 
 
 const ThemeToggle = ({ onClick }: { onClick: () => void }) => {
     const theme = useTheme();
+    return (<StyledIconButton
+        aria-label="mode"
+        onClick={onClick}
+        theme={theme}
+    >
+        {theme.mode === 'light'
+            ? <Brightness3Icon fontSize="large" color="inherit" />
+            : <WbSunnyIcon fontSize="large" color="inherit" />}
+    </StyledIconButton>
 
-    return (
-        <StyledIconButton
-            aria-label="mode"
-            onClick={onClick}
-            theme={theme}
-            data-id="special"
-        >
-            {theme.mode === 'light'
-                ? <Brightness3Icon fontSize="large" color="inherit" />
-                : <WbSunnyIcon fontSize="large" color="inherit" />}
-        </StyledIconButton>
     );
 };
 

@@ -24,14 +24,12 @@ interface NavBarProps {
 
 
 const NavBarContainer = createStyledMotionComponent('div')(props => `
-  min-height: 10%;
-  max-height: 10%;
   height: 10%;
   display: flex;
-  flex-direction: row;
-  ${flexBetween};
-  ${stickyTop};
-  z-index: ${zIndex.foreground + 1000}
+  align-items: center; // vertically center children
+  justify-content: space-between; // space children out evenly
+  padding: 0 2rem; // some horizontal padding to keep content away from edges
+
 
 `)
 

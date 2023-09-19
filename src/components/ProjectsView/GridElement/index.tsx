@@ -25,21 +25,19 @@ const StyledFlexElement = createStyledMotionComponent('div')(props => `
     ${flexCenter}
     flex-direction: column;
     ${padding('md')}
-    border: solid 0.1rem ${props.isActive ? props.projectPrimaryColor : adjustTransparency(props.theme.colors.text, 0)};
+    background: linear-gradient(135deg, ${props.theme.colors.background} 0%, ${props.theme.colors.primary} 100%);
     ${rounded('lg')}
     ${transition('normal')}
-    max-width: 200px;
-    min-width: 200px;
-    max-height: 200px;
+    max-width: 220px;
+    min-width: 220px;
+    max-height: 220px;
     overflow: hidden;
-
     &:hover {
+        box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
         border: solid 0.1rem ${adjustTransparency(props.projectPrimaryColor, 1)};
-        div {
-            transform: scale(0.9);
-        }
     }
 `);
+
 
 const ConstantSizeWrapper = createStyledMotionComponent('div')(props => `
     width: 100%;
@@ -51,11 +49,13 @@ const ConstantSizeWrapper = createStyledMotionComponent('div')(props => `
 
 const hoverEffects = {
     hover: {
-        scale: 1.05,
+        scale: 1.08,
         transition: {
-            duration: 0.3
+            duration: 0.3,
+            type: "spring",
+            stiffness: 300
         },
-        boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)"
+        boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.1)"
     }
 };
 
@@ -64,6 +64,13 @@ const exitTransition = {
     opacity: [1, 0, 0],
     transition: {
         duration: 0.5
+    }
+};
+
+const clickTransition = {
+    scale: [1, 0.9, 1],
+    transition: {
+        duration: 0.5,
     }
 };
 
@@ -86,7 +93,6 @@ interface GridElementProps {
 export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEnter, handleMouseLeave, isActive }) => {
     const { isHovered, onHoverStart, onHoverEnd } = useHoveredState();
     const theme = useTheme();
-    const cursorType = useCursorEffect();
     const navigate = useNavigate();
     const [exitAnim, setExitAnim] = useState(exitTransition); // NEW
 
@@ -107,34 +113,31 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
 
 
     return (
-        <CursorContext.Provider value={cursorType}>
-            <StyledFlexElement
-                projectPrimaryColor={project.primaryColor}
-                isHovered={isHovered}
-                key={project.id}
-                onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
-                onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
-                onClick={handleClick}
-                whileHover={hoverEffects.hover}
-                whileTap={clickTransition}
-                theme={theme}
-                style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
-                data-id="special"
-                isActive={isActive}
-                as={motion.div}
-                exit={exitAnim}
-            >
-                <ConstantSizeWrapper exit={exitTransition}>
-                    <VectorLogoAndText
-                        text={project.name}
-                        logo={project.logo}
-                        font={project.titleFont}
-                        theme={theme}
-                        data-id="special"
-                    />
-                </ConstantSizeWrapper>
-            </StyledFlexElement>
-        </CursorContext.Provider >
+        <StyledFlexElement
+            projectPrimaryColor={project.primaryColor}
+            isHovered={isHovered}
+            key={project.id}
+            onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
+            onMouseLeave={() => { handleMouseLeave(); onHoverEnd(); }}
+            whileHover={hoverEffects.hover}
+            whileTap={clickTransition}
+            theme={theme}
+            style={{ cursor: cursorType === 'hovered' ? 'pointer' : 'default' }}
+            data-id="special"
+            isActive={isActive}
+            as={motion.div}
+            exit={exitAnim}
+        >
+            <ConstantSizeWrapper exit={exitTransition}>
+                <VectorLogoAndText
+                    text={project.name}
+                    logo={project.logo}
+                    font={project.titleFont}
+                    theme={theme}
+                    data-id="special"
+                />
+            </ConstantSizeWrapper>
+        </StyledFlexElement>
     );
 };
 

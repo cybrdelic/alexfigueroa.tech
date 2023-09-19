@@ -36,13 +36,13 @@ class EventManager {
         }
     }
 
-    deregister(element: Element, type: ListenerType, callback: EventCallback) {
-        const elementKey = element.toString();
+    deregister(element: Element | null, type: ListenerType, callback: EventCallback) {
+        const elementKey = element?.toString();
 
-        if (this.listeners[elementKey] && this.listeners[elementKey][type]) {
+        if (elementKey && this.listeners[elementKey] && this.listeners[elementKey][type]) {
             const index = this.listeners[elementKey][type]!.indexOf(callback);
             if (index !== -1) {
-                element.removeEventListener(type, callback);
+                element?.removeEventListener(type, callback);
                 this.listeners[elementKey][type]!.splice(index, 1);
             }
         }

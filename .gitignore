@@ -26,3 +26,6 @@ yarn-error.log*
 package-lock.json
 .bashrc
 .gitignore
+node_modules
+*.png
+*.gitignore

@@ -12,6 +12,7 @@ import ThemeToggle from "../ThemeToggle";
 import { fontFamily, fontSize, fontWeight } from "../../theming/util-style-functions/typography";
 import { textColor } from "../../theming/util-style-functions/colors";
 import BottomBar from "../BottomBar";
+import { useCursorEffect } from "../../hooks/useCursorEffect";
 
 interface SiteLayoutProps {
     children: React.ReactNode[] | React.ReactNode,
@@ -46,6 +47,7 @@ const Text = createStyledMotionComponent('p')(props => `
 
 
 export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
+    useCursorEffect()
     return (
         <BackgroundImage>
             <LayoutContainer>

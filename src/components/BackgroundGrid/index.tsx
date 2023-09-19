@@ -4,6 +4,7 @@ import { useTheme } from '../../hooks/useTheme';
 import _ from 'lodash';
 import { absoluteTopLeft, fullViewport } from '../../theming/util-style-functions/position';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
+import { padding } from '../../theming/util-style-functions/spacing';
 
 interface BackgroundImageProps {
   children: React.ReactNode;
@@ -83,7 +84,10 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid(ctx, state);
-    ctx.fillStyle = `rgba(0, 0, 0, 0.05)`;
+    ctx.fillStyle = isDarkMode
+      ? ctx.createLinearGradient(0, 0, mousePos.current.x, mousePos.current.y)
+      : ctx.createLinearGradient(0, canvas.height, mousePos.current.x, mousePos.current.y);
+
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, [drawGrid]);
 
