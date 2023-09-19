@@ -41,28 +41,21 @@ const HoverItemsWrapper = createStyledMotionComponent('div')(props => `
 `)
 
 
-const GlassEffect = `
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)),
-              linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.05));
-  border-radius: 10px;
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(50px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+const DualBorderEffect = theme => `
+  border: 2px solid ${theme.mode === 'dark' ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.6)"};
+  box-shadow: 0 0 0 4px ${theme.mode === 'dark' ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.8)"};
 `;
 
-const GlassHoverEffect = `
-  &:hover {
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
+const DynamicShadow = theme => `
+  box-shadow: 0 4px 6px ${theme.mode === 'dark' ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.2)"};
 `;
+
+
+
 
 const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
-    ${GlassEffect}
-    ${GlassHoverEffect}
+    ${DualBorderEffect(props.theme)}
+    ${DynamicShadow(props.theme)}
     ${textColor(props.theme, 'text')}
     display: flex;
     flex-direction: row;
