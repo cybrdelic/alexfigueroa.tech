@@ -1,20 +1,13 @@
 import React from 'react';
-import TextTransition, { presets } from 'react-text-transition';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { withAnimations } from '../../hooks/animation/withAnimations';
 import { useTheme } from '../../hooks/useTheme';
-import ParticlesBg from 'particles-bg';
 import { animated, useSpring } from 'react-spring';
-import { useCursorEffect } from '../../hooks/useCursorEffect';
-import { CursorContext } from '../../contexts/CursorContext';
-import { duration } from '@mui/material';
 import { flexColumn } from '../../theming/util-style-functions/layout';
 import { padding } from '../../theming/util-style-functions/spacing';
 import { backgroundColor, textColor } from '../../theming/util-style-functions/colors';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import { rounded } from '../../theming/util-style-functions/misc';
-import { ThemeProvider } from '../../theming/ThemeProvider';
 import { fontFamily } from '../../theming/util-style-functions/typography';
 
 const HeroContainer = styled(motion.div)`
@@ -90,7 +83,6 @@ const ButtonContainer = styled(motion.div)`
 const HeroComponent = () => {
   const theme = useTheme();
   const [index, setIndex] = React.useState(0);
-  const cursorType = useCursorEffect();
 
   const springProps = useSpring({
 

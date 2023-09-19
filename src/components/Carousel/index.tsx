@@ -96,58 +96,50 @@ const Indicator = createStyledMotionComponent('div')(props => css`
 `);
 
 const Carousel = ({ items }) => {
-    const {
-        next,
-        activeIndex,
-        getPreviousIndex,
-        getNextIndex,
-        getPropsForStatus
-    } = useCarouselLayoutAnimation(items);
+  const {
+    next,
+    activeIndex,
+    getPreviousIndex,
+    getNextIndex,
+    getPropsForStatus
+  } = useCarouselLayoutAnimation(items);
 
-    const theme = useTheme()
+  const theme = useTheme()
 
-    return (
-        <Container>
-            <LayoutGroup>
-                <CarouselItem
-                    layout
-                    layoutId={`item-${getPreviousIndex()}`}
-                    key={getPreviousIndex()}
-                    {...getPropsForStatus('previous')}
-                >
-                    {items[getPreviousIndex()]}
-                </CarouselItem>
+  return (
+    <Container>
+      <CarouselItem
+        key={getPreviousIndex()}
+        {...getPropsForStatus('previous')}
+      >
+        {items[getPreviousIndex()]}
+      </CarouselItem>
 
-                <CarouselItem
-                    layout
-                    layoutId={`item-${activeIndex}`}
-                    key={activeIndex}
-                    {...getPropsForStatus('active')}
-                >
-                    {items[activeIndex]}
-                </CarouselItem>
+      <CarouselItem
+        key={activeIndex}
+        {...getPropsForStatus('active')}
+      >
+        {items[activeIndex]}
+      </CarouselItem>
 
-                <CarouselItem
-                    layout
-                    layoutId={`item-${getNextIndex()}`}
-                    key={getNextIndex()}
-                    {...getPropsForStatus("next")}  // Spread the properties
-                >
-                    {items[getNextIndex()]}
-                </CarouselItem>
-            </LayoutGroup>
-            <NextButton onClick={next}>Next</NextButton>
-            <ProgressBar>
-                {items.map((_, index) => (
-                    <Indicator
-                        key={index}
-                        className={index === activeIndex ? 'active' : ''}
-                        theme={theme}
-                    />
-                ))}
-            </ProgressBar>
-        </Container>
-    );
+      <CarouselItem
+        key={getNextIndex()}
+        {...getPropsForStatus("next")}  // Spread the properties
+      >
+        {items[getNextIndex()]}
+      </CarouselItem>
+      <NextButton onClick={next}>Next</NextButton>
+      <ProgressBar>
+        {items.map((_, index) => (
+          <Indicator
+            key={index}
+            className={index === activeIndex ? 'active' : ''}
+            theme={theme}
+          />
+        ))}
+      </ProgressBar>
+    </Container>
+  );
 }
 
 export default Carousel;
