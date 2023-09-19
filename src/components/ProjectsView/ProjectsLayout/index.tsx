@@ -30,19 +30,12 @@ const ProjectListItem = createStyledMotionComponent('h1')(props => css`
     ${fontSize('h2')}
     ${fontFamily(props.font)}
     transform: rotateY(0deg);
+    width: auto;
     color: white;
     mix-blend-mode: difference;
     margin: 0rem 0;
-    padding: 0rem;
+    padding: 1rem;
     transition: transform 0.3s ease-in-out;
-
-    /* Initial background setup, modified by handleMouseMove */
-    background-image: radial-gradient(circle 50px at center, black, transparent);
-
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    -webkit-background-clip: text;
 `)
 
 
@@ -60,7 +53,7 @@ const ProjectList = createStyledMotionComponent('div')(props => `
     padding:5% 0;  // Give some padding at top and bottom
     padding-bottom: 15%;
     left: 0%;
-    width: 100%;
+    width: auto;
     &::-webkit-scrollbar {
         width: 0;
         background: transparent;
@@ -97,6 +90,7 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                                 key={index}
                                 font={projectsArray[index].titleFont}
                                 theme={theme}
+                                data-id="special"
                             >
                                 {projectsArray[index].name}
                             </ProjectListItem>
