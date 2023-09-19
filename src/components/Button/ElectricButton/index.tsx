@@ -82,6 +82,7 @@ const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
     padding: 15px 30px;
     font-size: 18px;
     ${fontFamily()}
+    ${zIndex.foreground}
     text-transform: uppercase;
     cursor: pointer;
     outline: none;
@@ -136,63 +137,12 @@ const ProfessionalButtonBase = createStyledMotionComponent('button')(props => `
 const ElectricButton: React.FC<ButtonProps> = (props) => {
   const controls = useAnimation();
   const theme = useTheme();
-  const buttonRef = useRef(null);
 
-  const handleMouseEnter = (e: any) => {
-    controls.start({
-      scale: 5,
-      boxShadow: `0 8px 20px ${props.backgroundColor}`,
-    });
-    eventManager.stopPropagation(e);
-  };
-
-  const handleMouseLeave = (e: any) => {
-    controls.start({
-      scale: 1,
-      boxShadow: `0 5px 15px ${props.backgroundColor}`,
-    });
-    eventManager.stopPropagation(e);
-  };
-
-  const handleMouseDown = (e: any) => {
-    controls.start({
-      scale: 0.95,
-      boxShadow: `0 2px 5px ${props.backgroundColor}`
-    });
-    eventManager.stopPropagation(e);
-  };
-
-  const handleMouseUp = (e: any) => {
-    controls.start({
-      scale: 1.05,
-      boxShadow: `0 8px 20px ${props.backgroundColor}`,
-    });
-    eventManager.stopPropagation(e);
-  };
-
-
-
-  useEffect(() => {
-    if (buttonRef.current) {
-      eventManager.register(buttonRef.current, 'mouseover', handleMouseEnter);
-      eventManager.register(buttonRef.current, 'mouseout', handleMouseLeave);
-      eventManager.register(buttonRef.current, 'mouseup', handleMouseUp);
-      eventManager.register(buttonRef.current, 'mousedown', handleMouseDown);
-
-      return () => {
-        eventManager.deregister(buttonRef?.current, 'mouseover', handleMouseEnter);
-        eventManager.deregister(buttonRef?.current, 'mouseout', handleMouseLeave);
-        eventManager.deregister(buttonRef.current, 'mouseup', handleMouseUp);
-        eventManager.deregister(buttonRef.current, 'mousedown', handleMouseDown);
-      };
-    }
-  }, [buttonRef, controls, props.backgroundColor]);
 
   return (
     <ProfessionalButtonBase
       animate={controls}
       theme={theme}
-      ref={buttonRef}
       data-id="special"
       {...props}
     >
