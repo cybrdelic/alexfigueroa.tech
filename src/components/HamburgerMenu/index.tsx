@@ -18,7 +18,26 @@ import {
     flexColumn,
 } from "../../theming/util-style-functions/layout";
 import { padding } from "../../theming/util-style-functions/spacing";
-import { Bar, HamburgerContainer } from "../NavMenu/styles";
+
+const HamburgerContainer = createStyledMotionComponent('div')(props =>
+    `
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: ${props.theme.primary};
+    `
+);
+
+const Bar = createStyledMotionComponent('div')(props => `
+    width: 2.5rem;
+    height: 0.3rem;
+    ${backgroundColor(props.theme, 'text')}
+    margin: 5% 0;
+    transition: background-color 0.2s ease;
+    &:hover {
+        background-color: ${textColor(props.theme, 'text')};
+    }
+`);
 
 // Hamburger Menu Component
 export default function HamburgerMenu({ isHovered }: HamburgerMenuProps) {

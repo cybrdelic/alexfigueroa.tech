@@ -68,7 +68,7 @@ export const borderColor = (theme: Theme, type: ColorKey) => {
 export const gradientBackground = (theme: Theme, type: ColorKey) => {
   const baseColor = getColorValue(theme, type);
   const gradient = generateBackgroundGradient(baseColor);
-  return `background: ${gradient}; `;
+  return `background: ${gradient};`;
 }
 
 const neonizeText = (cssPropertyValue: string): string => {
