@@ -1,16 +1,11 @@
 // GridElement.tsx
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTheme } from "../../../hooks/useTheme";
 import { ProjectType } from "../../../data/project.data";
 import { useHoveredState } from "../../../hooks/animation/useHoveredState";
-import { CursorContext } from "../../../contexts/CursorContext";
-import { useCursorEffect } from "../../../hooks/useCursorEffect";
-import VectorLogoAndText from "../VectorLogoAndText";
-import styled from 'styled-components';
 import { createStyledMotionComponent } from '../../../theming/styled-motion-utils/createStyledMotionComponent';
 import { adjustTransparency } from '../../../utils/adjustTransparency';
-import Tilt from 'react-parallax-tilt';
 import { useNavigate } from 'react-router-dom';
 import { flexCenter } from '../../../theming/util-style-functions/layout';
 import { padding } from '../../../theming/util-style-functions/spacing';
@@ -99,7 +94,7 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
     const handleClick = () => {
         setExitAnim(activeGridElementExitTransition); // NEW
         setTimeout(() => {
-            navigate(`/project/${project.name}`);
+            navigate(`/project/${project.branding.title}`);
         }, 500); // Adjust the delay as needed
     };
 
@@ -114,7 +109,7 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
 
     return (
         <StyledFlexElement
-            projectPrimaryColor={project.primaryColor}
+            projectPrimaryColor={project.colors.primary}
             isHovered={isHovered}
             key={project.id}
             onMouseEnter={() => { handleMouseEnter(project); onHoverStart(); }}
@@ -129,13 +124,14 @@ export const GridElement: React.FC<GridElementProps> = ({ project, handleMouseEn
             exit={exitAnim}
         >
             <ConstantSizeWrapper exit={exitTransition}>
-                <VectorLogoAndText
+                {/* <VectorLogoAndText
                     text={project.name}
                     logo={project.logo}
-                    font={project.titleFont}
+                    font={project.title_font}
                     theme={theme}
                     data-id="special"
-                />
+                /> */}
+                {project.branding.title}
             </ConstantSizeWrapper>
         </StyledFlexElement>
     );

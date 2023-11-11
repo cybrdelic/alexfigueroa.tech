@@ -77,13 +77,6 @@ const ProjectOverview = createStyledMotionComponent('p')(props => `
     ${lineHeight('base')};
 `)
 
-const ProjectName = createStyledMotionComponent('h1')(props => `
-    color: ${props.projectColor ?? 'red'};
-    ${fontSize('h5')}
-    font-weight: 700;
-    ${fontFamily()}
-    letter-spacing: 0rem;
-`)
 
 const Bar = createStyledMotionComponent('div')(props => `
     margin-top: 2rem;
@@ -104,24 +97,6 @@ const ProjectCategory = createStyledMotionComponent('span')(props => `
     font-size: 0.8rem;
     text-transform: uppercase;
 `);
-
-const ProjectDuration = createStyledMotionComponent('span')(props => `
-    font-size: 0.9rem;
-    margin-top: 1rem;
-    display: block;
-    color: ${props.theme.colors.textMuted};
-`);
-
-const LogoWrapper = styled.div` /
-`;
-
-const SlideLeftTitleContainer = createStyledMotionComponent('div')(props => `
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    background-color: brown;
-`)
 
 
 export default function ProjectPreview(props: ProjectPreviewProps) {
@@ -148,35 +123,15 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
             exit="exit"
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         >
-
-            <SlideLeft theme={theme}>
-                <SlideLeftTitleContainer>
-                    <ProjectName data-id="special" theme={theme} project={project} projectColor={project.primaryColor}>
-                        {project.name}
-                    </ProjectName>
-                    <SocialMediaIcons color={colors.common.white} />
-                </SlideLeftTitleContainer>
-                <LogoWrapper>
-                    <img
-                        style={{
-                            width: '48rem',
-                            height: '27rem',
-                            objectFit: 'cover'
-                        }}
-                        src={project.logoPhoto}
-                        data-id="special"
-                    />
-                </LogoWrapper>
-            </SlideLeft>
             <SlideRight theme={theme}>
 
-                <ProjectCategory theme={theme}>{project.subtitle}</ProjectCategory>  {/* Assuming 'type' is a property on the project */}
-                <ProjectDuration theme={theme}>Duration: {project.duration} months</ProjectDuration> {/* Assuming 'duration' is a property on the project */}
-                <ProjectStatus theme={theme}>Status: {project.status}</ProjectStatus> {/* Assuming 'status' is a property on the project */}
-                <ProjectOverview theme={theme}>{project.overview}</ProjectOverview>
+                <ProjectCategory theme={theme}>{project.branding.subtitle}</ProjectCategory>  {/* Assuming 'type' is a property on the project */}
+                {/* <ProjectDuration theme={theme}>Duration: {project.branding} months</ProjectDuration> Assuming 'duration' is a property on the project */}
+                {/* <ProjectStatus theme={theme}>Status: {project}</ProjectStatus> Assuming 'status' is a property on the project */}
+                <ProjectOverview theme={theme}>{project.branding.brandedHook}</ProjectOverview>
                 <Bar>
                     <ButtonBar>
-                        <ElectricButton data-id="special" backgroundColor={project.primaryColor} onClick={() => console.log("Button clicked!")}>
+                        <ElectricButton data-id="special" backgroundColor={project.colors.primary} onClick={() => console.log("Button clicked!")}>
                             Explore Project
                         </ElectricButton>
                         <ElectricButton backgroundColor={theme.mode === 'light' ? colors.gray.light : colors.gray.dark} onClick={() => console.log("Button clicked!")}>

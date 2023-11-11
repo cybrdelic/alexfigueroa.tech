@@ -72,7 +72,7 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
     );
 
     const projectListPreviews: React.ReactNode[] = projectsArray.map(
-        project => <ProjectListItem font={project.titleFont} theme={theme}>{project.name}</ProjectListItem>
+        project => <ProjectListItem font={project.title_font} theme={theme}>{project.branding.title}</ProjectListItem>
     )
 
 
@@ -88,11 +88,11 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                         {projectListPreviews.map((preview, index) => (
                             <ProjectListItem
                                 key={index}
-                                font={projectsArray[index].titleFont}
+                                font={projectsArray[index].title_font}
                                 theme={theme}
                                 data-id="special"
                             >
-                                {projectsArray[index].name}
+                                {projectsArray[index].branding.title}
                             </ProjectListItem>
                         ))}
 

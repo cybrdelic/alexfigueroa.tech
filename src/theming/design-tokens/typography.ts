@@ -1,7 +1,7 @@
 import { projectsData } from "../../data/project.data";
 
 export const typography = {
-    fontFamily: projectsData.x1dra.titleFont,
+    fontFamily: projectsData.Blitzkrieg.title_font,
     fontSize: {
         xsmall: '0.625rem',
         small: '0.875rem',

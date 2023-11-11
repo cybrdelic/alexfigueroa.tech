@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "../../../hooks/useTheme";
-import { ProjectType, generateProjectsData } from "../../../data/project.data";
+import { ProjectType } from "../../../data/project.data";
 import { motion } from "framer-motion";
 import BoldHeaderText, { TextSize } from "../BoldHeaderText";
 import { adjustTransparency } from "../../../utils/adjustTransparency";
@@ -91,11 +91,11 @@ export const ProjectDetailsLayout: React.FC<ProjectDetailsLayoutProps> = ({ proj
             theme={theme}
         >
             <TopMiddlePane variants={paneVariants}>
-                {project.overview}
+                {project.branding.detailedDescription}
             </TopMiddlePane>
             <BottomLeftPane variants={bottomLeftPaneVariants} transition={{ duration: 0.3 }}>
-                <BoldHeaderText text={project.subtitle} font={generateProjectsData().x1dra.titleFont} size={TextSize.MEDIUM} opacity={0.6} />
-                <BoldHeaderText text={project.name} font={generateProjectsData().x1dra.titleFont} size={TextSize.EXTRA_LARGE} opacity={0.6} color={project.primaryColor} />
+                <BoldHeaderText text={project.branding.subtitle} font={generateProjectsData().DynamicTaskLine.title_font} size={TextSize.MEDIUM} opacity={0.6} />
+                <BoldHeaderText text={project.branding.title} font={generateProjectsData().DynamicTaskLine.title_font} size={TextSize.EXTRA_LARGE} opacity={0.6} color={project.colors.primary} />
             </BottomLeftPane>
         </ProjectDetailsContainer>
     );
