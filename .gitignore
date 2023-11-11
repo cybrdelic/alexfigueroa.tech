@@ -29,3 +29,7 @@ package-lock.json
 node_modules
 *.png
 *.gitignore
+*.pyc
+.venv/
+package-lock.json
+*.log
