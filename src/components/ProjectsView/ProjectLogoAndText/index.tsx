@@ -23,8 +23,8 @@ export const ProjectTitleAndLogo = ({ project }: { project: ProjectType | null }
 
     return (
         <StyledTextAndLogoContainer>
-            <StyledLogo src={project.logo} alt={project.name} effect="blur" theme={theme} />
-            <BoldHeaderText text={project.name} font={project.titleFont} />
+            {/* <StyledLogo src={project.logo} alt={project.name} effect="blur" theme={theme} /> */}
+            <BoldHeaderText text={project.branding.title} font={project.title_font} />
         </StyledTextAndLogoContainer>
     )
 }
