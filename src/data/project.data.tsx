@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { ProjectBrandingType, getProjectBrandingCopy } from './projects/getProjectBrandingCopy';
-import { getProjectUrls } from './projects/getProjectUrls';
+import { ProjectBrandingType, getProjectBrandingCopy } from './utils/getProjectBrandingCopy';
+import { getProjectUrls } from './utils/getProjectUrls';
 
 export type ProjectKey = 'WorkspaceAutomator' | 'Blitzkrieg' | 'DynamicTaskLine' | 'TraceMate' | 'CodebaseSeed' | 'CodebasedUtils' | 'AlexFigueroaPortfolio';
 

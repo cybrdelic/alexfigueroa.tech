@@ -1,6 +1,6 @@
-import { ProjectBrandingType } from "./getProjectBrandingCopy";
+import { ProjectBrandingType } from "../utils/getProjectBrandingCopy";
 
-export const Blitzkrieg: ProjectBrandingType = {
+export const blitzkriegData: ProjectBrandingType = {
     title: 'Blitzkrieg',
     brandedHook: 'Blitzkrieg: Command Your Databases with Unprecedented Ease.',
     subtitle: 'Redefine Database Management',
