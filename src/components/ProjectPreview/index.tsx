@@ -38,7 +38,7 @@ const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
     font-family: ${props.project.title_font}, sans-serif;
     text-transform: uppercase;
-    ${fontSize('largePoster')};
+    ${fontSize('poster')};
     margin: 0rem 0rem;
     padding: 0rem 0rem;
     text-align: left;
@@ -51,7 +51,7 @@ const StyledTitle = createStyledMotionComponent('h1')(props => `
 const StyledDescription = createStyledMotionComponent('p')(props => `
     $color: ${props?.project?.colors?.secondary ?? 'blue'};
     ${fontFamily(props.project.title_font)}
-    ${fontSize('h6')}
+    ${fontSize('small')}
     ${lineHeight('small')}
     margin-bottom: 1rem;
     text-align: justify;
@@ -67,7 +67,7 @@ const FAQList = createStyledMotionComponent('ul')(props => `
     list-style: none;
     padding: 0;
     margin-top: 1rem;
-    ${fontSize('h6')}
+    ${fontSize('small')}
 `);
 
 const FAQItem = createStyledMotionComponent('li')(props => `
@@ -81,12 +81,12 @@ const FeatureItem = createStyledMotionComponent('li')(props => `
     align-items: center;
     color: ${props?.theme?.colors?.neon ?? 'red'};
     margin-bottom: 1rem;
-    ${fontSize('h5')}
+    ${fontSize('h6')}
     ${fontFamily()}
 `);
 const ProjectOverview = createStyledMotionComponent('p')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
-    ${fontSize('large')}
+    ${fontSize('h6')}
     max-width: 40rem;  // Maximum width for better readability
     text-align: justify;  // Justify the text to align on both left and right sides
     width: 100%;
@@ -106,65 +106,14 @@ const ButtonBar = createStyledMotionComponent('div')(props => `
     ${flexStart}
 `)
 
-const ProjectCategory = createStyledMotionComponent('span')(props => `
-    background-color: ${props.theme.colors.primary};
-    color: white;
-    padding: 0.2rem 1rem;
-    border-radius: 2rem;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-`);
 
 const NeonText = createStyledMotionComponent('span')(props => `
     color: ${props.theme.colors.neon}; // Neon color for cyberpunk style
     text-shadow: 0 0 10px ${props.theme.colors.neon}, 0 0 20px ${props.theme.colors.neon};
     ${fontFamily(props.project.title_font)};
-    ${fontSize('poster')};
+    font-size: 3.2rem;
 `);
 
-const GlitchEffect = styled.div`
-    position: relative;
-    color: white;
-    font-family: 'Orbitron', sans-serif; // Futuristic font
-    text-transform: uppercase;
-    overflow: hidden;
-
-    &:after {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: ${props => props.theme.colors.background};
-        clip-path: polygon(0 0, 100% 0, 100% 25%, 0 25%, 0 50%, 100% 50%, 100% 75%, 0 75%);
-        animation: glitch 1s linear infinite;
-    }
-
-    @keyframes glitch {
-        0% { clip-path: inset(42% 0 41% 0); }
-        5% { clip-path: inset(8% 0 44% 0); }
-        10% { clip-path: inset(50% 0 49% 0); }
-        15.0% { clip-path: inset(20% 0 57% 0); }
-        20% { clip-path: inset(34% 0 15% 0); }
-        25% { clip-path: inset(33% 0 67% 0); }
-        30% { clip-path: inset(12% 0 34% 0); }
-        35% { clip-path: inset(44% 0 54% 0); }
-        40% { clip-path: inset(29% 0 70% 0); }
-        45% { clip-path: inset(14% 0 85% 0); }
-        50% { clip-path: inset(50% 0 49% 0); }
-        55% { clip-path: inset(60% 0 39% 0); }
-        60% { clip-path: inset(40% 0 58% 0); }
-        65% { clip-path: inset(10% 0 89% 0); }
-        70% { clip-path: inset(58% 0 40% 0); }
-        75% { clip-path: inset(30% 0 25% 0); }
-        80% { clip-path: inset(25% 0 74% 0); }
-        85% { clip-path: inset(20% 0 79% 0); }
-        90% { clip-path: inset(60% 0 38% 0); }
-        95% { clip-path: inset(40% 0 59% 0); }
-        100% { clip-path: inset(70% 0 28% 0); }
-    }
-`;
 
 const ProjectWrapper = createStyledMotionComponent('div')(props => `
     display: flex;
@@ -205,18 +154,18 @@ const NotTitleSection = styled.div`
     display: flex;
     flex-direction: row; // Arrange Left and Center sections vertically
     width: 100%; // Ensure it takes the full width
+    justify-content: stretch;
+    gap: 5%;
     flex-basis: 90%;
-    flex-grow: 1; // Allow to grow
+    flex-grow: 0; // Allow to grow
     flex-shrink: 1; // Allow to shrink if needed
 `;
 const LeftSection = styled.div`
     flex-basis: 45%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    height: 100%;
-    ${padding('md')};
+    justify-content: space-between;
+    align-items: left;
     flex-shrink: 1;
     flex-grow: 0;
 `;
@@ -242,6 +191,14 @@ const RightSection = styled.div`
     flex-shrink: 1;
     flex-grow: 1; // Prevent shrinking
 `;
+
+const HeadlineAndSubtitle = createStyledMotionComponent('div')(props => `
+    display: flex;
+    padding-top: 10%;
+    flex-direction: column;
+    justify-content: stretch;
+    width: 100%;
+`)
 
 export default function ProjectPreview(props: ProjectPreviewProps) {
     const {
@@ -283,10 +240,12 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                 <NotTitleSection>
                     <LeftSection>
 
-                        <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
-                        <StyledDescription theme={theme} project={project}>
-                            {project.branding.brandedHook}
-                        </StyledDescription>
+                        <HeadlineAndSubtitle>
+                            <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
+                            <StyledDescription theme={theme} project={project}>
+                                {project.branding.brandedHook}
+                            </StyledDescription>
+                        </HeadlineAndSubtitle>
                         <ProjectOverview theme={theme} project={project}>
                             {project.branding.detailedDescription}
                         </ProjectOverview>
