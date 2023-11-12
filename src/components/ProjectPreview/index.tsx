@@ -37,23 +37,13 @@ const animationVariants = {
 const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
     font-family: ${props.project.title_font}, sans-serif;
-    text-shadow: 0 0 8px ${props.theme.colors.neon};
-    ${fontSize('poster')};
-    background-color: red;
-
-    /* Box styling */
-    box-sizing: border-box; /* Include padding and border in width/height */
-    padding: 10px; /* Adjust as needed */
-    text-align: flex-start; /* Center align text */
-
-    /* Text wrapping */
-    word-wrap: break-word; /* Wrap long words */
-    overflow-wrap: break-word; /* Handle overflow */
-    hyphens: auto; /* Enable hyphenation */
-
-    /* Splitting */
-    max-width: 600px; /* Adjust max-width as needed */
-    height: 100%;
+    text-transform: uppercase;
+    ${fontSize('largePoster')};
+    margin: 0rem 0rem;
+    padding: 0rem 0rem;
+    text-align: left;
+    flex-grow: 1;
+    flex-shrink: 0;
 `);
 
 
@@ -128,7 +118,8 @@ const ProjectCategory = createStyledMotionComponent('span')(props => `
 const NeonText = createStyledMotionComponent('span')(props => `
     color: ${props.theme.colors.neon}; // Neon color for cyberpunk style
     text-shadow: 0 0 10px ${props.theme.colors.neon}, 0 0 20px ${props.theme.colors.neon};
-    ${fontFamily(props.project.title_font)}
+    ${fontFamily(props.project.title_font)};
+    ${fontSize('poster')};
 `);
 
 const GlitchEffect = styled.div`
@@ -178,31 +169,78 @@ const GlitchEffect = styled.div`
 const ProjectWrapper = createStyledMotionComponent('div')(props => `
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     background-color: ${props.theme.colors.background[props.theme.mode]};
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 4px 10px ${props.theme.colors.shadow};
-    ${margin('md')};
-    ${padding('lg')};
+    flex-grow: 0;
 `);
 
+const BigLeftSection = styled.div`
+    display: flex;
+    flex-direction: column; // Stack children vertically
+    justify-content: space-between; // Space out children
+    align-items: stretch; // Stretch children to fill the width
+    width: 100%; // Full width
+    flex-grow: 0; // Grow to fill available space
+    flex-shrink: 1;
+
+`;
+
+
+const TitleSection = styled.div`
+    display: flex;
+    align-items: flex-start; // Align title to the top
+    justify-content: flex-start; // Align title to the left
+    width: 100%; // Take full width of BigLeftSection
+    margin: 0rem 0rem;
+    padding: 0rem 0rem;
+    flex-basis: 10%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 100%;
+`;
+
+const NotTitleSection = styled.div`
+    display: flex;
+    flex-direction: row; // Arrange Left and Center sections vertically
+    width: 100%; // Ensure it takes the full width
+    flex-basis: 90%;
+    flex-grow: 1; // Allow to grow
+    flex-shrink: 1; // Allow to shrink if needed
+`;
 const LeftSection = styled.div`
+    flex-basis: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: 100%;
+    ${padding('md')};
+    flex-shrink: 1;
+    flex-grow: 0;
+`;
+const CenterSection = styled.div`
     flex-basis: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     ${padding('md')};
+    height: 100%;
+    width: 100%;
 `;
 
 const RightSection = styled.div`
-    flex-basis: 60%;
+    flex-basis: 15%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     ${padding('md')};
+    gap: 0px;
+    flex-shrink: 1;
+    flex-grow: 1; // Prevent shrinking
 `;
 
 export default function ProjectPreview(props: ProjectPreviewProps) {
@@ -236,46 +274,52 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             project={project}
         >
-            <LeftSection>
-                <GlitchEffect data-text={project.branding.title}>
+            <BigLeftSection>
+                <TitleSection>
                     <StyledTitle theme={theme} project={project}>
                         {project.branding.title}
                     </StyledTitle>
-                </GlitchEffect>
-                <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
-                <StyledDescription theme={theme} project={project}>
-                    {project.branding.brandedHook}
-                </StyledDescription>
-                <ProjectOverview theme={theme} project={project}>
-                    {project.branding.detailedDescription}
-                </ProjectOverview>
-            </LeftSection>
+                </TitleSection>
+                <NotTitleSection>
+                    <LeftSection>
 
+                        <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
+                        <StyledDescription theme={theme} project={project}>
+                            {project.branding.brandedHook}
+                        </StyledDescription>
+                        <ProjectOverview theme={theme} project={project}>
+                            {project.branding.detailedDescription}
+                        </ProjectOverview>
+                    </LeftSection>
+                    <CenterSection>
+                        <FeatureList theme={theme}>
+                            {project.branding.features.map(renderFeatureItem)}
+                        </FeatureList>
+
+                        <FAQList theme={theme}>
+                            {project.branding.faqs.map((faq, index) => (
+                                <FAQItem key={index} theme={theme}>
+                                    <strong>Q: {faq.question}</strong> <br /> A: {faq.answer}
+                                </FAQItem>
+                            ))}
+                        </FAQList>
+                        <Bar>
+                            <ButtonBar>
+                                <ElectricButton backgroundColor={project.colors.primary} onClick={() => console.log("Explore Project")}>
+                                    Explore Project
+                                </ElectricButton>
+                                <ElectricButton backgroundColor={theme.mode === 'light' ? colors.gray.light : colors.gray.dark} onClick={() => console.log("View Demo")}>
+                                    View Demo
+                                </ElectricButton>
+                            </ButtonBar>
+                        </Bar>
+                    </CenterSection>
+                </NotTitleSection>
+            </BigLeftSection>
             <RightSection>
-
-
-                <FeatureList theme={theme}>
-                    {project.branding.features.map(renderFeatureItem)}
-                </FeatureList>
-
-                <FAQList theme={theme}>
-                    {project.branding.faqs.map((faq, index) => (
-                        <FAQItem key={index} theme={theme}>
-                            <strong>Q: {faq.question}</strong> <br /> A: {faq.answer}
-                        </FAQItem>
-                    ))}
-                </FAQList>
-
-                <Bar>
-                    <ButtonBar>
-                        <ElectricButton backgroundColor={project.colors.primary} onClick={() => console.log("Explore Project")}>
-                            Explore Project
-                        </ElectricButton>
-                        <ElectricButton backgroundColor={theme.mode === 'light' ? colors.gray.light : colors.gray.dark} onClick={() => console.log("View Demo")}>
-                            View Demo
-                        </ElectricButton>
-                    </ButtonBar>
-                </Bar>
+                <img src="https://via.placeholder.com/150" alt="Placeholder Image 1" style={{ width: '100%' }} />
+                <img src="https://via.placeholder.com/150" alt="Placeholder Image 2" style={{ width: '100%' }} />
+                <img src="https://via.placeholder.com/150" alt="Placeholder Image 3" style={{ width: '100%' }} />
             </RightSection>
         </ProjectWrapper>
     );

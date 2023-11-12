@@ -1,5 +1,4 @@
-import { motion, AnimateSharedLayout, LayoutGroup } from 'framer-motion';
-import { Key, useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import styled, { css, keyframes } from 'styled-components';
 import useCarouselLayoutAnimation from '../../hooks/animation/useCarouselLayoutAnimation';
@@ -7,7 +6,6 @@ import { backgroundColor } from '../../theming/util-style-functions/colors';
 import { useSetDynamicBackground, useTheme } from '../../hooks/useTheme';
 import { useAlternateTheme } from '../../hooks/theming/useAlternateTheme';
 import { zIndex } from '../../theming/design-tokens';
-import { ThemeContext } from '../../contexts/ThemeContext';
 import { ProjectType } from '../../data/project.data';
 import ProjectPreview from '../ProjectPreview';
 
@@ -26,7 +24,7 @@ const glow = keyframes`
 const NextButton = styled.button`
   position: absolute;
   top: 50%;
-  right: 5%;
+  right: 0%;
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
@@ -45,28 +43,28 @@ const NextButton = styled.button`
 `;
 
 
-export const Container = createStyledMotionComponent('div')(props => `
-  position: relative;
+const Container = createStyledMotionComponent('div')(props => `
+  position: relative; // Parent container with relative positioning
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100vw;
   height: 100%;
-  overflow: hidden;
   perspective: 1500px;
 `);
 
 export const CarouselItem = createStyledMotionComponent('div')(props => css`
-  position: absolute;
-  top: 10%;
-  width: 80%;
-  height: 80%;
+  position: absolute; // Positioned absolutely within Container
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 2rem;
+  justify-content: flex-start;
   transition: all 0.3s ease-in;  // enhanced timing
   transform-style: preserve-3d;
   filter: brightness(1.2);
+  padding-left: 3%;
+  flex-grow: 1;
+  flex-shrink: 1;
   z-index: ${zIndex.default};
-
   &:hover {
     filter: brightness(1.5); // brighten on hover
     }
@@ -74,7 +72,7 @@ export const CarouselItem = createStyledMotionComponent('div')(props => css`
 
 const ProgressBar = createStyledMotionComponent('div')(props => css`
   position: absolute;
-  bottom: 5%;
+  bottom: 0%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -132,21 +130,23 @@ const Carousel = ({ items, onActiveProjectChange }: CarouselProps) => {
 
   return (
     <Container>
-      {items.map((project, index) => {
-        // Determine the status of the carousel item
-        const status = index === activeIndex ? 'active' :
-          index === getPreviousIndex() ? 'previous' :
-            index === getNextIndex() ? 'next' : 'inactive';
+      <div>
+        {items.map((project, index) => {
+          // Determine the status of the carousel item
+          const status = index === activeIndex ? 'active' :
+            index === getPreviousIndex() ? 'previous' :
+              index === getNextIndex() ? 'next' : 'inactive';
 
-        return (
-          <CarouselItem
-            key={project.id}
-            {...getPropsForStatus(status)} // Apply animation props based on status
-          >
-            <ProjectPreview project={project} isActive={status === 'active'} />
-          </CarouselItem>
-        );
-      })}
+          return (
+            <CarouselItem
+              key={project.id}
+              {...getPropsForStatus(status)} // Apply animation props based on status
+            >
+              <ProjectPreview project={project} isActive={status === 'active'} />
+            </CarouselItem>
+          );
+        })}
+      </div>
       <NextButton onClick={next}>Next</NextButton>
       <ProgressBar>
         {items.map((_, index) => (
