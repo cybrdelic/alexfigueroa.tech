@@ -39,7 +39,7 @@ const StyledTitle = createStyledMotionComponent('h1')(props => `
     font-family: ${props.project.title_font}, sans-serif;
     text-shadow: 0 0 8px ${props.theme.colors.neon};
     margin-bottom: 0.5rem;
-    font-size: 2.5rem;
+    ${fontSize('largePoster')}
 `);
 
 
@@ -47,7 +47,7 @@ const StyledDescription = createStyledMotionComponent('p')(props => `
     $color: ${props?.project?.colors?.secondary ?? 'blue'};
     ${fontFamily(props.project.title_font)}
     ${fontSize('h6')}
-    ${lineHeight('base')}
+    ${lineHeight('small')}
     margin-bottom: 1rem;
     text-align: justify;
 `);
@@ -62,7 +62,7 @@ const FAQList = createStyledMotionComponent('ul')(props => `
     list-style: none;
     padding: 0;
     margin-top: 1rem;
-    ${fontSize('small')}
+    ${fontSize('h6')}
 `);
 
 const FAQItem = createStyledMotionComponent('li')(props => `
@@ -76,7 +76,7 @@ const FeatureItem = createStyledMotionComponent('li')(props => `
     align-items: center;
     color: ${props?.theme?.colors?.neon ?? 'red'};
     margin-bottom: 1rem;
-    font-size: 1.1rem;
+    ${fontSize('h5')}
     ${fontFamily()}
 `);
 const ProjectOverview = createStyledMotionComponent('p')(props => `

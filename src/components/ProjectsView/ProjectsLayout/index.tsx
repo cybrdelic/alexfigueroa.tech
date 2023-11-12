@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTheme } from "../../../hooks/useTheme";
-import { ProjectData } from "../../../data/project.data";
+import { ProjectData, ProjectType } from "../../../data/project.data";
 import { createStyledMotionComponent } from "../../../theming/styled-motion-utils/createStyledMotionComponent";
 import Carousel from "../../Carousel";
 import ProjectPreview from "../../ProjectPreview";
@@ -8,6 +8,7 @@ import { zIndex } from "../../../theming/design-tokens";
 import { css } from "styled-components";
 import { fontFamily, fontSize } from "../../../theming/util-style-functions/typography";
 import ListCarouselToggleButtons from "../../ListCarouselToggleButtons";
+import { ErrorBoundary } from "../../ErrorBoundary";
 
 
 
@@ -22,6 +23,7 @@ const CarouselContainer = createStyledMotionComponent('div')(props => css`
     justify-content: flex-start;
     width: 100%;
     height: 100%;
+    background-color: ${props.backgroundColor || 'green'}
 `);
 
 
@@ -65,11 +67,21 @@ const ProjectList = createStyledMotionComponent('div')(props => `
 export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
     const projectsArray = Object.values(projects);
     const theme = useTheme();
+    // Inside ProjectsLayout component
+    const [activeProject, setActiveProject] = useState<ProjectType>();
+
+    const handleActiveProjectChange = (index: number) => {
+        setActiveProject(projectsArray[index]);
+    };
 
 
-    const projectCarouselPreviews: React.ReactNode[] = projectsArray.map(
-        project => <ProjectPreview project={project} isActive={true} />
-    );
+
+
+
+    const projectCarouselPreviews = projectsArray.map(project => {
+        // Return the actual project data, not a component
+        return project;
+    });
 
     const projectListPreviews: React.ReactNode[] = projectsArray.map(
         project => <ProjectListItem font={project.title_font} theme={theme}>{project.branding.title}</ProjectListItem>
@@ -99,8 +111,13 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
                     </ProjectList>
                 </CarouselContainer>
             ) : (
-                <CarouselContainer>
-                    <Carousel items={projectCarouselPreviews} />
+                <CarouselContainer backgroundColor={activeProject?.colors?.primary ?? 'blue'}>
+                    <ErrorBoundary>
+                        <Carousel
+                            items={projectCarouselPreviews}
+                            onActiveProjectChange={handleActiveProjectChange}
+                        />
+                    </ErrorBoundary>
                 </CarouselContainer>
             )}
         </>

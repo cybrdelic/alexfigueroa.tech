@@ -1,12 +1,15 @@
 import { motion, AnimateSharedLayout, LayoutGroup } from 'framer-motion';
-import { useState } from 'react';
+import { Key, useContext, useEffect, useState } from 'react';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import styled, { css, keyframes } from 'styled-components';
 import useCarouselLayoutAnimation from '../../hooks/animation/useCarouselLayoutAnimation';
 import { backgroundColor } from '../../theming/util-style-functions/colors';
-import { useTheme } from '../../hooks/useTheme';
+import { useSetDynamicBackground, useTheme } from '../../hooks/useTheme';
 import { useAlternateTheme } from '../../hooks/theming/useAlternateTheme';
 import { zIndex } from '../../theming/design-tokens';
+import { ThemeContext } from '../../contexts/ThemeContext';
+import { ProjectType } from '../../data/project.data';
+import ProjectPreview from '../ProjectPreview';
 
 const pulsate = keyframes`
   0% { transform: scale(1); box-shadow: 0 0 10px #fff; }
@@ -95,7 +98,14 @@ const Indicator = createStyledMotionComponent('div')(props => css`
   }
 `);
 
-const Carousel = ({ items }) => {
+interface CarouselProps {
+  items: ProjectType[];
+  onActiveProjectChange?: (activeIndex: number) => void; // New callback prop
+  // ... other props
+}
+
+
+const Carousel = ({ items, onActiveProjectChange }: CarouselProps) => {
   const {
     next,
     activeIndex,
@@ -104,30 +114,39 @@ const Carousel = ({ items }) => {
     getPropsForStatus
   } = useCarouselLayoutAnimation(items);
 
-  const theme = useTheme()
+  const theme = useTheme();
+  const setDynamicBackground = useSetDynamicBackground();
+
+  useEffect(() => {
+    const activeProjectColor = items[activeIndex]?.colors?.primary;
+    if (activeProjectColor) {
+      setDynamicBackground(activeProjectColor); // Update the dynamic background color
+    }
+  }, [activeIndex, items, setDynamicBackground]);
+
+  useEffect(() => {
+    if (onActiveProjectChange) {
+      onActiveProjectChange(activeIndex);
+    }
+  }, [activeIndex, onActiveProjectChange]);
 
   return (
     <Container>
-      <CarouselItem
-        key={getPreviousIndex()}
-        {...getPropsForStatus('previous')}
-      >
-        {items[getPreviousIndex()]}
-      </CarouselItem>
+      {items.map((project, index) => {
+        // Determine the status of the carousel item
+        const status = index === activeIndex ? 'active' :
+          index === getPreviousIndex() ? 'previous' :
+            index === getNextIndex() ? 'next' : 'inactive';
 
-      <CarouselItem
-        key={activeIndex}
-        {...getPropsForStatus('active')}
-      >
-        {items[activeIndex]}
-      </CarouselItem>
-
-      <CarouselItem
-        key={getNextIndex()}
-        {...getPropsForStatus("next")}  // Spread the properties
-      >
-        {items[getNextIndex()]}
-      </CarouselItem>
+        return (
+          <CarouselItem
+            key={project.id}
+            {...getPropsForStatus(status)} // Apply animation props based on status
+          >
+            <ProjectPreview project={project} isActive={status === 'active'} />
+          </CarouselItem>
+        );
+      })}
       <NextButton onClick={next}>Next</NextButton>
       <ProgressBar>
         {items.map((_, index) => (

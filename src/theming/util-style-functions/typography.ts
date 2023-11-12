@@ -17,7 +17,7 @@ export const lineHeight = (height: keyof typeof typography.lineHeight) => `
 `;
 
 export const fontFamily = (customFont?: string) => {
-  return `font-family: ${customFont ?? projectsData.DynamicTaskLine.title_font};`
+  return `font-family: ${customFont ?? projectsData.WorkspaceAutomator.title_font};`
 }
 
 // ... Add more as needed
