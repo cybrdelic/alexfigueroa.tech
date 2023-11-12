@@ -9,6 +9,7 @@ import { css } from "styled-components";
 import { fontFamily, fontSize } from "../../../theming/util-style-functions/typography";
 import ListCarouselToggleButtons from "../../ListCarouselToggleButtons";
 import { ErrorBoundary } from "../../ErrorBoundary";
+import { useActiveProject } from "../../../contexts/ActiveProjectContext";
 
 
 
@@ -23,7 +24,6 @@ const CarouselContainer = createStyledMotionComponent('div')(props => css`
     justify-content: flex-start;
     width: 100%;
     height: 100%;
-    background-color: ${props.backgroundColor || 'green'}
 `);
 
 
@@ -68,7 +68,8 @@ export default function ProjectsLayout({ projects }: ProjectsLayoutProps) {
     const projectsArray = Object.values(projects);
     const theme = useTheme();
     // Inside ProjectsLayout component
-    const [activeProject, setActiveProject] = useState<ProjectType>();
+
+    const { activeProject, setActiveProject } = useActiveProject();
 
     const handleActiveProjectChange = (index: number) => {
         setActiveProject(projectsArray[index]);

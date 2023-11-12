@@ -38,9 +38,24 @@ const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
     font-family: ${props.project.title_font}, sans-serif;
     text-shadow: 0 0 8px ${props.theme.colors.neon};
-    margin-bottom: 0.5rem;
-    ${fontSize('largePoster')}
+    ${fontSize('poster')};
+    background-color: red;
+
+    /* Box styling */
+    box-sizing: border-box; /* Include padding and border in width/height */
+    padding: 10px; /* Adjust as needed */
+    text-align: flex-start; /* Center align text */
+
+    /* Text wrapping */
+    word-wrap: break-word; /* Wrap long words */
+    overflow-wrap: break-word; /* Handle overflow */
+    hyphens: auto; /* Enable hyphenation */
+
+    /* Splitting */
+    max-width: 600px; /* Adjust max-width as needed */
+    height: 100%;
 `);
+
 
 
 const StyledDescription = createStyledMotionComponent('p')(props => `

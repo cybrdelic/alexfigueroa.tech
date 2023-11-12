@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { absoluteTopLeft, fullViewport } from '../../theming/util-style-functions/position';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import { padding } from '../../theming/util-style-functions/spacing';
+import { useActiveProject } from '../../contexts/ActiveProjectContext';
 
 interface BackgroundImageProps {
   children: React.ReactNode;
@@ -30,6 +31,8 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDarkMode = useMemo(() => theme.mode === 'dark', [theme]);
   const mousePos = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
+  const { activeProject } = useActiveProject();
+  const activeProjectColor = activeProject?.colors?.primary ?? 'green'
 
   const distanceBetweenPoints = (x1, y1, x2, y2) =>
     Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
@@ -79,17 +82,24 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
       gap: 15,
       distortion: 100000,
     };
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // Clear the canvas first
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawGrid(ctx, state);
-    ctx.fillStyle = isDarkMode
-      ? ctx.createLinearGradient(0, 0, mousePos.current.x, mousePos.current.y)
-      : ctx.createLinearGradient(0, canvas.height, mousePos.current.x, mousePos.current.y);
 
+    // Create and apply the gradient background
+    const gradient = ctx.createLinearGradient(0, 0, window.innerWidth, window.innerHeight);
+    gradient.addColorStop(0, activeProjectColor);
+    gradient.addColorStop(1, isDarkMode ? 'black' : 'white');
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }, [drawGrid]);
+
+    // Then draw the grid on top of the background
+    drawGrid(ctx, state);
+
+  }, [drawGrid, activeProjectColor, isDarkMode]);
 
   const throttledDraw = _.throttle(draw, 100 / 15);
 
