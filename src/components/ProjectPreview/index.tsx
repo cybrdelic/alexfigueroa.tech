@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { styled } from "styled-components";
 import ElectricButton from "../Button/ElectricButton";
 import { useCursorEffect } from "../../hooks/useCursorEffect";
+import { CheckBox } from "@mui/icons-material";
 
 interface ProjectPreviewProps {
     project: ProjectType;
@@ -35,23 +36,16 @@ const animationVariants = {
 
 const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
-    font-family: ${props.titleFont}, sans-serif;
+    font-family: ${props.project.title_font}, sans-serif;
     text-shadow: 0 0 8px ${props.theme.colors.neon};
     margin-bottom: 0.5rem;
     font-size: 2.5rem;
 `);
 
-const StyledSubtitle = createStyledMotionComponent('h2')(props => `
-    color: ${props?.project?.colors?.secondary ?? 'blue'};
-    font-family: ${props.titleFont}, sans-serif;
-    text-shadow: 0 0 5px ${props.theme.colors.neon};
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-`);
 
 const StyledDescription = createStyledMotionComponent('p')(props => `
     $color: ${props?.project?.colors?.secondary ?? 'blue'};
-    ${fontFamily()}
+    ${fontFamily(props.project.title_font)}
     ${fontSize('h6')}
     ${lineHeight('base')}
     margin-bottom: 1rem;
@@ -78,9 +72,12 @@ const FAQItem = createStyledMotionComponent('li')(props => `
 
 
 const FeatureItem = createStyledMotionComponent('li')(props => `
+    display: flex;
+    align-items: center;
     color: ${props?.theme?.colors?.neon ?? 'red'};
-    text-shadow: 0 0 5px ${props.theme.colors.neon};
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    ${fontFamily()}
 `);
 const ProjectOverview = createStyledMotionComponent('p')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
@@ -88,7 +85,7 @@ const ProjectOverview = createStyledMotionComponent('p')(props => `
     max-width: 40rem;  // Maximum width for better readability
     text-align: justify;  // Justify the text to align on both left and right sides
     width: 100%;
-    ${fontFamily()}
+    ${fontFamily(props.project.title_font)}
     ${lineHeight('base')};
 `)
 
@@ -116,6 +113,7 @@ const ProjectCategory = createStyledMotionComponent('span')(props => `
 const NeonText = createStyledMotionComponent('span')(props => `
     color: ${props.theme.colors.neon}; // Neon color for cyberpunk style
     text-shadow: 0 0 10px ${props.theme.colors.neon}, 0 0 20px ${props.theme.colors.neon};
+    ${fontFamily(props.project.title_font)}
 `);
 
 const GlitchEffect = styled.div`
@@ -170,7 +168,6 @@ const ProjectWrapper = createStyledMotionComponent('div')(props => `
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 10px ${props.theme.colors.shadow};
-    background-color: ${props.project.colors.primary};
     ${margin('md')};
     ${padding('lg')};
 `);
@@ -205,6 +202,13 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
     // Determine the animation variant based on `isActive` prop
     const selectedVariant = isActive ? animationVariants.active : animationVariants.inactive;
 
+    const renderFeatureItem = (feature: any, index: number) => (
+        <FeatureItem key={index} theme={theme}>
+            <CheckBox />
+            {feature}
+        </FeatureItem>
+    );
+
 
     return (
         <ProjectWrapper
@@ -219,15 +223,15 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
         >
             <LeftSection>
                 <GlitchEffect data-text={project.branding.title}>
-                    <StyledTitle theme={theme} titleFont={project.title_font} project={project}>
+                    <StyledTitle theme={theme} project={project}>
                         {project.branding.title}
                     </StyledTitle>
                 </GlitchEffect>
-                <NeonText theme={theme}>{project.branding.subtitle}</NeonText>
-                <StyledDescription theme={theme}>
+                <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
+                <StyledDescription theme={theme} project={project}>
                     {project.branding.brandedHook}
                 </StyledDescription>
-                <ProjectOverview theme={theme}>
+                <ProjectOverview theme={theme} project={project}>
                     {project.branding.detailedDescription}
                 </ProjectOverview>
             </LeftSection>
@@ -236,11 +240,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
 
 
                 <FeatureList theme={theme}>
-                    {project.branding.features.map((feature, index) => (
-                        <FeatureItem key={index} theme={theme}>
-                            {feature}
-                        </FeatureItem>
-                    ))}
+                    {project.branding.features.map(renderFeatureItem)}
                 </FeatureList>
 
                 <FAQList theme={theme}>
