@@ -14,10 +14,9 @@ import { projectsData } from '../../data/project.data';
 const HeroContainer = styled(motion.div)`
   display: flex;
   flex-direction: row;
-  justify-content: stretch;
+  justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  flex-basis: 30%;
 `;
 
 const Pane = styled.div`
@@ -25,8 +24,40 @@ const Pane = styled.div`
   ${padding('sm')}
 `;
 
-const LeftPane = styled(Pane)`
+const CTAButton = styled(motion.button)`
+  ${padding('md')}
+  ${rounded('lg')}
+  ${fontFamily()}
+  background-color: ${projectsData.CodebasedUtils.colors.secondary};
+  color: white;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin: 0.5rem;
+  border: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3; // Darken on hover, adjust as per theme
+  }
+`;
+
+const GhostButton = styled(CTAButton)`
+  background-color: transparent;
+  color: white; // Same as the CTAButton color
+  border: 2px solid ${projectsData.CodebasedUtils.colors.secondary};
+
+  &:hover {
+    background-color: rgba(0, 123, 255, 0.1); // Slight background on hover
+  }
+`;
+const CTASection = styled(Pane)`
   text-align: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 30%;
 `;
 
 const RightPane = styled(Pane)`
@@ -35,8 +66,9 @@ const RightPane = styled(Pane)`
   background-color: rgba(250,250,250,1);
   height: 20rem;
   max-height: 20rem;
-  flex-basis: 40%;
+  width: 40%;
   margin-left: 1rem;
+  flex-grow: 1;
 `;
 
 const revealAnimation = keyframes`
@@ -52,7 +84,7 @@ const HeroTitle = styled(motion.h1)`
   ${fontSize('h4')}
   ${fontFamily("Nova Square")}
   font-weight: 900;
-  width: 60%;
+  width: 100%;
   text-transform: uppercase;
   position: relative;
   text-align: left;
@@ -71,7 +103,7 @@ const HeroTagline = createStyledMotionComponent(animated.h2)(props => `
   color: white;
   text-shadow: 0px 0px 10px ${props?.theme?.colors?.secondary};
   text-align: flex-start;
-  width: 50%;
+  width: 100%;
   text-transform: uppercase;
   letter-spacing: 0.3rem;
   color: ${projectsData.CodebasedUtils.colors.secondary}
@@ -90,7 +122,16 @@ const HeroSection = createStyledMotionComponent('div')(props => `
   align-items: flex-start;
   gap: 0rem;
   flex-basis: 70%;
+`)
 
+const Top = createStyledMotionComponent('div')(props => css`
+  display: flex;
+  flex-direction: row;
+`)
+const Bottom = createStyledMotionComponent('div')(props => css`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 `)
 
 const HeroComponent = () => {
@@ -106,25 +147,36 @@ const HeroComponent = () => {
   return (
     <TopHalf>
 
-      <HeroSection>
+      <Top>
+        <HeroSection>
+          <HeroTagline theme={theme} style={springProps}>
+            Full-Stack Development Meets Full-Cycle Automation.
+          </HeroTagline>
+          <HeroTitle theme={theme}>
+            Streamlined Solutions – Full-Stack Development with an Eye for Automation
+          </HeroTitle>
 
-        <HeroTitle theme={theme}>
-          Streamlined Solutions – Full-Stack Development with an Eye for Automation
-        </HeroTitle>
-        <HeroTagline theme={theme} style={springProps}>
-          Full-Stack Development Meets Full-Cycle Automation.
-        </HeroTagline>
+        </HeroSection>
+        <CTASection>
+          <CTAButton as="a" href="/projects" >
+            View My Projects
+          </CTAButton>
+          <GhostButton as="a" href="mailto:your.email@example.com">
+            Get In Touch
+          </GhostButton>
+        </CTASection>
+      </Top>
+      <Bottom>
+        <HeroContainer>
+          <li style={{ backgroundImage: `url('/background.png')`, width: '60rem', borderRadius: '25px', height: '100%' }}>
+          </li>
+          <RightPane>
 
-      </HeroSection>
-      <HeroContainer>
-        <li style={{ backgroundImage: `url('/background.png')`, width: '60rem', height: '20rem', borderRadius: '25px', minHeight: '20rem' }}>
-        </li>
-        <RightPane>
+          </RightPane>
+        </HeroContainer>
+      </Bottom>
 
-        </RightPane>
-      </HeroContainer>
-
-    </TopHalf>
+    </TopHalf >
   );
 };
 export default HeroComponent
