@@ -7,6 +7,8 @@ import { createStyledMotionComponent } from "../../theming/styled-motion-utils/c
 import { fontSize, fontWeight, fontFamily } from '../../theming/util-style-functions/typography';
 import { textColor } from '../../theming/util-style-functions/colors';
 import ProfilePopover from '../ProfilePopover';
+import { useActiveProject } from '../../contexts/ActiveProjectContext';
+import { projectsData } from '../../data/project.data';
 
 const Bar = styled.div`
   z-index: ${zIndex.foreground + 10};
@@ -16,6 +18,7 @@ const Bar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-end; // Correct alignment
 
   ${mq('md')} {
     bottom: ${spacing.md};
@@ -26,7 +29,37 @@ const Bar = styled.div`
 const BrandTextContainer = createStyledMotionComponent('div')(props => `
   grid-gap: 0rem;
   position: relative;  // Making it relative to position the popover
+  flex-basis: 15%;
+  align-items: flex-end;
 `)
+
+const ActionItemContainer = createStyledMotionComponent('div')(props => `
+width: 100%;
+flex-basis: 70%;
+`)
+
+const ProjectNumber = createStyledMotionComponent('span')(props => `
+  ${props.isActive ? fontSize('h6') : fontSize('h6')};
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  font-weight: 900;
+  ${fontFamily()};
+  color: ${props.isActive ? props.project.colors.secondary : 'rgba(250,250,250,0.4)'};
+  // Replace 'brightColor' and 'defaultColor' with actual color values
+  // Add more styles as needed
+  align-self: flex-end; // Align this item to the bottom
+  margin: 0; // Reset any default margins
+  padding: 0; // Reset any default padding
+`);
+
+const CarouselSwitcher = createStyledMotionComponent('div')(props => `
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  max-height: 100%;
+`);
+
+
 
 const textSize = 'xsmall';
 
@@ -44,6 +77,15 @@ interface BottomBarProps {
 
 const BottomBar: React.FC<BottomBarProps> = ({ toggleTheme }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { activeProject, setActiveProject } = useActiveProject();
+  const projects = Object.values(projectsData)
+  const handlePrevClick = () => {
+    // Logic for previous project
+  };
+
+  const handleNextClick = () => {
+    // Logic for next project
+  };
 
   return (
     <Bar>
@@ -56,6 +98,18 @@ const BottomBar: React.FC<BottomBarProps> = ({ toggleTheme }) => {
         <Text>Alex Figueroa</Text>
         <Text>Full-Stack Software Developer</Text>
       </BrandTextContainer>
+      <ActionItemContainer>
+        <CarouselSwitcher>
+          {projects?.map((project, index) => (
+            <React.Fragment key={index}>
+              <ProjectNumber isActive={project === activeProject} project={activeProject}>
+                {index + 1}
+              </ProjectNumber>
+            </React.Fragment>
+          ))}
+        </CarouselSwitcher>
+      </ActionItemContainer>
+
       <ThemeToggle onClick={toggleTheme} />
     </Bar>
   );

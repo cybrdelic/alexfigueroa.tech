@@ -24,23 +24,31 @@ const glow = keyframes`
 const NextButton = styled.button`
   position: absolute;
   top: 50%;
-  right: 0%;
-  padding: 8px 16px;
+  right: 0px; // Adjust as needed
+  width: 50px; // Circular button
+  height: 50px;
+  border-radius: 50%; // Makes it circular
   border: none;
-  border-radius: 8px;
   background-color: #333;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  animation: ${pulsate} 1.5s infinite, ${glow} 1.5s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: ${pulsate} 2s infinite;
 
   &:hover {
-    background-color: #555;
-    transform: translateY(-50%) scale(1.1); // slight increase in scale
-    box-shadow: 0 0 25px #fff, 0 0 30px #fff; // enhanced glow on hover
-}
+    transform: scale(1.1); // Slightly increase size on hover
+    box-shadow: 0 0 15px #fff, 0 0 20px #fff; // Enhanced glow on hover
+  }
 
+  &:before {
+    content: '➔'; // Arrow icon
+    font-size: 1.5em; // Adjust icon size
+  }
 `;
+
 
 
 const Container = createStyledMotionComponent('div')(props => `
@@ -68,31 +76,6 @@ export const CarouselItem = createStyledMotionComponent('div')(props => css`
     }
 `);
 
-const ProgressBar = createStyledMotionComponent('div')(props => css`
-  position: absolute;
-  bottom: 0%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`);
-
-const Indicator = createStyledMotionComponent('div')(props => css`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  ${backgroundColor(useAlternateTheme(), 'background')}
-  margin: 0 5px;
-  opacity: 0.3;
-  transition: transform 0.3s, opacity 0.3s;
-
-  &.active {
-    transform: scale(1.5);
-    opacity: 1;
-    animation: ${pulsate} 1.5s infinite, ${glow} 1.5s infinite;
-  }
-`);
 
 interface CarouselProps {
   items: ProjectType[];
@@ -140,21 +123,12 @@ const Carousel = ({ items, onActiveProjectChange }: CarouselProps) => {
               key={project.id}
               {...getPropsForStatus(status)} // Apply animation props based on status
             >
-              <ProjectPreview project={project} isActive={status === 'active'} />
+              <ProjectPreview project={project} isActive={status === 'active'} activeIndex={activeIndex} />
             </CarouselItem>
           );
         })}
       </div>
-      <NextButton onClick={next}>Next</NextButton>
-      <ProgressBar>
-        {items.map((_, index) => (
-          <Indicator
-            key={index}
-            className={index === activeIndex ? 'active' : ''}
-            theme={theme}
-          />
-        ))}
-      </ProgressBar>
+      <NextButton onClick={next}></NextButton>
     </Container>
   );
 }

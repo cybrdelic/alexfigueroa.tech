@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { ProjectData, ProjectType } from "../../data/project.data";
 import { useTheme } from "../../hooks/useTheme";
 import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 import { margin, padding } from "../../theming/util-style-functions/spacing";
 import { GridElement } from "../ProjectsView/GridElement";
-import { fontFamily, fontSize, lineHeight } from "../../theming/util-style-functions/typography";
+import { fontFamily, fontSize, letterSpacing, lineHeight } from "../../theming/util-style-functions/typography";
 import { textColor } from "../../theming/util-style-functions/colors";
 import { flexBetween, flexStart } from "../../theming/util-style-functions/layout";
 import SocialMediaIcons from "../SocialMediaIcons";
@@ -19,6 +19,7 @@ import { CheckBox } from "@mui/icons-material";
 interface ProjectPreviewProps {
     project: ProjectType;
     isActive: boolean;
+    activeIndex: number;
 }
 const animationVariants = {
     active: {
@@ -36,14 +37,14 @@ const animationVariants = {
 
 const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
-    font-family: ${props.project.title_font}, sans-serif;
+    ${fontFamily(props.project.title_font)};
+    ${letterSpacing('wider')};
+    font-weight: 200;
     text-transform: uppercase;
     ${fontSize('large')};
     margin: 0rem 0rem;
     padding: 0rem 0rem;
     text-align: left;
-    flex-grow: 1;
-    flex-shrink: 0;
 `);
 
 const BadgeContainer = styled.div`
@@ -56,19 +57,27 @@ const BadgeContainer = styled.div`
 
 
 const StyledDescription = createStyledMotionComponent('p')(props => `
-    $color: ${props?.project?.colors?.secondary ?? 'blue'};
-    ${fontFamily(props.project.title_font)}
+    color: ${props.project.colors.secondary};
+    ${fontFamily()}
     ${fontSize('small')}
-    ${lineHeight('small')}
+    ${lineHeight('small')};
+    ${letterSpacing('wider')};
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     margin-bottom: 1rem;
     text-align: justify;
+    font-weight: 300;
 `);
 
 const FeatureList = createStyledMotionComponent('ul')(props => `
     list-style: none;
     padding: 0;
     margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
 `);
+
 
 const FAQSection = styled.section`
     margin-top: 2rem;
@@ -96,7 +105,7 @@ const FAQList = createStyledMotionComponent('ul')(props => `
 `);
 
 const FAQItem = createStyledMotionComponent('li')(props => `
-    color: ${props.theme.colors.background};
+    color: ${props.project.colors.secondary};
     margin-bottom: 1rem;
     padding: 0.5rem;
     border-bottom: 1px solid ${props.theme.colors.neon};
@@ -120,14 +129,43 @@ const FAQItem = createStyledMotionComponent('li')(props => `
 const FeatureItem = createStyledMotionComponent('li')(props => `
     display: flex;
     align-items: center;
-    color: ${props?.theme?.colors?.neon ?? 'red'};
+    color: ${props.theme.colors.neon};
     margin-bottom: 1rem;
-    ${fontSize('h5')}
-    ${fontFamily()}
-`);
-const ProjectOverview = createStyledMotionComponent('p')(props => `
-    color: ${props?.project?.colors?.secondary ?? 'red'};
+    padding: 0.5rem;
+    background-color: ${props.theme.colors.dark};
+    border-radius: 5px;
+    box-shadow: 0 0 10px ${props.theme.colors.neon};
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: ${props.theme.colors.backgroundLight};
+        box-shadow: 0 0 15px ${props.theme.colors.neon};
+    }
+
     ${fontSize('h6')}
+    ${fontFamily('Orbitron')}
+
+    &::before {
+        content: '';
+        display: inline-block;
+        background-image: url('checkbox-icon-path'); // replace with your checkbox icon path
+        background-size: contain;
+        background-repeat: no-repeat;
+        height: 1rem;
+        width: 1rem;
+        margin-right: 10px;
+    }
+
+    cursor: pointer;
+
+    &:hover, &:focus {
+        // hover and focus styles
+    }
+`);
+
+const ProjectOverview = createStyledMotionComponent('p')(props => `
+    color: ${props?.theme?.colors?.common.white ?? 'red'};
+    ${fontSize('small')}
     text-align: justify;  // Justify the text to align on both left and right sides
     width: 100%;
     max-height: 100%;
@@ -143,15 +181,19 @@ const Bar = createStyledMotionComponent('div')(props => `
 
 const ButtonBar = createStyledMotionComponent('div')(props => `
     grid-gap: 2rem;
-    ${flexStart}
+    ${flexStart};
+    padding-bottom: 1rem;
 `)
 
 
 const NeonText = createStyledMotionComponent('span')(props => `
-    color: ${props.theme.colors.neon}; // Neon color for cyberpunk style
+    color: ${props.theme.colors.common.white}; // Neon color for cyberpunk style
     text-shadow: 0 0 10px ${props.theme.colors.neon}, 0 0 20px ${props.theme.colors.neon};
-    ${fontFamily(props.project.title_font)};
-    font-size: 3.2rem;
+    ${fontFamily()};
+    font-size: 4.5rem;
+    font-weight: 900;
+    ${letterSpacing('normal')};
+    ${lineHeight('heading')};
 `);
 
 
@@ -202,7 +244,7 @@ const LeftSection = styled.div`
     align-items: left;
     flex-grow: 0;
 `;
-const ScrollableSection = styled.div`
+const ScrollableSection = createStyledMotionComponent('div')(props => `
     display: flex;
     flex-direction: column;
     justify-content: space-between; // Align content to start
@@ -213,31 +255,32 @@ const ScrollableSection = styled.div`
     overflow-y: auto; // Enable vertical scrolling
     overflow-x: hidden; // Hide horizontal scrollbar
     scrollbar-width: thin; // For Firefox
-    scrollbar-color: ${props => props.theme.colors.neon} ${props => props.theme.colors.background}; // Custom scrollbar colors
+    scrollbar-color: ${props.theme.colors.neon} ${props.theme.colors.background}; // Custom scrollbar colors
 
     &::-webkit-scrollbar {
         width: 10px; // A bit wider for a bolder look
-        background-color: ${props => props.theme.colors.dark.dark}; // Dark background for contrast
+        background-color: ${props.theme.colors.dark.dark}; // Dark background for contrast
     }
 
     &::-webkit-scrollbar-track {
-        background: ${props => props.theme.colors.background};
-        box-shadow: inset 0 0 10px 10px ${props => props.theme.colors.dark.dark};
-        border-left: 10px solid ${props => props.theme.colors.neon}; // Neon border for a sharp look
+        background: ${props.theme.colors.background};
+        box-shadow: inset 0 0 10px 10px ${props.theme.colors.dark.dark};
+        border-left: 10px solid ${props.theme.colors.neon}; // Neon border for a sharp look
         width: 20px;
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.colors.neon}; // Neon color for thumb
+        background-color: ${props.project.colors.secondary}; // Neon color for thumb
         border-radius: 6px; // Slightly more rounded
-        border: 30px solid ${props => props.theme.colors.dark.dark}; // Dark border for contrast
-        box-shadow: 0 0 10px ${props => props.theme.colors.neon}; // Glowing effect
+        border: 30px solid ${props.theme.colors.dark.dark}; // Dark border for contrast
+        box-shadow: 0 0 10px ${props.theme.colors.neon}; // Glowing effect
         &:hover {
-            background-color: ${props => props.theme.colors.neon}; // Brighter color on hover
-            box-shadow: 0 0 15px ${props => props.theme.colors.neon}; // Stronger glow on hover
+            background-color: ${props.theme.colors.neon}; // Brighter color on hover
+            box-shadow: 0 0 15px ${props.theme.colors.neon}; // Stronger glow on hover
         }
     }
-`;
+
+`);
 
 
 const RightSection = styled.div`
@@ -281,10 +324,75 @@ const HeadlineAndSubtitle = createStyledMotionComponent('div')(props => `
     width: 100%;
 `)
 
+const FeaturesHeader = styled.h2`
+    color: ${props => props.theme.colors.neon};
+    text-shadow: 0 0 10px ${props => props.theme.colors.neon};
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-bottom: 2px solid ${props => props.theme.colors.neon};
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const Tooltip = styled.span`
+    visibility: hidden;
+    width: 120px;
+    background-color: ${props => props.theme.colors.neon};
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: ${props => props.theme.colors.neon} transparent transparent transparent;
+    }
+
+    ${FeatureItem}:hover & {
+        visibility: visible;
+        opacity: 1;
+    }
+`;
+
+const FeatureItemComponent = React.memo(({ feature, theme, isOpen, onToggle }) => (
+    <FeatureItem theme={theme} onClick={() => onToggle(feature.id)}>
+        {feature.title}
+        {isOpen && (
+            <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+            >
+                <p>{feature.description}</p>
+                {/* Additional content like images or links can be added here */}
+            </motion.div>
+        )}
+    </FeatureItem>
+));
+
+
+
 export default function ProjectPreview(props: ProjectPreviewProps) {
     const {
         isActive,
         project,
+        activeIndex
     } = props;
 
     const theme = useTheme();
@@ -292,13 +400,12 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
 
     // Determine the animation variant based on `isActive` prop
     const selectedVariant = isActive ? animationVariants.active : animationVariants.inactive;
+    const [openFeatureId, setOpenFeatureId] = useState(null);
 
-    const renderFeatureItem = (feature: any, index: number) => (
-        <FeatureItem key={index} theme={theme}>
-            <CheckBox />
-            {feature}
-        </FeatureItem>
-    );
+    const handleToggleFeature = useCallback((id) => {
+        setOpenFeatureId(openFeatureId === id ? null : id);
+    }, [openFeatureId]);
+
 
 
     return (
@@ -313,34 +420,31 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
             project={project}
         >
             <BigLeftSection>
-                <TitleSection>
-                    <StyledTitle theme={theme} project={project}>
-                        {project.branding.title}
-                        <BadgeContainer>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                {/* GitHub Repo Badge */}
-                                <a href="https://github.com/alexfigueroa-solutions/TraceMate" target="_blank" rel="noopener noreferrer">
-                                    <img src="https://img.shields.io/github/stars/TraceMate?style=flat-square&logo=github&color=black" alt="GitHub Repo" />
-                                </a>
-
-                                {/* PyPI Version Badge */}
-                                <a href="https://pypi.org/project/TraceMate/" target="_blank" rel="noopener noreferrer">
-                                    <img src="https://img.shields.io/pypi/v/TraceMate?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Version" />
-                                </a>
-
-                                {/* PyPI Downloads Badge */}
-                                <a href="https://pypi.org/project/your-package/" target="_blank" rel="noopener noreferrer">
-                                    <img src="https://img.shields.io/pypi/dm/your-package?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Downloads" />
-                                </a>
-                            </div>
-
-
-                        </BadgeContainer>
-                    </StyledTitle>
-
-                </TitleSection>
                 <NotTitleSection>
                     <LeftSection>
+                        <StyledTitle theme={theme} project={project}>
+                            {activeIndex + 1}. {project.branding.title}
+                            <BadgeContainer>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    {/* GitHub Repo Badge */}
+                                    <a href="https://github.com/alexfigueroa-solutions/TraceMate" target="_blank" rel="noopener noreferrer">
+                                        <img src="https://img.shields.io/github/stars/TraceMate?style=flat-square&logo=github&color=black" alt="GitHub Repo" />
+                                    </a>
+
+                                    {/* PyPI Version Badge */}
+                                    <a href="https://pypi.org/project/TraceMate/" target="_blank" rel="noopener noreferrer">
+                                        <img src="https://img.shields.io/pypi/v/TraceMate?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Version" />
+                                    </a>
+
+                                    {/* PyPI Downloads Badge */}
+                                    <a href="https://pypi.org/project/your-package/" target="_blank" rel="noopener noreferrer">
+                                        <img src="https://img.shields.io/pypi/dm/your-package?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Downloads" />
+                                    </a>
+                                </div>
+
+
+                            </BadgeContainer>
+                        </StyledTitle>
 
                         <HeadlineAndSubtitle>
                             <NeonText theme={theme} project={project}>{project.branding.subtitle}</NeonText>
@@ -350,10 +454,10 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                         </HeadlineAndSubtitle>
                         <Bar>
                             <ButtonBar>
-                                <ElectricButton backgroundColor={project.colors.primary} onClick={() => console.log("Explore Project")}>
+                                <ElectricButton backgroundColor={project.colors.secondary} onClick={() => console.log("Explore Project")}>
                                     Explore Project
                                 </ElectricButton>
-                                <ElectricButton backgroundColor={theme.mode === 'light' ? colors.gray.light : colors.gray.dark} onClick={() => console.log("View Demo")}>
+                                <ElectricButton backgroundColor={'rgba(250,250,250,0.2)'} onClick={() => console.log("View Demo")}>
                                     View Demo
                                 </ElectricButton>
                             </ButtonBar>
@@ -362,9 +466,21 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                             {project.branding.detailedDescription}
                         </ProjectOverview>
                     </LeftSection>
-                    <ScrollableSection>
+                    <ScrollableSection project={project} theme={theme}>
+                        <FeaturesHeader theme={theme}>
+                            Features
+                            {/* You can add an interactive icon or button next to the header if needed */}
+                        </FeaturesHeader>
                         <FeatureList theme={theme}>
-                            {project.branding.features.map(renderFeatureItem)}
+                            {project.branding.features.map((feature) => (
+                                <FeatureItemComponent
+                                    key={feature.id}
+                                    feature={feature}
+                                    isOpen={openFeatureId === feature.id}
+                                    onToggle={handleToggleFeature}
+                                    theme={theme}
+                                />
+                            ))}
                         </FeatureList>
                         <RightSection>
                             <img src="https://www.electronics-lab.com/wp-content/uploads/2018/09/nexmo-cli-installed.jpg" alt="Placeholder Image 1" style={{ width: '100%' }} />
@@ -375,7 +491,7 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                             <FAQHeader theme={theme}>Frequently Asked Questions</FAQHeader>
                             <FAQList theme={theme}>
                                 {project.branding.faqs.map((faq, index) => (
-                                    <FAQItem key={index} theme={theme}>
+                                    <FAQItem project={project} key={index} theme={theme}>
                                         <strong>Q: {faq.question}</strong>
                                         <span>A: {faq.answer}</span>
                                     </FAQItem>

@@ -7,12 +7,12 @@ export type ProjectColorType = {
 
 export const getProjectColors = (): { [key in ProjectKey]: ProjectColorType } => {
     return {
-        WorkspaceAutomator: { primary: '#007bff', secondary: '#FFD700' }, // Gold for contrast
-        Blitzkrieg: { primary: '#28a745', secondary: '#FFC0CB' }, // Light Pink for contrast
-        DynamicTaskLine: { primary: '#17a2b8', secondary: '#FF4500' }, // Orange Red for contrast
-        TraceMate: { primary: '#ffc107', secondary: '#8B4513' }, // Darker Brown for contrast
-        CodebaseSeed: { primary: '#dc3545', secondary: '#00FFFF' }, // Cyan for contrast
-        CodebasedUtils: { primary: '#fd7e14', secondary: '#4682B4' }, // Steel Blue for contrast
-        AlexFigueroaPortfolio: { primary: '#6f42c1', secondary: '#FFD700' } // Gold for contrast
+        WorkspaceAutomator: { primary: '#102027', secondary: '#FFD600' }, // Slate Black with Neon Yellow
+        Blitzkrieg: { primary: '#1B1F3B', secondary: '#FF4081' }, // Deep Midnight Blue with Neon Pink
+        DynamicTaskLine: { primary: '#0D47A1', secondary: '#00E676' }, // Dark Blue with Fluorescent Green
+        TraceMate: { primary: '#1A237E', secondary: '#FFAB40' }, // Indigo with Neon Orange
+        CodebaseSeed: { primary: '#3E2723', secondary: '#69F0AE' }, // Deep Brown with Neon Aquamarine
+        CodebasedUtils: { primary: '#263238', secondary: '#7C4DFF' }, // Dark Blue Grey with Light Purple
+        AlexFigueroaPortfolio: { primary: '#2C3A47', secondary: '#FF5252' } // Dark Slate Grey with Bright Red
     };
 };

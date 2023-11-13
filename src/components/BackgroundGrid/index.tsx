@@ -26,6 +26,35 @@ const ContentContainer = createStyledMotionComponent('div')(props => `
   ${fullViewport};
 `);
 
+// Function to lighten a color
+// Function to manipulate brightness of a hex color
+const adjustColor = (color, amount) => {
+  let usePound = true;
+
+  if (color[0] === "#") {
+    color = color.slice(1);
+    usePound = true;
+  }
+
+  const num = parseInt(color, 16);
+  let r = (num >> 16) + amount;
+  let b = ((num >> 8) & 0x00FF) + amount;
+  let g = (num & 0x0000FF) + amount;
+
+  r = Math.max(Math.min(255, r), 0);
+  b = Math.max(Math.min(255, b), 0);
+  g = Math.max(Math.min(255, g), 0);
+
+  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16).padStart(6, "0");
+};
+
+// Lighten a color
+const lightenColor = (color, percent) => adjustColor(color, percent);
+
+// Darken a color
+const darkenColor = (color, percent) => adjustColor(color, -percent);
+
+
 const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,6 +75,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   ];
 
   const easing = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
 
   const drawGrid = useCallback((ctx, state) => {
     const { width, height } = ctx.canvas;
@@ -87,20 +117,34 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Clear the canvas first
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Create and apply the gradient background
-    const gradient = ctx.createLinearGradient(0, 0, window.innerWidth, window.innerHeight);
-    gradient.addColorStop(0, activeProjectColor);
-    gradient.addColorStop(1, isDarkMode ? 'black' : 'white');
+    // Calculate the gradient center based on mouse position
+    const gradientX = mousePos.current.x / window.innerWidth;
+    const gradientY = mousePos.current.y / window.innerHeight;
+
+    // Adjust the gradient to be more subtle and centered
+    const gradient = ctx.createRadialGradient(
+      canvas.width * gradientX,
+      canvas.height * gradientY,
+      0,
+      canvas.width * gradientX,
+      canvas.height * gradientY,
+      Math.max(canvas.width, canvas.height) / 2
+    );
+
+    const brighterColor = darkenColor(activeProjectColor, 35);
+    const darkerColor = darkenColor(activeProjectColor, 50);
+
+    gradient.addColorStop(0, brighterColor);
+    gradient.addColorStop(1, darkerColor);
+
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Then draw the grid on top of the background
     drawGrid(ctx, state);
-
   }, [drawGrid, activeProjectColor, isDarkMode]);
+
 
   const throttledDraw = _.throttle(draw, 100 / 15);
 

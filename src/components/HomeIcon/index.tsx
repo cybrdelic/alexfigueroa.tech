@@ -33,7 +33,7 @@ const StyledText = createStyledMotionComponent('h2')(props => `
   ${fontSize('h6')}
   margin: 0;  // Reset default margin
   align-self: flex-end;  // Push to the bottom
-  ${fontFamily()}
+  ${fontFamily('Nova Square')}
 `);
 
 const StyledIconContainer = createStyledMotionComponent('div')(props => `

@@ -17,7 +17,8 @@ export const lineHeight = (height: keyof typeof typography.lineHeight) => `
 `;
 
 export const fontFamily = (customFont?: string) => {
-  return `font-family: ${customFont ?? projectsData.WorkspaceAutomator.title_font};`
+  return `font-family: ${customFont ?? 'Poppins'}, sans-serif;`;
 }
+
 
 // ... Add more as needed

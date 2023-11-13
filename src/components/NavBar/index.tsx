@@ -39,7 +39,7 @@ export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <NavBarContainer>
-      <HomeIcon title="Home" />
+      <HomeIcon title="Alex Figueroa" />
       <NavMenu links={links} toggleTheme={toggleTheme} />
     </NavBarContainer>
   );
