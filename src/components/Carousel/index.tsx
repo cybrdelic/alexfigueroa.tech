@@ -49,7 +49,6 @@ const Container = createStyledMotionComponent('div')(props => `
   flex-direction: row;
   justify-content: space-between;
   width: 100vw;
-  height: 100%;
   perspective: 1500px;
 `);
 
@@ -62,8 +61,7 @@ export const CarouselItem = createStyledMotionComponent('div')(props => css`
   transform-style: preserve-3d;
   filter: brightness(1.2);
   padding-left: 3%;
-  flex-grow: 1;
-  flex-shrink: 1;
+  max-height: 100%;
   z-index: ${zIndex.default};
   &:hover {
     filter: brightness(1.5); // brighten on hover

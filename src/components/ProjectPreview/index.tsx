@@ -38,13 +38,20 @@ const StyledTitle = createStyledMotionComponent('h1')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
     font-family: ${props.project.title_font}, sans-serif;
     text-transform: uppercase;
-    ${fontSize('poster')};
+    ${fontSize('large')};
     margin: 0rem 0rem;
     padding: 0rem 0rem;
     text-align: left;
     flex-grow: 1;
     flex-shrink: 0;
 `);
+
+const BadgeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; // Space between badges
+  margin-top: 1rem; // Adjust as needed
+`;
 
 
 
@@ -63,17 +70,51 @@ const FeatureList = createStyledMotionComponent('ul')(props => `
     margin-top: 1rem;
 `);
 
+const FAQSection = styled.section`
+    margin-top: 2rem;
+    padding: 1rem;
+    margin-bottom: 0rem;
+    border-radius: 8px;
+    background-color: ${props => props.theme.colors.dark.dark};
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+`;
+
+const FAQHeader = styled.h2`
+    color: ${props => props.theme.colors.common.white};
+    text-shadow: 0 0 10px ${props => props.theme.colors.neon};
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+`;
+
 const FAQList = createStyledMotionComponent('ul')(props => `
     list-style: none;
     padding: 0;
-    margin-top: 1rem;
     ${fontSize('small')}
+    color: ${props.theme.colors.secondary};
 `);
 
 const FAQItem = createStyledMotionComponent('li')(props => `
-    color: ${props?.theme?.colors?.secondary ?? 'green'};
-    margin-bottom: 0.5rem;
+    color: ${props.theme.colors.background};
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid ${props.theme.colors.neon};
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: ${props.theme.colors.backgroundLight};
+        box-shadow: 0 0 10px ${props.theme.colors.neon};
+    }
+
+    & strong {
+        display: block;
+        color: ${props.theme.colors.primary};
+        margin-bottom: 0.5rem;
+    }
 `);
+
 
 
 const FeatureItem = createStyledMotionComponent('li')(props => `
@@ -81,22 +122,21 @@ const FeatureItem = createStyledMotionComponent('li')(props => `
     align-items: center;
     color: ${props?.theme?.colors?.neon ?? 'red'};
     margin-bottom: 1rem;
-    ${fontSize('h6')}
+    ${fontSize('h5')}
     ${fontFamily()}
 `);
 const ProjectOverview = createStyledMotionComponent('p')(props => `
     color: ${props?.project?.colors?.secondary ?? 'red'};
     ${fontSize('h6')}
-    max-width: 40rem;  // Maximum width for better readability
     text-align: justify;  // Justify the text to align on both left and right sides
     width: 100%;
-    ${fontFamily(props.project.title_font)}
+    max-height: 100%;
+    ${fontFamily()}
     ${lineHeight('base')};
 `)
 
 
 const Bar = createStyledMotionComponent('div')(props => `
-    margin-top: 2rem;
     width: 100%;
     ${flexBetween}
 `)
@@ -117,23 +157,19 @@ const NeonText = createStyledMotionComponent('span')(props => `
 
 const ProjectWrapper = createStyledMotionComponent('div')(props => `
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
-    background-color: ${props.theme.colors.background[props.theme.mode]};
     border-radius: 10px;
     box-shadow: 0 4px 10px ${props.theme.colors.shadow};
-    flex-grow: 0;
 `);
 
 const BigLeftSection = styled.div`
     display: flex;
-    flex-direction: column; // Stack children vertically
-    justify-content: space-between; // Space out children
-    align-items: stretch; // Stretch children to fill the width
-    width: 100%; // Full width
-    flex-grow: 0; // Grow to fill available space
-    flex-shrink: 1;
-
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1; // Take up remaining space
+    margin-right: 5rem; // Adjust as needed to align with RightSection
 `;
 
 
@@ -145,7 +181,7 @@ const TitleSection = styled.div`
     margin: 0rem 0rem;
     padding: 0rem 0rem;
     flex-basis: 10%;
-    flex-grow: 1;
+    flex-grow: 0;
     flex-shrink: 0;
     height: 100%;
 `;
@@ -154,10 +190,8 @@ const NotTitleSection = styled.div`
     display: flex;
     flex-direction: row; // Arrange Left and Center sections vertically
     width: 100%; // Ensure it takes the full width
-    justify-content: stretch;
-    gap: 5%;
     flex-basis: 90%;
-    flex-grow: 0; // Allow to grow
+    flex-grow: 1; // Allow to grow
     flex-shrink: 1; // Allow to shrink if needed
 `;
 const LeftSection = styled.div`
@@ -166,31 +200,78 @@ const LeftSection = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: left;
-    flex-shrink: 1;
     flex-grow: 0;
 `;
-const CenterSection = styled.div`
-    flex-basis: 40%;
+const ScrollableSection = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between; // Align content to start
     align-items: flex-start;
-    ${padding('md')};
-    height: 100%;
-    width: 100%;
+    padding: 1rem; // Unified padding
+    max-height: 30rem;
+    width: 60%;
+    overflow-y: auto; // Enable vertical scrolling
+    overflow-x: hidden; // Hide horizontal scrollbar
+    scrollbar-width: thin; // For Firefox
+    scrollbar-color: ${props => props.theme.colors.neon} ${props => props.theme.colors.background}; // Custom scrollbar colors
+
+    &::-webkit-scrollbar {
+        width: 10px; // A bit wider for a bolder look
+        background-color: ${props => props.theme.colors.dark.dark}; // Dark background for contrast
+    }
+
+    &::-webkit-scrollbar-track {
+        background: ${props => props.theme.colors.background};
+        box-shadow: inset 0 0 10px 10px ${props => props.theme.colors.dark.dark};
+        border-left: 10px solid ${props => props.theme.colors.neon}; // Neon border for a sharp look
+        width: 20px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.colors.neon}; // Neon color for thumb
+        border-radius: 6px; // Slightly more rounded
+        border: 30px solid ${props => props.theme.colors.dark.dark}; // Dark border for contrast
+        box-shadow: 0 0 10px ${props => props.theme.colors.neon}; // Glowing effect
+        &:hover {
+            background-color: ${props => props.theme.colors.neon}; // Brighter color on hover
+            box-shadow: 0 0 15px ${props => props.theme.colors.neon}; // Stronger glow on hover
+        }
+    }
 `;
 
+
 const RightSection = styled.div`
-    flex-basis: 15%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    ${padding('md')};
-    gap: 0px;
-    flex-shrink: 1;
-    flex-grow: 1; // Prevent shrinking
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #121212;
+    color: ${props => props.theme.colors.neon};
+    border-left: 3px solid ${props => props.theme.colors.neon};
+    height: 100%;
+    width: 100%;
+    box-shadow: inset 0 0 10px ${props => props.theme.colors.neon};
+
+    img {
+        border: 3px solid ${props => props.theme.colors.neon};
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px ${props => props.theme.colors.neon};
+        }
+    }
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.colors.neon};
+        border-radius: 10px;
+    }
 `;
+
 
 const HeadlineAndSubtitle = createStyledMotionComponent('div')(props => `
     display: flex;
@@ -235,7 +316,28 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                 <TitleSection>
                     <StyledTitle theme={theme} project={project}>
                         {project.branding.title}
+                        <BadgeContainer>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                {/* GitHub Repo Badge */}
+                                <a href="https://github.com/alexfigueroa-solutions/TraceMate" target="_blank" rel="noopener noreferrer">
+                                    <img src="https://img.shields.io/github/stars/TraceMate?style=flat-square&logo=github&color=black" alt="GitHub Repo" />
+                                </a>
+
+                                {/* PyPI Version Badge */}
+                                <a href="https://pypi.org/project/TraceMate/" target="_blank" rel="noopener noreferrer">
+                                    <img src="https://img.shields.io/pypi/v/TraceMate?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Version" />
+                                </a>
+
+                                {/* PyPI Downloads Badge */}
+                                <a href="https://pypi.org/project/your-package/" target="_blank" rel="noopener noreferrer">
+                                    <img src="https://img.shields.io/pypi/dm/your-package?style=flat-square&logo=pypi&logoColor=white&color=black" alt="PyPI Downloads" />
+                                </a>
+                            </div>
+
+
+                        </BadgeContainer>
                     </StyledTitle>
+
                 </TitleSection>
                 <NotTitleSection>
                     <LeftSection>
@@ -246,22 +348,6 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                                 {project.branding.brandedHook}
                             </StyledDescription>
                         </HeadlineAndSubtitle>
-                        <ProjectOverview theme={theme} project={project}>
-                            {project.branding.detailedDescription}
-                        </ProjectOverview>
-                    </LeftSection>
-                    <CenterSection>
-                        <FeatureList theme={theme}>
-                            {project.branding.features.map(renderFeatureItem)}
-                        </FeatureList>
-
-                        <FAQList theme={theme}>
-                            {project.branding.faqs.map((faq, index) => (
-                                <FAQItem key={index} theme={theme}>
-                                    <strong>Q: {faq.question}</strong> <br /> A: {faq.answer}
-                                </FAQItem>
-                            ))}
-                        </FAQList>
                         <Bar>
                             <ButtonBar>
                                 <ElectricButton backgroundColor={project.colors.primary} onClick={() => console.log("Explore Project")}>
@@ -272,14 +358,35 @@ export default function ProjectPreview(props: ProjectPreviewProps) {
                                 </ElectricButton>
                             </ButtonBar>
                         </Bar>
-                    </CenterSection>
+                        <ProjectOverview theme={theme} project={project}>
+                            {project.branding.detailedDescription}
+                        </ProjectOverview>
+                    </LeftSection>
+                    <ScrollableSection>
+                        <FeatureList theme={theme}>
+                            {project.branding.features.map(renderFeatureItem)}
+                        </FeatureList>
+                        <RightSection>
+                            <img src="https://www.electronics-lab.com/wp-content/uploads/2018/09/nexmo-cli-installed.jpg" alt="Placeholder Image 1" style={{ width: '100%' }} />
+                            <img src="https://th.bing.com/th/id/OIP.cJ2ELTiATcCdCr13_B6kYgHaFj?pid=ImgDet&rs=1" alt="Placeholder Image 2" style={{ width: '100%' }} />
+                            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20190502161414/Screenshot-from-2019-05-02-16-04-50.png" alt="Placeholder Image 3" style={{ width: '100%' }} />
+                        </RightSection>
+                        <FAQSection theme={theme}>
+                            <FAQHeader theme={theme}>Frequently Asked Questions</FAQHeader>
+                            <FAQList theme={theme}>
+                                {project.branding.faqs.map((faq, index) => (
+                                    <FAQItem key={index} theme={theme}>
+                                        <strong>Q: {faq.question}</strong>
+                                        <span>A: {faq.answer}</span>
+                                    </FAQItem>
+                                ))}
+                            </FAQList>
+                        </FAQSection>
+                    </ScrollableSection>
+
+
                 </NotTitleSection>
             </BigLeftSection>
-            <RightSection>
-                <img src="https://via.placeholder.com/150" alt="Placeholder Image 1" style={{ width: '100%' }} />
-                <img src="https://via.placeholder.com/150" alt="Placeholder Image 2" style={{ width: '100%' }} />
-                <img src="https://via.placeholder.com/150" alt="Placeholder Image 3" style={{ width: '100%' }} />
-            </RightSection>
         </ProjectWrapper>
     );
 
