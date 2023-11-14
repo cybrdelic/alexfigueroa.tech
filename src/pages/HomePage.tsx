@@ -9,9 +9,7 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = () => {
 
   return (
-    <PageTransition>
-      <HeroComponent />
-    </PageTransition>
+    <HeroComponent />
   );
 }
 

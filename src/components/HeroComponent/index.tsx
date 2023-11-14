@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
-import { motion, useScroll, useTransform, useViewportScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTheme } from '../../hooks/useTheme';
 import { animated, useSpring } from 'react-spring';
 import { flexColumn } from '../../theming/util-style-functions/layout';
 import { padding } from '../../theming/util-style-functions/spacing';
-import { backgroundColor, textColor } from '../../theming/util-style-functions/colors';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
 import { rounded } from '../../theming/util-style-functions/misc';
 import { fontFamily, fontSize, fontWeight, letterSpacing } from '../../theming/util-style-functions/typography';
@@ -13,10 +12,11 @@ import { projectsData } from '../../data/project.data';
 
 const HeroContainer = styled(motion.div)`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
 `;
 
 const Pane = styled.div`
@@ -60,15 +60,13 @@ const CTASection = styled(Pane)`
   width: 30%;
 `;
 
-const RightPane = styled(Pane)`
-  text-align: left;
-  border-radius: 25px;
-  background-color: rgba(250,250,250,1);
-  height: 20rem;
-  max-height: 20rem;
-  width: 40%;
-  margin-left: 1rem;
-  flex-grow: 1;
+const RightPane = styled('div')`
+width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: stretch;
+align-items: stretch;
+background-color: black;
 `;
 
 const revealAnimation = keyframes`
@@ -97,7 +95,6 @@ const HeroTagline = createStyledMotionComponent(animated.h2)(props => `
   ${fontSize('small')}
   ${letterSpacing('wider')}
   font-weight: 900;
-  background-color: black;
   padding: 0.5rem;
   border-radius: 10px;
   color: white;
@@ -114,7 +111,6 @@ const TopHalf = createStyledMotionComponent('div')(props => css`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  min-height: 100%;
 `)
 
 const HeroSection = createStyledMotionComponent('div')(props => `
@@ -128,14 +124,73 @@ const Top = createStyledMotionComponent('div')(props => css`
   display: flex;
   flex-direction: row;
 `)
-const Bottom = createStyledMotionComponent('div')(props => css`
+const Center = createStyledMotionComponent('div')(props => css`
   display: flex;
   flex-direction: row;
   width: 100%;
 `)
 
+
+
+const Bottom = createStyledMotionComponent('div')(props => css`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
+`)
+
+const AboutSection = createStyledMotionComponent('div')(props => css`
+  ${flexColumn}
+  ${fontSize('h6')}
+  ${fontFamily()}
+  ${fontWeight('normal')}
+  color: ${props => props.theme.colors.text};
+  width: 100%;
+  margin-right: 1rem;
+  flex-grow: 1;
+  min-height: 20rem;
+  max-height: 20rem;
+`);
+
+const BlogPreviewSection = createStyledMotionComponent('div')(props => css`
+  display: flex;
+  flex-direction: row;
+  ${padding('md')}
+  ${fontSize('small')}
+  ${fontFamily('sans-serif')}
+  ${fontWeight('normal')}
+  color: ${props => props.theme.colors.text};
+  gap: 1rem;
+  flex-grow: 1;
+`);
+
+const BlogPreview = createStyledMotionComponent('div')(props => css`
+  ${padding('sm')}
+  border-radius: 15px;
+  background-color: ${props.theme.colors.primary};
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props.theme.colors.secondary};
+  }
+`);
+
+const TechAndToolsSection = createStyledMotionComponent('div')(props => css`
+  ${flexColumn}
+  ${fontSize('small')}
+  ${fontFamily('monospace')}
+  ${fontWeight('bold')}
+  color: ${props => props.theme.colors.text};
+  background-color: black;
+  width: 100%;
+  flex-grow: 1;
+`);
+
 const HeroComponent = () => {
   const theme = useTheme();
+
   const springProps = useSpring({
 
     opacity: 1,
@@ -143,6 +198,58 @@ const HeroComponent = () => {
     config: { tension: 0, friction: 14 },
     duration: 0.1
   });
+
+  const BlogPreviewComponent = ({ title, description, link }) => (
+    <BlogPreview style={{}}>
+      <h3>{title}</h3>
+      <p>{description}</p>
+      <a href={link} style={{ color: 'white', textDecoration: 'underline' }}>
+        Read more
+      </a>
+    </BlogPreview>
+  );
+
+  const AboutSectionComponent = () => (
+    <AboutSection>
+      <h2>About Me</h2>
+      <p>I am a full-stack developer with expertise in modern web technologies...</p>
+      {/* Add more personal or professional details here */}
+    </AboutSection>
+  );
+
+  const TechAndToolsSectionComponent = () => (
+    <TechAndToolsSection>
+      <h2>Technologies & Tools</h2>
+      <ul>
+        <li>React</li>
+        <li>Node.js</li>
+        <li>GraphQL</li>
+        {/* List more technologies and tools here */}
+      </ul>
+    </TechAndToolsSection>
+  );
+
+
+
+  const BlogPreviewSectionComponent = () => {
+    const blogPosts = [
+      { title: "Blog Post 1", description: "Description of blog post 1", link: "/blog/1" },
+      { title: "Blog Post 1", description: "Description of blog post 1", link: "/blog/1" },
+      { title: "Blog Post 1", description: "Description of blog post 1", link: "/blog/1" },
+      { title: "Blog Post 1", description: "Description of blog post 1", link: "/blog/1" },
+      // Add more blog posts here
+    ];
+
+    return (
+      <BlogPreviewSection>
+        {blogPosts.map((post, index) => (
+          <BlogPreviewComponent key={index} title={post.title} description={post.description} link={post.link} />
+        ))}
+      </BlogPreviewSection>
+    );
+  };
+
+
 
   return (
     <TopHalf>
@@ -168,12 +275,16 @@ const HeroComponent = () => {
       </Top>
       <Bottom>
         <HeroContainer>
-          <li style={{ backgroundImage: `url('/background.png')`, width: '60rem', borderRadius: '25px', height: '100%' }}>
-          </li>
-          <RightPane>
+          <li style={{ backgroundImage: `url('/background.png')`, width: '60rem', height: '20rem' }}>
 
-          </RightPane>
+          </li>
+          <TechAndToolsSectionComponent />
+
         </HeroContainer>
+        <RightPane>
+          <AboutSectionComponent />
+          <BlogPreviewSectionComponent />
+        </RightPane>
       </Bottom>
 
     </TopHalf >
