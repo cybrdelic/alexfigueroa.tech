@@ -27,6 +27,7 @@ const MainContent = createStyledMotionComponent('div')(props => `
 
 const LayoutContainer = createStyledMotionComponent('div')(props => `
     ${padding("xxl")}
+    overflow-x: hidden;
     ${coverParent}
 `)
 
