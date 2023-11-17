@@ -1,56 +1,54 @@
-import React, { useEffect } from "react";
+import React from "react";
+import styled from "styled-components";
 import BackgroundImage from "../BackgroundGrid";
 import NavBar from "../NavBar";
 import BottomBar from "../BottomBar";
 import { baseRoutes } from "../../routing/routes";
-import styled from "styled-components";
-import { useCursorEffect } from "../../hooks/useCursorEffect";
-import { useNavigate } from "react-router-dom";
-import { padding } from "../../theming/util-style-functions/spacing";
-import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
 
 interface SiteLayoutProps {
-    children: React.ReactNode[] | React.ReactNode;
+    children: React.ReactNode;
     toggleTheme: () => void;
 }
+
+const NAV_BAR_HEIGHT = '5vh';
+const BOTTOM_BAR_HEIGHT = '3vh';
+const PADDING_AMOUNT = '3rem'; // Assuming you want to maintain a padding of 3rem
 
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh; // Ensure it covers the full viewport height
-  box-sizing: border-box; // Include padding in the height calculation
+  justify-content: space-between;
+  min-height: 100vh;
+  box-sizing: border-box;
 `;
-
-const MainContent = styled.div`
-  flex-grow: 1;
-  overflow: auto; // Allow scrolling if content overflows
-  min-height: 80vh;
-  padding-left: 3rem;
-  padding-right:  3rem;
-`;
-
-
 
 const NavBarContainer = styled.div`
   position: sticky;
   top: 0;
-  z-index: 10; // Ensure it's above the MainContent
-  // Rest of your NavBar styles
-  height: 10vh;
-  ${padding('xxl')}
+  z-index: 10;
+  height: ${NAV_BAR_HEIGHT};
+  padding: 0 ${PADDING_AMOUNT};
+  background-color: /* your navbar background color here */;
+`;
+
+const MainContent = styled.div`
+  flex-grow: 1;
+  overflow: auto;
+  max-height: calc(100vh - ${NAV_BAR_HEIGHT} - ${BOTTOM_BAR_HEIGHT} - 3 * ${PADDING_AMOUNT});
+  margin: 0 ${PADDING_AMOUNT}; // Adding margin instead of padding to prevent content width issues
 `;
 
 const BottomBarContainer = styled.div`
   position: sticky;
   bottom: 0;
-  height: 10vh;
-  z-index: 10; // Ensure it's above the MainContent
-  // Rest of your BottomBar styles
-  ${padding('xxl')}
+  z-index: 10;
+  height: ${BOTTOM_BAR_HEIGHT};
+  padding-right: ${PADDING_AMOUNT};
+  padding-left: ${PADDING_AMOUNT};
+  padding-bottom: ${PADDING_AMOUNT};
 `;
 
-export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
-    // Rest of your component logic
+const SiteLayout: React.FC<SiteLayoutProps> = ({ children, toggleTheme }) => {
     return (
         <BackgroundImage>
             <LayoutContainer>
@@ -64,4 +62,6 @@ export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
             </LayoutContainer>
         </BackgroundImage>
     );
-}
+};
+
+export default SiteLayout;

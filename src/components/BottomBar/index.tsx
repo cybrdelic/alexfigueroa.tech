@@ -12,18 +12,12 @@ import { projectsData } from '../../data/project.data';
 
 const Bar = styled.div`
   z-index: ${zIndex.foreground + 10};
-  height: 10%;
-  min-height: 10%;
-  max-height: 10%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end; // Correct alignment
 
-  ${mq('md')} {
-    bottom: ${spacing.md};
-    right: ${spacing.md};
-  }
 `;
 
 const BrandTextContainer = createStyledMotionComponent('div')(props => `

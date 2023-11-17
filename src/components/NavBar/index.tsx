@@ -28,7 +28,7 @@ const NavBarContainer = createStyledMotionComponent('div')(props => `
   display: flex;
   align-items: center; // vertically center children
   justify-content: space-between; // space children out evenly
-
+  padding-top: 3rem;
 
 `)
 
