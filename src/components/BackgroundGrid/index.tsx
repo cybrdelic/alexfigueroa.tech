@@ -4,7 +4,6 @@ import { useTheme } from '../../hooks/useTheme';
 import _ from 'lodash';
 import { absoluteTopLeft, fullViewport } from '../../theming/util-style-functions/position';
 import { createStyledMotionComponent } from '../../theming/styled-motion-utils/createStyledMotionComponent';
-import { padding } from '../../theming/util-style-functions/spacing';
 import { useActiveProject } from '../../contexts/ActiveProjectContext';
 
 interface BackgroundImageProps {
@@ -14,20 +13,24 @@ interface BackgroundImageProps {
 const ParentContainer = styled.div`
   ${absoluteTopLeft}
   pointer-events: none;
-`;
-
-const CanvasContainer = styled.div`
   width: 100%;
   height: 100%;
-  ${absoluteTopLeft};
+  overflow: hidden;
+`;
+
+const CanvasContainer = styled.canvas`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 `;
 
 const ContentContainer = createStyledMotionComponent('div')(props => `
   ${fullViewport};
 `);
 
-// Function to lighten a color
-// Function to manipulate brightness of a hex color
 const adjustColor = (color, amount) => {
   let usePound = true;
 
@@ -61,9 +64,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const isDarkMode = useMemo(() => theme.mode === 'dark', [theme]);
   const mousePos = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
   const { activeProject } = useActiveProject();
-  const activeProjectColor = activeProject?.colors?.primary ?? 'green'
-
-
+  const activeProjectColor = activeProject?.colors?.primary ?? 'green';
   const distanceBetweenPoints = (x1, y1, x2, y2) =>
     Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
@@ -75,7 +76,6 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   ];
 
   const easing = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
 
   const drawGrid = useCallback((ctx, state) => {
     const { width, height } = ctx.canvas;
@@ -89,9 +89,9 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
         const fadeFactor = j / height * 1.2;
 
         const combinedAlpha = baseAlpha * fadeFactor;
-        ctx.lineWidth = 1.25 + 4 * (easedDistFromMouse);
+        ctx.lineWidth = 1.25 + 4 * easedDistFromMouse;
         ctx.strokeStyle = isDarkMode
-          ? `rgba(255, 255, 255, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`
+          ? `rgba(255, 255, 255, ${0.06 * combinedAlpha - easedDistFromMouse / 20})`
           : `rgba(0, 0, 0, ${0.05 * combinedAlpha - easedDistFromMouse / 20})`;
 
         const size = state.gap + Math.sin(distFromMouse / state.distortion) * state.gap;
@@ -105,10 +105,8 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
     const state = {
       gap: 15,
       distortion: 100000,
@@ -116,14 +114,10 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Calculate the gradient center based on mouse position
     const gradientX = mousePos.current.x / window.innerWidth;
     const gradientY = mousePos.current.y / window.innerHeight;
-
-    // Adjust the gradient to be more subtle and centered
     const gradient = ctx.createRadialGradient(
       canvas.width * gradientX,
       canvas.height * gradientY,
@@ -135,7 +129,6 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
     const brighterColor = darkenColor(activeProjectColor, 35);
     const darkerColor = darkenColor(activeProjectColor, 50);
-
     gradient.addColorStop(0, brighterColor);
     gradient.addColorStop(1, darkerColor);
 
@@ -145,8 +138,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
     drawGrid(ctx, state);
   }, [drawGrid, activeProjectColor, isDarkMode]);
 
-
-  const throttledDraw = _.throttle(draw, 100 / 15);
+  const throttledDraw = _.throttle(draw, 1000 / 15);
 
   useEffect(() => {
     if (window.innerWidth > 768) {
@@ -166,9 +158,7 @@ const BackgroundImage = ({ children }: BackgroundImageProps) => {
 
   return (
     <ParentContainer>
-      <CanvasContainer>
-        <canvas ref={canvasRef} style={{ position: 'absolute', zIndex: 0, backgroundColor: isDarkMode ? 'black' : 'white' }} />
-      </CanvasContainer>
+      <CanvasContainer ref={canvasRef} />
       <ContentContainer>
         {children}
       </ContentContainer>
