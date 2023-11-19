@@ -1,5 +1,5 @@
 // Import necessary libraries
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import { motion, useAnimation } from 'framer-motion';
 import { ProjectKey, ProjectType, projectsData } from '../../data/project.data';
@@ -112,9 +112,22 @@ const SideText = styled(motion.div)`
 const PageSwitcher = () => {
     const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
     const controls = useAnimation();
-    
+    const splineRef = useRef(null);
+    const { activeProject, setActiveProject } = useActiveProject()
+
+    useEffect(() => {
+        if (splineRef.current) {
+            switch (activeProject?.branding?.title) {
+                case 'WorkspaceAutomator':
+                    splineRef?.current?.play('WorkspaceAutomatorAnimation');
+                    break;
+                // ... other cases for different projects
+            }
+        }
+    }, [activeProject]);
+
+
     // Assuming `activeProject` should hold a key of the project, not the project object itself.
-    const [activeProject, setActiveProject] = useState<ProjectKey | null>('WorkspaceAutomator');
     const [carouselScrolledToEnd, setCarouselScrolledToEnd] = useState(false);
     // ... other states and hooks
 
@@ -169,9 +182,9 @@ const PageSwitcher = () => {
         return () => window.removeEventListener('mousemove', updateCursorPos);
     }, []);
 
-    const handleProjectClick = (key: ProjectKey) => {
-        setActiveProject(key);
-        setDynamicBackground(projectsData[key]?.colors?.primary);
+    const handleProjectClick = (project: ProjectType) => {
+        setActiveProject(project);
+        setDynamicBackground(project?.colors?.primary);
     };
 
 
@@ -188,7 +201,7 @@ const PageSwitcher = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
                 >
-                    {projectsData[activeProject ?? 'WorkspaceAutomator']?.branding?.subtitle}
+                    {activeProject?.branding?.subtitle}
                 </SideText>
                 <ImageWrap
                     initial={{ scale: 1.03 }}
@@ -196,7 +209,9 @@ const PageSwitcher = () => {
                     transition={{ duration: 0.5 }}
                     style={{}} // Use the secondary color
                 >
-                    <Spline scene="https://prod.spline.design/V1sMeeITKclNo7QY/scene.splinecode" />
+                    <Spline
+                        ref={splineRef}
+                        scene="https://prod.spline.design/V1sMeeITKclNo7QY/scene.splinecode" />
                 </ImageWrap>
                 <SlideButtonList id="slide-button-list"
                     onFocus={handleCarouselFocus}
@@ -204,11 +219,11 @@ const PageSwitcher = () => {
                     {Object.entries(projectsData).map(([key, project]) => (
                         <SlideButton
                             key={key}
-                            className={activeProject === key ? 'active' : ''}
+                            className={activeProject === project ? 'active' : ''}
                             onMouseEnter={() => controls.start({ scale: 1.1 })}
                             onMouseLeave={() => controls.start({ scale: 1 })}
                             // Pass a function that will call handleProjectClick with the correct key when clicked
-                            onClick={() => handleProjectClick(key as ProjectKey)}
+                            onClick={() => handleProjectClick(project)}
                         >
                             {project.branding.title}
                         </SlideButton>
