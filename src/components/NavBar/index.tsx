@@ -28,8 +28,7 @@ const NavBarContainer = createStyledMotionComponent('div')(props => `
   display: flex;
   align-items: center; // vertically center children
   justify-content: space-between; // space children out evenly
-  padding: 0 2rem; // some horizontal padding to keep content away from edges
-
+  padding-top: 3rem;
 
 `)
 
@@ -39,7 +38,7 @@ export default function NavBar({ links, toggleTheme }: NavBarProps) {
 
   return (
     <NavBarContainer>
-      <HomeIcon title="Home" />
+      <HomeIcon title="Alex Figueroa" />
       <NavMenu links={links} toggleTheme={toggleTheme} />
     </NavBarContainer>
   );

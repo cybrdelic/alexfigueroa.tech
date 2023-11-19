@@ -16,6 +16,7 @@ import { padding } from './theming/util-style-functions/spacing.ts';
 import { mq } from './theming/util-style-functions/responsive.ts';
 import { spacing, zIndex } from './theming/design-tokens/spacing.ts';
 import { fixedBottomRight } from './theming/util-style-functions/position.ts';
+import { ActiveProjectProvider } from './contexts/ActiveProjectContext.tsx';
 
 // BackgroundImage and CustomCursor are components, so we can lazy load them
 const CustomCursor = lazy(() => import('./components/Cursor/index.tsx'));
@@ -45,28 +46,30 @@ const App: React.FC = () => {
 
 
   return (
-    <AppThemeProvider>
-      <CursorProvider>
-        <Router>
-          <Suspense fallback={<div>Loading...</div>}>
-            <CustomCursor />
-            <ThemeContext.Consumer>
-              {(theme) =>
-                <ThemeToggleContext.Consumer>
-                  {(toggleTheme) =>
-                    theme && toggleTheme ?
-                      <SiteLayout toggleTheme={toggleTheme}>
-                        <RoutesWrapper />
-                      </SiteLayout>
-                      : null
-                  }
-                </ThemeToggleContext.Consumer>
-              }
-            </ThemeContext.Consumer>
-          </Suspense>
-        </Router>
-      </CursorProvider>
-    </AppThemeProvider>
+    <ActiveProjectProvider>
+      <AppThemeProvider>
+        <CursorProvider>
+          <Router>
+            <Suspense fallback={<div>Loading...</div>}>
+              <CustomCursor />
+              <ThemeContext.Consumer>
+                {(theme) =>
+                  <ThemeToggleContext.Consumer>
+                    {(toggleTheme) =>
+                      theme && toggleTheme ?
+                        <SiteLayout toggleTheme={toggleTheme}>
+                          <RoutesWrapper />
+                        </SiteLayout>
+                        : null
+                    }
+                  </ThemeToggleContext.Consumer>
+                }
+              </ThemeContext.Consumer>
+            </Suspense>
+          </Router>
+        </CursorProvider>
+      </AppThemeProvider>
+    </ActiveProjectProvider>
   );
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const getAnimationProps = (status) => {
+const getAnimationProps = (status: any) => {
     const unifiedTransition = {
         duration: 0.5,
         ease: [0.9, 0.67, 0.53, 0.99] // your chosen bezier curve
@@ -74,8 +74,10 @@ const getAnimationProps = (status) => {
 
 
 
-const useCarouselLayoutAnimation = (items) => {
+const useCarouselLayoutAnimation = (items: any) => {
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const getActiveProject = () => items[activeIndex];
 
     const next = () => {
         setActiveIndex((prev) => (prev + 1) % items.length);
@@ -84,7 +86,7 @@ const useCarouselLayoutAnimation = (items) => {
     const getPreviousIndex = () => (activeIndex - 1 + items.length) % items.length;
     const getNextIndex = () => (activeIndex + 1) % items.length;
 
-    const getPropsForStatus = (status) => {
+    const getPropsForStatus = (status: any) => {
         switch (status) {
             case 'previous': return getAnimationProps('previous');
             case 'active': return getAnimationProps('active');
@@ -98,7 +100,8 @@ const useCarouselLayoutAnimation = (items) => {
         activeIndex,
         getPreviousIndex,
         getNextIndex,
-        getPropsForStatus
+        getPropsForStatus,
+        getActiveProject
     };
 };
 

@@ -17,6 +17,7 @@ const StyledIconButton = createStyledMotionComponent(IconButton)(({ theme }) => 
     z-index: ${zIndex.modal};
     ${margin('md')}
     color: ${textColor(theme, 'text')};
+    flex-basis: 15%;
 `);
 
 const ThemeToggle = ({ onClick }: { onClick: () => void }) => {

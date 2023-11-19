@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ThemeContext, ThemeToggleContext } from "../contexts/ThemeContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { Theme, darkTheme, lightTheme } from "./theme";
+import { Theme, createTheme, darkTheme, lightTheme } from "./theme";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components"
 
 export interface ThemeProviderProps {
@@ -10,6 +10,7 @@ export interface ThemeProviderProps {
 
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  const [dynamicBackground, setDynamicBackground] = useState('');
   const [theme, setTheme] = useState<Theme>(darkTheme);
 
   const toggleTheme = () => {
@@ -23,9 +24,22 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (dynamicBackground) {
+      setTheme(prevTheme => createTheme(prevTheme.mode, dynamicBackground));
+    }
+  }, [dynamicBackground]);
+
+  const contextValue = {
+    theme,
+    setDynamicBackground: (color: string) => {
+      setDynamicBackground(color);
+    }
+  };
+
   return (
     <ThemeToggleContext.Provider value={toggleTheme}>
-      <ThemeContext.Provider value={theme}>
+      <ThemeContext.Provider value={contextValue}>
         <StyledComponentsThemeProvider theme={theme}>{children}</StyledComponentsThemeProvider>
       </ThemeContext.Provider>
     </ThemeToggleContext.Provider>

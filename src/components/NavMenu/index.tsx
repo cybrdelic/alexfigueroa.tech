@@ -60,7 +60,6 @@ const AdditionalItemsContainer = createStyledMotionComponent('div')(props => `
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    padding: 1rem 2rem;
     width: auto;
 `);
 

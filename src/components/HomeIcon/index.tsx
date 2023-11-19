@@ -18,6 +18,7 @@ const ButtonContainer = createStyledMotionComponent(Link)(props => `
   border-radius: 8px;
   transition: all 0.3s ease-in-out;
   text-decoration: none;
+  margin-left: 0rem;
   z-index: ${zIndex.foreground + 100};
   &:hover {
     transform: scale(1.05);
@@ -33,17 +34,17 @@ const StyledText = createStyledMotionComponent('h2')(props => `
   ${fontSize('h6')}
   margin: 0;  // Reset default margin
   align-self: flex-end;  // Push to the bottom
-  ${fontFamily()}
+  ${fontFamily('Nova Square')}
 `);
 
 const StyledIconContainer = createStyledMotionComponent('div')(props => `
-  display: inline-flex;
   ${fontSize('h4')}
   ${textColor(props.theme, 'text')}
   transition: all 0.3s ease-in-out;
   transform: rotate(270deg);
   height: 100%;
   align-self: flex-end;  // Push to the bottom
+  margin-left: 0rem;
 `);
 
 // ... rest of the component remains unchanged

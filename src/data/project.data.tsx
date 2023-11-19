@@ -12,6 +12,7 @@ export type ProjectType = {
     branding: ProjectBrandingType;
     github_url: string;
     title_font: string;
+    image_url: string;
     colors: ProjectColorType// Keep the GitHub URL here
     // Add any other fields you might need
 };
@@ -33,7 +34,8 @@ const fetchProjectData = (): ProjectData => {
             branding: brandingCopy[projectKey],
             github_url: projectUrls[projectKey],
             title_font: projectTitleFonts[projectKey],
-            colors: projectColors[projectKey] // Add the colors here
+            colors: projectColors[projectKey], // Add the colors here
+            image_url: '/background.png'
         };
         return acc;
     }, {} as ProjectData);

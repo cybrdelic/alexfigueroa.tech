@@ -1,63 +1,70 @@
 import React from "react";
+import styled from "styled-components";
 import BackgroundImage from "../BackgroundGrid";
 import NavBar from "../NavBar";
-import { baseRoutes } from "../../routing/routes";
-import { createStyledMotionComponent } from "../../theming/styled-motion-utils/createStyledMotionComponent";
-import { padding } from "../../theming/util-style-functions/spacing";
-import { mq } from "../../theming/util-style-functions/responsive";
-import { coverParent, fixedBottomRight, fullViewport } from "../../theming/util-style-functions/position";
-import { spacing, zIndex } from "../../theming/design-tokens/spacing";
-import { styled } from "styled-components";
-import ThemeToggle from "../ThemeToggle";
-import { fontFamily, fontSize, fontWeight } from "../../theming/util-style-functions/typography";
-import { textColor } from "../../theming/util-style-functions/colors";
 import BottomBar from "../BottomBar";
-import { useCursorEffect } from "../../hooks/useCursorEffect";
+import { baseRoutes } from "../../routing/routes";
 
 interface SiteLayoutProps {
-    children: React.ReactNode[] | React.ReactNode,
-    toggleTheme: () => void
+  children: React.ReactNode;
+  toggleTheme: () => void;
 }
 
-const MainContent = createStyledMotionComponent('div')(props => `
-    height: 80%;
-    min-height: 80%;
-    max-height: 80%;
-`);
+const NAV_BAR_HEIGHT = '5vh';
+const BOTTOM_BAR_HEIGHT = '3vh';
+const PADDING_AMOUNT = '3rem'; // Assuming you want to maintain a padding of 3rem
 
-const LayoutContainer = createStyledMotionComponent('div')(props => `
-    ${padding("xxl")}
-    ${coverParent}
-`)
+const LayoutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  box-sizing: border-box;
+`;
 
+const NavBarContainer = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: ${NAV_BAR_HEIGHT};
+  padding: 0 ${PADDING_AMOUNT};
+  background-color: /* your navbar background color here */;
+`;
 
-const BrandTextContainer = createStyledMotionComponent('div')(props => `
-  grid-gap: 0rem;
-`)
+const MainContent = styled.div`
+  flex-grow: 1;
+  overflow: auto;
+  max-height: calc(100vh - ${NAV_BAR_HEIGHT} - ${BOTTOM_BAR_HEIGHT} - 3 * ${PADDING_AMOUNT});
+  margin: 0 ${PADDING_AMOUNT}; // Adding margin instead of padding to prevent content width issues
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start
+`;
 
-const textSize = 'xsmall'
+const BottomBarContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  height: ${BOTTOM_BAR_HEIGHT};
+  padding-right: ${PADDING_AMOUNT};
+  padding-left: ${PADDING_AMOUNT};
+  padding-bottom: ${PADDING_AMOUNT};
+`;
 
-const Text = createStyledMotionComponent('p')(props => `
-  ${fontSize(textSize)}
-  ${textColor(props.theme, 'text')}
-  ${fontWeight('bold')}
-  ${fontFamily()}
-  text-transform: uppercase;
-`)
+const SiteLayout: React.FC<SiteLayoutProps> = ({ children, toggleTheme }) => {
+  return (
+    <BackgroundImage>
+      <LayoutContainer>
+        <NavBarContainer>
+          <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
+        </NavBarContainer>
+        <MainContent>{children}</MainContent>
+        <BottomBarContainer>
+          <BottomBar toggleTheme={toggleTheme} />
+        </BottomBarContainer>
+      </LayoutContainer>
+    </BackgroundImage>
+  );
+};
 
-
-export default function SiteLayout({ children, toggleTheme }: SiteLayoutProps) {
-    useCursorEffect()
-    return (
-        <BackgroundImage>
-            <LayoutContainer>
-                <NavBar links={baseRoutes} toggleTheme={toggleTheme} />
-                <MainContent>
-                    {children}
-                </MainContent>
-                <BottomBar toggleTheme={toggleTheme} />
-            </LayoutContainer>
-        </BackgroundImage>
-    );
-
-}
+export default SiteLayout;

@@ -51,7 +51,7 @@ const common = {
     boxShadow: tokens.boxShadow,
 };
 
-const createTheme = (colorMode: 'dark' | 'light'): Theme => ({
+export const createTheme = (colorMode: 'dark' | 'light', dynamicBackground?: string): Theme => ({
     ...common,
     colors: {
         primary: colors.primary,
@@ -64,9 +64,11 @@ const createTheme = (colorMode: 'dark' | 'light'): Theme => ({
         dark: colors.dark,
         gray: colors.gray,
         text: colorMode === 'dark' ? colors.common.white : colors.common.black,
-        background: colorMode === 'dark' ? colors.dark.dark : colors.light.light,
         common: colors.common,
         neon: colors.neon,
+        background: dynamicBackground || (colorMode === 'dark' ? colors.dark.dark : colors.light.light),
+
+
     },
     mode: colorMode
 });

@@ -17,7 +17,6 @@ const StyledNavLink = createStyledMotionComponent(Link)(props => `
   color: ${props.theme.colors.text};
   text-decoration: none;
   ${padding('md')}
-  ${margin('sm')}
   ${zIndex.foreground}
   font-weight: 900;
   position: relative;
